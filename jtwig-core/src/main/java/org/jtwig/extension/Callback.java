@@ -14,9 +14,14 @@
 
 package org.jtwig.extension;
 
-import java.util.Map;
 import org.jtwig.Environment;
+import org.jtwig.compile.CompileContext;
+import org.jtwig.exception.CompileException;
+import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
+import org.parboiled.Rule;
 
 public interface Callback {
-    Object invoke(Environment env, Map<String, Object> context, Object...args);
+    Object invoke(Environment env, JtwigPosition pos, CompileContext ctx, Object...args) throws CompileException;
+    Rule getRightSideRule(JtwigExpressionParser expr);
 }

@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jtwig.functions.annotations.JtwigFunction;
 import org.jtwig.functions.annotations.Parameter;
 import org.jtwig.functions.exceptions.FunctionException;
-import org.jtwig.functions.util.ObjectIterator;
 
 import java.util.*;
 

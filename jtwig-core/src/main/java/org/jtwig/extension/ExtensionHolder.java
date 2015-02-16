@@ -19,16 +19,49 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.jtwig.addons.Addon;
+import org.jtwig.addons.concurrent.ConcurrentAddon;
+import org.jtwig.addons.filter.FilterAddon;
+import org.jtwig.addons.spaceless.SpacelessAddon;
+import org.jtwig.extension.core.CoreJtwigExtension;
+import org.jtwig.extension.operator.Operator;
 
+/**
+ * The ExtensionHolder contains all information pertaining to the registration
+ * of extensions and individual globals, operators, filters, functions, tests,
+ * token parsers, and node visitors. Note that, in accordance with
+ * http://twig.sensiolabs.org/doc/advanced.html#overloading, individually
+ * registered globals, filters, etc take precedence over those registered in
+ * extensions. That is, extensions and their components are registered first,
+ * followed by individual components.
+ */
 public class ExtensionHolder {
+    private final Collection<Class<? extends Addon>> addons = new ArrayList<>();
     private final Collection<Extension> extensions = new ArrayList<>();
     private final Map<String, Object> globals = new HashMap<>();
-    private final Collection<SimpleOperator> operators = new ArrayList<>();
-    private final Collection<SimpleFilter> filters = new ArrayList<>();
-    private final Collection<SimpleFunction> functions = new ArrayList<>();
-    private final Collection<SimpleTest> tests = new ArrayList<>();
+    private final Map<String, Operator> unaryOperators = new HashMap<>();
+    private final Map<String, Operator> binaryOperators = new HashMap<>();
+    private final Map<String, SimpleFilter> filters = new HashMap<>();
+    private final Map<String, SimpleFunction> functions = new HashMap<>();
+    private final Map<String, SimpleTest> tests = new HashMap<>();
 //    private final Collection<TokenParser> tokenParsers = new ArrayList<>();
 //    private final Collection<NodeVisitor> nodeVisitors = new ArrayList<>();
+    
+    public ExtensionHolder() {
+        this.addAddon(SpacelessAddon.class)
+                .addAddon(FilterAddon.class)
+                .addAddon(ConcurrentAddon.class)
+        ;
+        this.addExtension(new CoreJtwigExtension());
+    }
+    
+    public ExtensionHolder addAddon (final Class<? extends Addon> addon) {
+        addons.add(addon);
+        return this;
+    }
+    public Collection<Class<? extends Addon>> getAddons() {
+        return addons;
+    }
     
     public ExtensionHolder addExtension(final Extension extension) {
         extensions.add(extension);
@@ -51,76 +84,118 @@ public class ExtensionHolder {
         return this;
     }
     public Object getGlobal(final String name) {
+        Map<String, Object> globals = getGlobals();
         if (globals.containsKey(name)) {
             return globals.get(name);
         }
         return null;
     }
     public Map<String, Object> getGlobals() {
-        return globals;
+        Map<String, Object> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getGlobals());
+        }
+        result.putAll(globals);
+        return result;
     }
     
-    public ExtensionHolder addOperator(final SimpleOperator operator) {
-        operators.add(operator);
+    public ExtensionHolder addUnaryOperator(final Operator operator) {
+        unaryOperators.put(operator.getName(), operator);
         return this;
     }
-    public SimpleOperator getOperator(final String name) {
-        for (SimpleOperator o : operators) {
-            if (StringUtils.equals(o.getName(), name)) {
-                return o;
-            }
+    public Operator getUnaryOperator(final String name) {
+        Map<String, Operator> unaryOperators = getUnaryOperators();
+        if (unaryOperators.containsKey(name)) {
+            return unaryOperators.get(name);
         }
         return null;
     }
-    public Collection<SimpleOperator> getOperators() {
-        return operators;
+    public Map<String, Operator> getUnaryOperators() {
+        Map<String, Operator> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getUnaryOperators());
+        }
+        result.putAll(unaryOperators);
+        return result;
+    }
+    public ExtensionHolder addBinaryOperator(final Operator operator) {
+        binaryOperators.put(operator.getName(), operator);
+        return this;
+    }
+    public Operator getBinaryOperator(final String name) {
+        Map<String, Operator> binaryOperators = getBinaryOperators();
+        if (binaryOperators.containsKey(name)) {
+            return binaryOperators.get(name);
+        }
+        return null;
+    }
+    public Map<String, Operator> getBinaryOperators() {
+        Map<String, Operator> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getBinaryOperators());
+        }
+        result.putAll(binaryOperators);
+        return result;
     }
     
     public ExtensionHolder addFilter(final SimpleFilter filter) {
-        filters.add(filter);
+        filters.put(filter.getName(), filter);
         return this;
     }
     public SimpleFilter getFilter(final String name) {
-        for (SimpleFilter f : filters) {
-            if (StringUtils.equals(f.getName(), name)) {
-                return f;
-            }
+        Map<String, SimpleFilter> filters = getFilters();
+        if (filters.containsKey(name)) {
+            return filters.get(name);
         }
         return null;
     }
-    public Collection<SimpleFilter> getFilters() {
-        return filters;
+    public Map<String, SimpleFilter> getFilters() {
+        Map<String, SimpleFilter> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getFilters());
+        }
+        result.putAll(filters);
+        return result;
     }
     
+    
     public ExtensionHolder addFunction(final SimpleFunction function) {
-        functions.add(function);
+        functions.put(function.getName(), function);
         return this;
     }
     public SimpleFunction getFunction(final String name) {
-        for (SimpleFunction f : functions) {
-            if (StringUtils.equals(f.getName(), name)) {
-                return f;
-            }
+        Map<String, SimpleFunction> functions = getFunctions();
+        if (functions.containsKey(name)) {
+            return functions.get(name);
         }
         return null;
     }
-    public Collection<SimpleFunction> getFunctions() {
-        return functions;
+    public Map<String, SimpleFunction> getFunctions() {
+        Map<String, SimpleFunction> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getFunctions());
+        }
+        result.putAll(functions);
+        return result;
     }
     
     public ExtensionHolder addTest(final SimpleTest test) {
-        tests.add(test);
+        tests.put(test.getName(), test);
         return this;
     }
     public SimpleTest getTest(final String name) {
-        for (SimpleTest t : tests) {
-            if (StringUtils.equals(t.getName(), name)) {
-                return t;
-            }
+        Map<String, SimpleTest> tests = getTests();
+        if (tests.containsKey(name)) {
+            return tests.get(name);
         }
         return null;
     }
-    public Collection<SimpleTest> getTests() {
-        return tests;
+    public Map<String, SimpleTest> getTests() {
+        Map<String, SimpleTest> result = new HashMap<>();
+        for (Extension ex : extensions) {
+            result.putAll(ex.getTests());
+        }
+        result.putAll(tests);
+        return result;
     }
 }

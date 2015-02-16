@@ -25,16 +25,17 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.exception.ResourceException;
+import org.jtwig.extension.ExtensionHolder;
 import org.jtwig.functions.config.JsonConfiguration;
 import org.jtwig.functions.repository.api.FunctionRepository;
 import org.jtwig.functions.repository.impl.MapFunctionRepository;
 import org.jtwig.loader.Loader;
-import org.jtwig.parser.config.AddonParserList;
 import org.jtwig.parser.config.Symbols;
 import org.jtwig.parser.config.TagSymbols;
 import org.jtwig.parser.parboiled.JtwigBasicParser;
 import org.jtwig.parser.parboiled.JtwigConstantParser;
 import org.jtwig.parser.parboiled.JtwigContentParser;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.parser.parboiled.JtwigTagPropertyParser;
 import org.parboiled.Parboiled;
 import static org.parboiled.Parboiled.createParser;
@@ -48,7 +49,7 @@ public class Environment {
     protected boolean strictMode = false;
     protected boolean logNonStrictMode = true;
     protected Symbols symbols = TagSymbols.DEFAULT;
-    protected AddonParserList addonParserList = new AddonParserList();
+    protected ExtensionHolder extensions = new ExtensionHolder();
     
     protected int minThreads = 20;
     protected int maxThreads = 100;
@@ -104,8 +105,8 @@ public class Environment {
         return this;
     }
     
-    public AddonParserList getAddonParserList() {
-        return addonParserList;
+    public ExtensionHolder getExtensions() {
+        return extensions;
     }
     
     public int getMinThreads() {

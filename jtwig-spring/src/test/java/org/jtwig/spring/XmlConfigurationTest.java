@@ -8,12 +8,7 @@ import org.jtwig.parser.config.TagSymbols;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.annotation.Nullable;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import org.jtwig.Environment;
-import org.jtwig.cache.impl.ExecutionCache;
 import org.jtwig.loader.Loader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -52,7 +47,7 @@ public class XmlConfigurationTest {
         Class<? extends Addon> testAddonClass = TestAddon.class;
         underTest.setExtraSyntaticAddons(new Class[]{ testAddonClass });
 
-        assertTrue(underTest.getAddonParserList().list().contains(testAddonClass));
+        assertTrue(underTest.getExtensions().getAddons().contains(testAddonClass));
     }
 
     public static class TestAddon extends TagAddon {

@@ -20,8 +20,6 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.OperationBinary;
-import org.jtwig.expressions.model.Operator;
-import static org.jtwig.expressions.model.Operator.UNKNOWN;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
@@ -40,12 +38,12 @@ public class OperationBinaryTest extends AbstractJtwigTest {
         when(right.calculate(any(RenderContext.class))).thenReturn(1);
 
         Object result = new OperationBinary(null, expression(left))
-                .add(Operator.ADD)
-                .add(expression(right))
-                .compile(null)
+                .addOperator("+")
+                .addOperand(expression(right))
+                .compile(compileContext)
                 .calculate(renderContext);
 
-        assertEquals(2, result);
+        assertEquals(2L, result);
     }
 
     @Test
@@ -55,9 +53,9 @@ public class OperationBinaryTest extends AbstractJtwigTest {
         Variable right = new Variable(null, "defined");
 
         Object result = new OperationBinary(null, expression(left))
-                .add(Operator.COMPOSITION)
-                .add(right)
-                .compile(null)
+                .addOperator("|")
+                .addOperand(right)
+                .compile(compileContext)
                 .calculate(renderContext);
 
         assertEquals(true, result);
@@ -66,8 +64,8 @@ public class OperationBinaryTest extends AbstractJtwigTest {
     @Test(expected = CompileException.class)
     public void unknownOperation() throws Exception {
         new OperationBinary(new JtwigPosition(null, 1, 1), mock(CompilableExpression.class))
-                .add(UNKNOWN)
-                .add(mock(CompilableExpression.class)).compile(compileContext);
+                .addOperator("unknown")
+                .addOperand(mock(CompilableExpression.class)).compile(compileContext);
     }
 
     private CompilableExpression expression(final Expression expression) {

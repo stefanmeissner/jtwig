@@ -17,7 +17,9 @@ package org.jtwig;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import org.jtwig.compile.CompileContext;
+import org.jtwig.content.api.Compilable;
 import org.jtwig.exception.ResourceException;
+import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.loader.Loader;
 import org.jtwig.loader.impl.ClasspathLoader;
 import org.jtwig.loader.impl.StringLoader;
@@ -85,6 +87,17 @@ public abstract class AbstractJtwigTest {
     public String theResultOf(Loader.Resource resource) throws Exception {
         this.resource = resource;
         return theResult();
+    }
+    public Object theResultOf(CompilableExpression expr) throws Exception {
+        output = new ByteArrayOutputStream();
+        buildContexts();
+        return expr.compile(compileContext).calculate(renderContext);
+    }
+    public String theResultOf(Compilable compilable) throws Exception {
+        output = new ByteArrayOutputStream();
+        buildContexts();
+        compilable.compile(compileContext).render(renderContext);
+        return output.toString();
     }
     
     //~ Template builders ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

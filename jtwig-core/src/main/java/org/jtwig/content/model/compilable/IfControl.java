@@ -14,6 +14,9 @@
 
 package org.jtwig.content.model.compilable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.tag.TagInformation;
@@ -24,12 +27,7 @@ import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.render.RenderContext;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.jtwig.util.BooleanOperations.isTrue;
+import static org.jtwig.util.TypeUtil.toBoolean;
 
 public class IfControl extends AbstractElement {
     private List<Case> cases = new ArrayList<>();
@@ -123,7 +121,7 @@ public class IfControl extends AbstractElement {
 
         public boolean conditionIsTrue (RenderContext context) throws RenderException {
             try {
-                return isTrue(expression.calculate(context));
+                return toBoolean(expression.calculate(context));
             } catch (CalculateException e) {
                 throw new RenderException(e);
             }

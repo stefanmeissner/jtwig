@@ -14,6 +14,7 @@
 
 package org.jtwig.functions.util;
 
+import org.jtwig.unit.util.ObjectIterator;
 import org.junit.Test;
 
 import java.util.ArrayList;

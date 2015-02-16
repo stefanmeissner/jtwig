@@ -17,6 +17,7 @@ package org.jtwig.extension;
 import java.util.Collection;
 import java.util.Map;
 import org.jtwig.Environment;
+import org.jtwig.extension.operator.Operator;
 
 public interface Extension {
     /**
@@ -36,31 +37,40 @@ public interface Extension {
      */
     Map<String, Object> getGlobals();
     /**
-     * Returns a collection of operators registered by the extension.
-     * @return A collection of operators.
+     * Returns a map of unary operators registered by the extension, indexed by
+     * operator identifier.
+     * @return A map of unary operators.
      */
-    Collection<SimpleOperator> getOperators();
+    Map<String, Operator> getUnaryOperators();
     /**
-     * Returns a collection of functions registered by the extension.
-     * @return A collection of functions.
+     * Returns a map of binary operators registered by the extension, indexed by
+     * operator identifier.
+     * @return A map of binary operators.
      */
-    Collection<SimpleFunction> getFunctions();
+    Map<String, Operator> getBinaryOperators();
     /**
-     * Returns a collection of filters registered by the extension.
-     * @return A collection of filters.
+     * Returns a map of functions registered by the extension, indexed by
+     * function name.
+     * @return A map of functions.
      */
-    Collection<SimpleFilter> getFilters();
+    Map<String, SimpleFunction> getFunctions();
     /**
-     * Returns a collection of tests registered by the extension.
-     * @return A collection of tests.
+     * Returns a map of filters registered by the extension, indexed by filter
+     * name.
+     * @return A map of filters.
      */
-    Collection<SimpleTest> getTests();
-//    /**
-//     * Returns a collection of token parser instances registered by the
-//     * extension.
-//     * @return A collection of token parser instances.
-//     */
-//    Collection<TokenParser> getTokenParsers();
+    Map<String, SimpleFilter> getFilters();
+    /**
+     * Returns a map of tests registered by the extension, indexed by test name.
+     * @return A map of tests.
+     */
+    Map<String, SimpleTest> getTests();
+    /**
+     * Returns a collection of token parser instances registered by the
+     * extension.
+     * @return A collection of token parser instances.
+     */
+    Collection<TokenParser> getTokenParsers();
 //    /**
 //     * Returns a collection of node visitor instances registered by the
 //     * extension.

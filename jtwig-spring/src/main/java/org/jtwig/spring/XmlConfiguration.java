@@ -19,7 +19,7 @@ public class XmlConfiguration extends Environment {
 
     public void setExtraSyntaticAddons(Class<? extends Addon>[] addons) {
         for (Class<? extends Addon> addon : addons) {
-            getAddonParserList().withAddon(addon);
+            getExtensions().addAddon(addon);
         }
     }
 }

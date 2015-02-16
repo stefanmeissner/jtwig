@@ -18,7 +18,6 @@ import org.jtwig.Environment;
 import org.jtwig.addons.Addon;
 import org.jtwig.addons.AddonModel;
 import org.jtwig.exception.ParseException;
-import org.jtwig.expressions.model.Operator;
 import org.jtwig.loader.Loader;
 import org.parboiled.Rule;
 
@@ -51,7 +50,7 @@ public class FilterAddon extends Addon {
                                         expressionParser().functionWithBrackets(),
                                         expressionParser().variableAsFunction()
                                 ),
-                                Operator.COMPOSITION
+                                "|"
                         ),
                         push(new Filter(currentPosition(), expressionParser().pop()))
                 ),

@@ -62,7 +62,7 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
         tagPropertyParser = env.getTagPropertyParser();
         expressionParser = createParser(JtwigExpressionParser.class, resource, env);
 
-        this.contentAddons = Collections2.transform(env.getAddonParserList().list(), toBaseParser());
+        this.contentAddons = Collections2.transform(env.getExtensions().getAddons(), toBaseParser());
         this.env = env;
 
         contentAddonParsers = new Addon[contentAddons.size()];
