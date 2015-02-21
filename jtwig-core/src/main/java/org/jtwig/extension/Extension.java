@@ -14,10 +14,11 @@
 
 package org.jtwig.extension;
 
+import org.jtwig.extension.api.tokenparser.TokenParser;
 import java.util.Collection;
 import java.util.Map;
 import org.jtwig.Environment;
-import org.jtwig.extension.operator.Operator;
+import org.jtwig.extension.api.operator.Operator;
 
 public interface Extension {
     /**
@@ -70,7 +71,7 @@ public interface Extension {
      * extension.
      * @return A collection of token parser instances.
      */
-    Collection<TokenParser> getTokenParsers();
+    Collection<Class<? extends TokenParser>> getTokenParsers();
 //    /**
 //     * Returns a collection of node visitor instances registered by the
 //     * extension.

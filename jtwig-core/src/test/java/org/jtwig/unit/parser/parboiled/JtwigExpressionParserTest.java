@@ -63,6 +63,13 @@ public class JtwigExpressionParserTest extends AbstractJtwigTest {
 //        assertEquals("ok", theResultOf(parse("(1 and 0 b-or 0) is same as(1 and (0 b-or 0)) ? 'ok' : 'ko'")));
     }
     
+    @Test
+    public void parsesVariables() throws Exception {
+        model.withModelAttribute("var", "hello");
+        
+        assertEquals("hello", theResultOf(parse("var")));
+    }
+    
     
     protected CompilableExpression parse(final String parse) {
 //        TracingParseRunner<CompilableExpression> runner = new TracingParseRunner<CompilableExpression>(exprParser.expression());

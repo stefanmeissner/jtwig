@@ -48,7 +48,7 @@ public class WhitespaceControlTest extends AbstractJtwigTest {
     @Test
     public void setTest() throws Exception {
         assertThat(theResultOf(theTemplate(
-                " {%- set a = 1 %}")),
+                " {%- set a = 1 -%} ")),
                    is(equalTo(""))
         );
     }

@@ -15,7 +15,7 @@
 package org.jtwig.extension.core.operators;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 

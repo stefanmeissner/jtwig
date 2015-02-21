@@ -69,7 +69,7 @@ public abstract class Import {
             @Override
             public void render(RenderContext context) throws RenderException {
                 try {
-                    Template.CompiledTemplate template = getTemplate(from, position, compileContext, context);
+                    Template.Compiled template = getTemplate(from, position, compileContext, context);
                     context.with(as, template);
                 } catch (CalculateException | CompileException | ParseException | ResourceException ex) {
                     throw new RenderException(ex);
@@ -123,7 +123,7 @@ public abstract class Import {
             @Override
             public void render(final RenderContext context) throws RenderException {
                 try {
-                    Template.CompiledTemplate template = getTemplate(from, position, compileContext, context);
+                    Template.Compiled template = getTemplate(from, position, compileContext, context);
                     for (String name : imports.keySet()) {
                         Macro.Compiled macro = template.macro(name);
                         if (macro != null) {
@@ -163,7 +163,7 @@ public abstract class Import {
         }
     }
     
-    protected static Template.CompiledTemplate getTemplate(
+    protected static Template.Compiled getTemplate(
             final Expression from,
             final JtwigPosition position,
             final CompileContext compileContext,
@@ -172,7 +172,6 @@ public abstract class Import {
                     ParseException,
                     CompileException,
                     CalculateException {
-            System.out.println("From: "+from.getClass().getName());
         if ((from instanceof Variable && "_self".equals(((Variable)from).name()))
                 || (from instanceof Constant && "_self".equals(((Constant)from).getValue()))
                 || from instanceof SelfReference) {

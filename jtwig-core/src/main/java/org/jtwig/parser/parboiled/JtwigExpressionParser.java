@@ -17,13 +17,11 @@ package org.jtwig.parser.parboiled;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jtwig.Environment;
-import org.jtwig.content.model.Template;
 import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.expressions.api.CompilableExpression;
@@ -39,11 +37,9 @@ import org.jtwig.expressions.model.ValueMap;
 import org.jtwig.expressions.model.ValueRange;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.SimpleTest;
-import org.jtwig.extension.core.operators.BinaryAdditionOperator;
-import org.jtwig.extension.core.operators.BinarySubtractionOperator;
-import org.jtwig.extension.operator.BinaryOperator;
-import org.jtwig.extension.operator.Operator;
-import org.jtwig.extension.operator.UnaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.api.operator.UnaryOperator;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigKeyword;
 import org.jtwig.parser.model.JtwigSymbol;
@@ -157,7 +153,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     Rule elementar() {
         return FirstOf(
                 mapEntry(),
-                blockFunction(),
+//                blockFunction(),
                 function(),
                 map(),
                 list(),
@@ -200,7 +196,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
 
-    Rule functionWithTwoWordsAsName() {
+    public Rule functionWithTwoWordsAsName() {
         return Sequence(
                 basic.identifier(),
                 push(new Constant<>(match())),
@@ -277,29 +273,29 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
     
-    public Rule blockFunction() {
-        return Sequence(
-                "block",
-                basic.spacing(),
-                push(new BlockFunction(currentPosition())),
-                symbol(OPEN_PARENT),
-                mandatory(
-                        Sequence(
-                                expression(),
-                                action(peek(1, BlockFunction.class).add(pop())),
-                                ZeroOrMore(
-                                        symbol(COMMA),
-                                        expression(),
-                                        action((peek(1, BlockFunction.class)).add(pop()))
-                                ),
-                                symbol(CLOSE_PARENT)
-                        ),
-                        new ParseException("Invalid block function syntax")
-                )
-        );
-    }
+//    public Rule blockFunction() {
+//        return Sequence(
+//                "block",
+//                basic.spacing(),
+//                push(new BlockFunction(currentPosition())),
+//                symbol(OPEN_PARENT),
+//                mandatory(
+//                        Sequence(
+//                                expression(),
+//                                action(peek(1, BlockFunction.class).add(pop())),
+//                                ZeroOrMore(
+//                                        symbol(COMMA),
+//                                        expression(),
+//                                        action((peek(1, BlockFunction.class)).add(pop()))
+//                                ),
+//                                symbol(CLOSE_PARENT)
+//                        ),
+//                        new ParseException("Invalid block function syntax")
+//                )
+//        );
+//    }
 
-    Rule map() {
+    public Rule map() {
         return Sequence(
                 symbol(OPEN_CURLY_BRACKET),
                 push(new ValueMap(currentPosition())),
@@ -334,10 +330,10 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
 
     Rule list() {
-        return FirstOf(
-                comprehensionList(),
-                enumeratedList()
-        );
+//        return FirstOf(
+//                comprehensionList(),
+                return enumeratedList();
+//        );
     }
 
     Rule enumeratedList() {
@@ -362,23 +358,23 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
     
-    Rule comprehensionList() {
-        return Sequence(
-                TestNot(InValueStack(ValueRange.class)),
-                push(new ValueRange()),
-                expression(),
-                action(peek(1, ValueRange.class).withStart(pop(CompilableExpression.class))),
-                symbol(TWO_DOTS),
-                mandatory(
-                        Sequence(
-                                expression(),
-                                action(peek(1, ValueRange.class).withEnd(pop(CompilableExpression.class))),
-                                basic.spacing()
-                        ),
-                        new ParseException("Invalid comprehension syntax")
-                )
-        );
-    }
+//    Rule comprehensionList() {
+//        return Sequence(
+//                TestNot(InValueStack(ValueRange.class)),
+//                push(new ValueRange()),
+//                expression(),
+//                action(peek(1, ValueRange.class).withStart(pop(CompilableExpression.class))),
+//                symbol(TWO_DOTS),
+//                mandatory(
+//                        Sequence(
+//                                expression(),
+//                                action(peek(1, ValueRange.class).withEnd(pop(CompilableExpression.class))),
+//                                basic.spacing()
+//                        ),
+//                        new ParseException("Invalid comprehension syntax")
+//                )
+//        );
+//    }
 
     public Rule variable() {
         return Sequence(
@@ -396,7 +392,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
 
-    Rule identifierAsString() {
+    public Rule identifierAsString() {
         return Sequence(
                 basic.identifier(),
                 push(new Constant<>(match())),
@@ -404,25 +400,20 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
 
-    String popIdentifierAsString () {
+    public String popIdentifierAsString () {
         return popIdentifierAsString(0);
     }
 
-    String popIdentifierAsString(int position) {
+    public String popIdentifierAsString(int position) {
         return (String) pop(position, Constant.class).as(String.class);
     }
 
-    Rule constant() {
+    public Rule constant() {
         return Sequence(
                 constants.anyConstant(),
                 push(constants.pop()),
                 basic.spacing()
         );
-    }
-
-    @Override
-    boolean throwException(ParseException exception) throws ParseBypassException {
-        throw new ParseBypassException(exception);
     }
 
     Rule symbol(JtwigSymbol symbol) {

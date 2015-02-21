@@ -1,22 +1,22 @@
-package org.jtwig.unit.addons.filter;
+package org.jtwig.unit.extension.core.tokenparsers;
 
-import org.jtwig.addons.filter.Filter;
+import java.io.IOException;
+import java.io.OutputStream;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.FunctionElement;
+import org.jtwig.extension.core.tokenparsers.FilterTag;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FilterTest {
     private final CompilableExpression expression = mock(CompilableExpression.class);
@@ -24,14 +24,15 @@ public class FilterTest {
     private final RenderContext renderContext = mock(RenderContext.class);
     private final JtwigPosition position = mock(JtwigPosition.class);
     private final FunctionElement.Compiled function = mock(FunctionElement.Compiled.class);
-    private Filter underTest = new Filter(position, expression)
-                                .withContent(new Sequence());
+    private FilterTag.Filter underTest = new FilterTag.Filter(position)
+            .withFilterExpression(expression)
+            .withContent(new Sequence());
 
     @Before
     public void setUp() throws Exception {
         when(compileContext.clone()).thenReturn(compileContext);
         when(function.calculate(renderContext)).thenReturn(null);
-        when(expression.compile(compileContext)).thenReturn(new Filter.DelegateCalculable(function));
+        when(expression.compile(compileContext)).thenReturn(new FilterTag.DelegateCalculable(function));
         when(renderContext.newRenderContext(any(OutputStream.class))).thenReturn(renderContext);
         when(function.cloneAndAddArgument(any(Expression.class))).thenReturn(function);
     }

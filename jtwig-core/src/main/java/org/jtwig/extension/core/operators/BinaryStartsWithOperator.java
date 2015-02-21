@@ -14,7 +14,7 @@
 
 package org.jtwig.extension.core.operators;
 
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import org.parboiled.common.StringUtils;

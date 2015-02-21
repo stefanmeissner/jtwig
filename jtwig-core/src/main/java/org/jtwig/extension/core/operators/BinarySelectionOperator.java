@@ -21,7 +21,7 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.Variable;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
@@ -29,8 +29,11 @@ import org.jtwig.types.Undefined;
 import static org.jtwig.types.Undefined.UNDEFINED;
 import org.jtwig.util.ObjectExtractor;
 import org.parboiled.Rule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BinarySelectionOperator extends BinaryOperator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinarySelectionOperator.class);
     
     public BinarySelectionOperator(final String name, final int precedence) {
         super(name, precedence);
@@ -71,6 +74,7 @@ public class BinarySelectionOperator extends BinaryOperator {
         }
         
         if (left == null) {
+            LOGGER.warn("Left hand argument is null. Right side is "+name);
             if (!ctx.environment().isStrictMode()) {
                 return Undefined.UNDEFINED;
             }
@@ -115,8 +119,8 @@ public class BinarySelectionOperator extends BinaryOperator {
         public Object calculate(final RenderContext context) throws CalculateException {
             Object calculatedLeft = null;
             try {
-                left.calculate(context);
-            } catch (CalculateException e) {}
+                calculatedLeft = left.calculate(context);
+            } catch (CalculateException ex) {}
 
             if (calculatedLeft == UNDEFINED)
                 calculatedLeft = null;

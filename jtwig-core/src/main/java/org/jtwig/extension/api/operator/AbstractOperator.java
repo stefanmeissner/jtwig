@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.operator;
+package org.jtwig.extension.api.operator;
 
 public abstract class AbstractOperator implements Operator {
     protected final String name;

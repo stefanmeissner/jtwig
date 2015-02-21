@@ -17,14 +17,14 @@ package org.jtwig;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jtwig.exception.ResourceException;
 import org.jtwig.loader.Loader;
 import org.jtwig.util.LoaderUtil;
 import org.junit.Before;
 import static org.mockito.Mockito.*;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public abstract class MultiresourceUnitTest extends AbstractJtwigTest {
     protected Map<String, Loader.Resource> resources;
@@ -42,7 +42,7 @@ public abstract class MultiresourceUnitTest extends AbstractJtwigTest {
     
 
     @Override
-    protected void withResource(String template) {
+    protected void withResource(String template) throws ResourceException {
         super.withResource(template);
         try {
             doAnswer(new ReturnsArgumentAt(0)).when(resource).resolve(any(String.class));
@@ -57,27 +57,9 @@ public abstract class MultiresourceUnitTest extends AbstractJtwigTest {
         when(tmp.relativePath()).thenReturn(name);
         when(tmp.canonicalPath()).thenReturn(name);
         when(tmp.getCacheKey()).thenReturn(LoaderUtil.getCacheKey(name));
+        when(tmp.toString()).thenReturn(name);
         when(env.load(name)).thenReturn(tmp);
         doAnswer(new ReturnsArgumentAt(0)).when(tmp).resolve(any(String.class));
         resources.put(name, tmp);
     }
-    
-//    protected void withPrimaryResource(final String contents) throws ResourceException {
-//        withPrimaryResource("_primary_", contents);
-//    }
-//    protected void withPrimaryResource(final String name, final String contents) throws ResourceException {
-//        when(env.load(name)).thenReturn(resource);
-//        when(resource.source()).thenReturn(new ByteArrayInputStream(contents.getBytes()));
-//        when(resource.relativePath()).thenReturn(name);
-//        when(resource.canonicalPath()).thenReturn(name);
-//        resources.put(name, resource);
-//    }
-//    protected void attachResource(final String name, final String contents) throws ResourceException {
-//        Loader.Resource tmp = mock(Loader.Resource.class);
-//        when(tmp.source()).thenReturn(new ByteArrayInputStream(contents.getBytes()));
-//        when(tmp.relativePath()).thenReturn(name);
-//        when(tmp.canonicalPath()).thenReturn(name);
-//        when(env.load(name)).thenReturn(tmp);
-//        resources.put(name, tmp);
-//    }
 }

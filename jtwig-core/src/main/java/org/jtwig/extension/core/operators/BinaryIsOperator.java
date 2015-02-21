@@ -21,10 +21,12 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.Variable;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.util.TypeUtil.*;
+import org.parboiled.Rule;
 
 public class BinaryIsOperator extends BinaryOperator {
     private final CompositionExpressionFactory delegate = new CompositionExpressionFactory();
@@ -46,6 +48,17 @@ public class BinaryIsOperator extends BinaryOperator {
     public Object render(RenderContext ctx, JtwigPosition pos, Object left, Object right) throws CalculateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Rule getRightSideRule(JtwigExpressionParser expr) {
+        return expr.FirstOf(
+                expr.functionWithBrackets(),
+                expr.functionWithTwoWordsAsName(),
+                expr.variable()
+        );
+    }
+    
+    
     
     
     

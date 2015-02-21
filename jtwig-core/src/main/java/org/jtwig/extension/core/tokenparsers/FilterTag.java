@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,52 +12,122 @@
  * limitations under the License.
  */
 
-package org.jtwig.addons.filter;
+package org.jtwig.extension.core.tokenparsers;
 
 import com.google.common.base.Function;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.jtwig.addons.AddonModel;
 import org.jtwig.compile.CompileContext;
+import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
+import org.jtwig.content.model.compilable.Content;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
+import org.jtwig.exception.ParseException;
 import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.OperationBinary;
+import org.jtwig.extension.api.tokenparser.Tag;
+import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigBasicParser;
+import org.jtwig.parser.parboiled.JtwigContentParser;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
+import org.jtwig.parser.parboiled.JtwigTagPropertyParser;
 import org.jtwig.render.RenderContext;
+import org.parboiled.Rule;
+import org.parboiled.annotations.Label;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+public class FilterTag extends Tag {
 
-public class Filter extends AddonModel<Filter> {
-    private final JtwigPosition position;
-    private CompilableExpression expression;
-
-    public Filter(JtwigPosition position, CompilableExpression expression) {
-        this.position = position;
-        this.expression = expression;
+    public FilterTag(Loader.Resource resource, JtwigContentParser content, JtwigBasicParser basic, JtwigExpressionParser expr, JtwigTagPropertyParser tag) {
+        super(resource, content, basic, expr, tag);
     }
 
     @Override
-    public Renderable compile(CompileContext context) throws CompileException {
-        if (expression instanceof OperationBinary) {
-            OperationBinary operationBinary = (OperationBinary) expression;
-            operationBinary.transformFirst(toSpecialFunction());
+    public String getKeyword() {
+        return "filter";
+    }
+
+    @Override
+    public Compilable model(JtwigPosition pos) {
+        return new Filter(pos);
+    }
+
+    @Label("Filter tag")
+    @Override
+    public Rule rule() {
+        return super.rule(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Rule getAttributeRule() {
+        return mandatory(
+                Sequence(
+                        expr.binary(
+                                FirstOf(
+                                        expr.functionWithBrackets(),
+                                        expr.variableAsFunction()
+                                ),
+                                "|"
+                        ),
+                        action(peek(1, Filter.class).withFilterExpression(expr.pop()))
+                ),
+                new ParseException("Filter should have at least one function")
+        ).label("Attributes");
+    }
+    
+//    public static class Filter extends Content<Filter> {
+//        private final JtwigPosition pos;
+//        private CompilableExpression filterExpression;
+//        
+//        public Filter(final JtwigPosition pos) {
+//            this.pos = pos;
+//        }
+//        
+//        public Filter withFilterExpression(final CompilableExpression filterExpression) {
+//            this.filterExpression = filterExpression;
+//            return this;
+//        }
+//    }
+    
+    
+    
+    public static class Filter extends Content<Filter> {
+        private final JtwigPosition position;
+        private CompilableExpression filterExpression;
+
+        public Filter(final JtwigPosition position) {
+            this.position = position;
         }
-        return new Compiled(position, super.compile(context), expression.compile(context));
-    }
+        
+        public Filter withFilterExpression(final CompilableExpression filterExpression) {
+            this.filterExpression = filterExpression;
+            return this;
+        }
 
-    private Function<CompilableExpression, CompilableExpression> toSpecialFunction() {
-        return new Function<CompilableExpression, CompilableExpression>() {
-            @Override
-            public CompilableExpression apply(CompilableExpression input) {
-                return new DelegateCompilable((FunctionElement)input);
+        @Override
+        public Renderable compile(final CompileContext context) throws CompileException {
+            if (filterExpression instanceof OperationBinary) {
+                OperationBinary operationBinary = (OperationBinary) filterExpression;
+                operationBinary.transformFirst(toSpecialFunction());
             }
-        };
-    }
+            return new Compiled(position, super.compile(context), filterExpression.compile(context));
+        }
 
+        private Function<CompilableExpression, CompilableExpression> toSpecialFunction() {
+            return new Function<CompilableExpression, CompilableExpression>() {
+                @Override
+                public CompilableExpression apply(CompilableExpression input) {
+                    return new DelegateCompilable((FunctionElement)input);
+                }
+            };
+        }
+    }
+    
     private static class Compiled implements Renderable {
         private final JtwigPosition position;
         private final Renderable content;
@@ -96,7 +166,7 @@ public class Filter extends AddonModel<Filter> {
         }
     }
 
-    private class DelegateCompilable implements CompilableExpression {
+    private static class DelegateCompilable implements CompilableExpression {
         private final FunctionElement delegate;
 
         public DelegateCompilable(FunctionElement delegate) {

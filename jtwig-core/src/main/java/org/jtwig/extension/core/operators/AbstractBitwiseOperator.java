@@ -17,7 +17,7 @@ package org.jtwig.extension.core.operators;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.util.TypeUtil.*;

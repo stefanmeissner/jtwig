@@ -47,7 +47,7 @@ public class TextTest extends AbstractJtwigTest {
         Content before = mock(Content.class);
         when(before.compile(any(CompileContext.class))).thenReturn(renderable(""));
         TagInformation tagInformation = new TagInformation();
-        tagInformation.whiteSpaceControl().trimAfterEnd(true);
+        tagInformation.whiteSpaceControl().trimAfterClose(true);
         when(before.tag()).thenReturn(tagInformation);
 
         new Sequence()
@@ -64,7 +64,7 @@ public class TextTest extends AbstractJtwigTest {
         Content after = mock(Content.class);
         when(after.compile(any(CompileContext.class))).thenReturn(renderable(""));
         TagInformation tagInformation = new TagInformation();
-        tagInformation.whiteSpaceControl().trimBeforeBegin(true);
+        tagInformation.whiteSpaceControl().trimBeforeOpen(true);
         when(after.tag()).thenReturn(tagInformation);
 
         new Sequence()
@@ -87,23 +87,17 @@ public class TextTest extends AbstractJtwigTest {
     }
 
     @Test
-    public void builderIsFakeContent() throws Exception {
-        Text.Builder b = new Text.Builder();
-        assertNull(b.compile(null));
-    }
-
-    @Test
     public void removingBothSidesWhiteSpaces() throws Exception {
         Content before = mock(Content.class);
         when(before.compile(any(CompileContext.class))).thenReturn(renderable(""));
         TagInformation beforeTagInformation = new TagInformation();
-        beforeTagInformation.whiteSpaceControl().trimAfterEnd(true);
+        beforeTagInformation.whiteSpaceControl().trimAfterClose(true);
         when(before.tag()).thenReturn(beforeTagInformation);
 
         Content after = mock(Content.class);
         when(after.compile(any(CompileContext.class))).thenReturn(renderable(""));
         TagInformation afterTagInformation = new TagInformation();
-        afterTagInformation.whiteSpaceControl().trimBeforeBegin(true);
+        afterTagInformation.whiteSpaceControl().trimBeforeOpen(true);
         when(after.tag()).thenReturn(afterTagInformation);
 
 

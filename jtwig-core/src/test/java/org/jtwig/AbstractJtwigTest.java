@@ -14,6 +14,7 @@
 
 package org.jtwig;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import org.jtwig.compile.CompileContext;
@@ -24,11 +25,22 @@ import org.jtwig.loader.Loader;
 import org.jtwig.loader.impl.ClasspathLoader;
 import org.jtwig.loader.impl.StringLoader;
 import org.jtwig.render.RenderContext;
+import org.jtwig.util.LoaderUtil;
 import org.junit.Before;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
+import org.parboiled.Rule;
+import org.parboiled.parserunners.TracingParseRunner;
+import org.parboiled.support.ParsingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJtwigTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJtwigTest.class);
     protected Environment env;
     protected JtwigModelMap model;
     protected CompileContext compileContext;
@@ -46,7 +58,7 @@ public abstract class AbstractJtwigTest {
         buildContexts();
     }
     protected Environment buildEnvironment() {
-        return new Environment();
+        return spy(new Environment());
     }
     protected void buildContexts() {
         compileContext = spy(new CompileContext(resource, env));
@@ -120,7 +132,21 @@ public abstract class AbstractJtwigTest {
         this.resource = spy(resource);
     }
     
-    protected void withResource(String template) {
-        this.resource = spy(stringResource(template));
+    protected void withResource(String template) throws ResourceException {
+        this.resource = mock(Loader.Resource.class);
+        when(resource.source()).thenReturn(new ByteArrayInputStream(template.getBytes()));
+        when(resource.relativePath()).thenReturn("<primary>");
+        when(resource.canonicalPath()).thenReturn("<primary>");
+        when(resource.getCacheKey()).thenReturn(LoaderUtil.getCacheKey("<primary>"));
+        when(resource.toString()).thenReturn("<primary>");
+        when(env.load("<primary>")).thenReturn(resource);
+        doAnswer(new ReturnsArgumentAt(0)).when(resource).resolve(any(String.class));
+    }
+    
+    protected <T> T traceParse(String template, Rule rule, Class<T> cls) {
+        TracingParseRunner<T> runner = new TracingParseRunner<>(rule);
+        ParsingResult<T> result = runner.run(template);
+        LOGGER.debug("{}", runner.getLog());
+        return result.resultValue;
     }
 }

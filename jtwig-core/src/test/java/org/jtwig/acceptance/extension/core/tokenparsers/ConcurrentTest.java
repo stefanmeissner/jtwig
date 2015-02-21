@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.addons.concurrent;
+package org.jtwig.acceptance.extension.core.tokenparsers;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
@@ -22,10 +22,9 @@ import java.util.concurrent.ExecutorService;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.jtwig.acceptance.addons.AbstractAddonTest;
-import org.jtwig.addons.concurrent.Concurrent;
-import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.RenderException;
+import org.jtwig.extension.core.tokenparsers.ConcurrentTag;
 import org.jtwig.render.RenderContext;
 import org.jtwig.render.stream.RenderStream;
 import org.junit.Test;
@@ -98,7 +97,7 @@ public class ConcurrentTest extends AbstractAddonTest {
         field.set(null, sExecutor);
         doThrow(OutOfMemoryError.class).when(sExecutor).execute(any(Runnable.class));
         
-        Concurrent concurrent = new Concurrent();
+        ConcurrentTag.Concurrent concurrent = new ConcurrentTag.Concurrent();
         concurrent.withContent(new Sequence());
         concurrent.compile(compileContext).render(renderContext);
         verify(sExecutor, atLeastOnce()).shutdownNow();

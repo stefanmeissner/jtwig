@@ -20,9 +20,11 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.Variable;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
+import org.parboiled.Rule;
 
 public class BinaryCompositionOperator extends BinaryOperator {
 
@@ -43,6 +45,14 @@ public class BinaryCompositionOperator extends BinaryOperator {
             return function((FunctionElement.Compiled) right, left);
         }
         throw new CompileException(pos + ": Composition always requires a function to execute as the right argument");
+    }
+
+    @Override
+    public Rule getRightSideRule(JtwigExpressionParser expr) {
+        return expr.FirstOf(
+                expr.functionWithBrackets(),
+                expr.variable()
+        );
     }
     
     private Expression function(FunctionElement.Compiled compiled, Expression left) {

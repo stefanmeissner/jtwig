@@ -20,11 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.addons.Addon;
-import org.jtwig.addons.concurrent.ConcurrentAddon;
-import org.jtwig.addons.filter.FilterAddon;
-import org.jtwig.addons.spaceless.SpacelessAddon;
+import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.extension.core.CoreJtwigExtension;
-import org.jtwig.extension.operator.Operator;
 
 /**
  * The ExtensionHolder contains all information pertaining to the registration
@@ -44,14 +42,10 @@ public class ExtensionHolder {
     private final Map<String, SimpleFilter> filters = new HashMap<>();
     private final Map<String, SimpleFunction> functions = new HashMap<>();
     private final Map<String, SimpleTest> tests = new HashMap<>();
-//    private final Collection<TokenParser> tokenParsers = new ArrayList<>();
+    private final Collection<Class<? extends TokenParser>> tokenParsers = new ArrayList<>();
 //    private final Collection<NodeVisitor> nodeVisitors = new ArrayList<>();
     
     public ExtensionHolder() {
-        this.addAddon(SpacelessAddon.class)
-                .addAddon(FilterAddon.class)
-                .addAddon(ConcurrentAddon.class)
-        ;
         this.addExtension(new CoreJtwigExtension());
     }
     
@@ -196,6 +190,19 @@ public class ExtensionHolder {
             result.putAll(ex.getTests());
         }
         result.putAll(tests);
+        return result;
+    }
+    
+    public ExtensionHolder addTokenParser(final Class<? extends TokenParser> tokenParser) {
+        tokenParsers.add(tokenParser);
+        return this;
+    }
+    public Collection<Class<? extends TokenParser>> getTokenParsers() {
+        Collection<Class<? extends TokenParser>> result = new ArrayList<>();
+        for (Extension ex : extensions) {
+            result.addAll(ex.getTokenParsers());
+        }
+        result.addAll(tokenParsers);
         return result;
     }
 }

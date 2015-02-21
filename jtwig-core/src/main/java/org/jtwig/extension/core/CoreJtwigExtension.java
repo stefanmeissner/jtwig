@@ -22,7 +22,7 @@ import org.jtwig.extension.SimpleExtension;
 import org.jtwig.extension.SimpleFilter;
 import org.jtwig.extension.SimpleFunction;
 import org.jtwig.extension.SimpleTest;
-import org.jtwig.extension.TokenParser;
+import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.extension.core.filters.*;
 import org.jtwig.extension.core.functions.*;
 import org.jtwig.extension.core.operators.BinaryAdditionOperator;
@@ -60,7 +60,21 @@ import org.jtwig.extension.core.operators.UnaryNegativeOperator;
 import org.jtwig.extension.core.operators.UnaryNotOperator;
 import org.jtwig.extension.core.operators.UnaryPositiveOperator;
 import org.jtwig.extension.core.tests.*;
-import org.jtwig.extension.operator.Operator;
+import org.jtwig.extension.core.tokenparsers.BlockDefinitionParser;
+import org.jtwig.extension.core.tokenparsers.EmbedStatementParser;
+import org.jtwig.extension.core.tokenparsers.ExtendsStatementParser;
+import org.jtwig.extension.core.tokenparsers.ForStatementParser;
+import org.jtwig.extension.core.tokenparsers.FromImportStatementParser;
+import org.jtwig.extension.core.tokenparsers.IfStatementParser;
+import org.jtwig.extension.core.tokenparsers.ImportStatementParser;
+import org.jtwig.extension.core.tokenparsers.IncludeStatementParser;
+import org.jtwig.extension.core.tokenparsers.MacroDefinitionParser;
+import org.jtwig.extension.core.tokenparsers.SetStatementParser;
+import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.core.tokenparsers.CommentParser;
+import org.jtwig.extension.core.tokenparsers.ConcurrentTag;
+import org.jtwig.extension.core.tokenparsers.FilterTag;
+import org.jtwig.extension.core.tokenparsers.SpacelessTag;
 
 public class CoreJtwigExtension extends SimpleExtension {
 
@@ -205,23 +219,30 @@ public class CoreJtwigExtension extends SimpleExtension {
     }
 
     @Override
-    public Collection<TokenParser> getTokenParsers() {
+    public Collection<Class<? extends TokenParser>> getTokenParsers() {
         return Arrays.asList(
-//                new ForTokenParser(),
-//                new IfTokenParser(),
-//                new ExtendsTokenParser(),
-//                new IncludeTokenParser(),
-//                new BlockTokenParser(),
-//                new UseTokenParser(),
-//                new FilterTokenParser(),
-//                new MacroTokenParser(),
-//                new ImportTokenParser(),
-//                new FromTokenParser(),
-//                new SetTokenParser(),
-//                new SpacelessTokenParser(),
-//                new FlushTokenParser(),
+                ExtendsStatementParser.class,
+                IncludeStatementParser.class,
+                
+                BlockDefinitionParser.class,
+                MacroDefinitionParser.class,
+                ImportStatementParser.class,
+                FromImportStatementParser.class,
+                EmbedStatementParser.class,
+                CommentParser.class,
+                
+                ForStatementParser.class,
 //                new DoTokenParser(),
-//                new EmbedTokenParser()
+                IfStatementParser.class,
+                
+//                UseTokenParser.class,
+                SetStatementParser.class,
+//                SpacelessTokenParser.class,
+//                FlushTokenParser.class,
+                
+                ConcurrentTag.class,
+                SpacelessTag.class,
+                FilterTag.class
         );
     }
     

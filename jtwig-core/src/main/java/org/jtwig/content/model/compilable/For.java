@@ -43,6 +43,11 @@ public class For extends Content<For> {
         this.collection = collection;
     }
 
+    public For withElse (Sequence content) {
+        this.elseContent = content.withParent(this);
+        return this;
+    }
+
     @Override
     public Renderable compile(CompileContext context) throws CompileException {
         Renderable elseContent = null;
@@ -50,11 +55,6 @@ public class For extends Content<For> {
             elseContent = this.elseContent.compile(context);
         }
         return new Compiled(super.compile(context), collection.compile(context), elseContent, key, value);
-    }
-
-    public For withElse (Sequence content) {
-        this.elseContent = content.withParent(this);
-        return this;
     }
 
     static class Compiled implements Renderable {

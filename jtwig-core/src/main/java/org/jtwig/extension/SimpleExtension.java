@@ -14,11 +14,12 @@
 
 package org.jtwig.extension;
 
+import org.jtwig.extension.api.tokenparser.TokenParser;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import org.jtwig.Environment;
-import org.jtwig.extension.operator.Operator;
+import org.jtwig.extension.api.operator.Operator;
 
 public abstract class SimpleExtension implements Extension {
 
@@ -58,7 +59,7 @@ public abstract class SimpleExtension implements Extension {
     }
 
     @Override
-    public Collection<TokenParser> getTokenParsers() {
+    public Collection<Class<? extends TokenParser>> getTokenParsers() {
         return Collections.EMPTY_LIST;
     }
     

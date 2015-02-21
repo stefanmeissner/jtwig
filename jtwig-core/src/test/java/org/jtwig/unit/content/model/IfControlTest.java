@@ -79,11 +79,11 @@ public class IfControlTest {
         IfControl.Case aCase = mock(IfControl.Case.class, Mockito.RETURNS_DEEP_STUBS);
         IfControl control = new IfControl().add(aCase);
 
-        control.tag().whiteSpaceControl().trimAfterBegin();
-        control.tag().whiteSpaceControl().trimBeforeEnd();
+        control.tag().whiteSpaceControl().trimAfterOpen();
+        control.tag().whiteSpaceControl().trimBeforeClose();
 
-        verify(aCase.tag().whiteSpaceControl()).trimAfterBegin();
-        verify(aCase.tag().whiteSpaceControl()).trimBeforeEnd();
+        verify(aCase.tag().whiteSpaceControl()).trimAfterOpen();
+        verify(aCase.tag().whiteSpaceControl()).trimBeforeClose();
     }
 
 

@@ -19,7 +19,6 @@ import org.jtwig.AbstractJtwigTest;
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
-import org.jtwig.content.model.BasicTemplate;
 import org.jtwig.content.model.Template;
 import org.jtwig.content.model.compilable.Include;
 import org.jtwig.exception.CalculateException;
@@ -130,10 +129,10 @@ public class IncludeTest extends AbstractJtwigTest {
                 .render(renderContext);
     }
     private Template toTemplate(final Renderable elementRender) {
-        return new BasicTemplate(position) {
+        return new Template(position) {
             @Override
-            public CompiledBasicTemplate compile(CompileContext context) throws CompileException {
-                return new CompiledBasicTemplate(position, null, null, elementRender);
+            public Compiled compile(CompileContext context) throws CompileException {
+                return new Compiled(position, null, null, null, elementRender, context);
             }
         };
     }

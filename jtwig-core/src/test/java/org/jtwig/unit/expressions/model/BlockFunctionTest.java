@@ -15,20 +15,24 @@
 package org.jtwig.unit.expressions.model;
 
 import org.jtwig.AbstractJtwigTest;
-import org.jtwig.content.model.BasicTemplate;
 import org.jtwig.content.model.Template;
-import org.jtwig.exception.CompileException;
-import org.jtwig.expressions.model.BlockFunction;
-import org.jtwig.expressions.model.Constant;
-import org.jtwig.MultiresourceUnitTest;
 import org.jtwig.content.model.compilable.Block;
 import org.jtwig.exception.CalculateException;
+import org.jtwig.exception.CompileException;
 import org.jtwig.exception.RenderException;
+import org.jtwig.expressions.model.BlockFunction;
+import org.jtwig.expressions.model.Constant;
 import org.jtwig.render.RenderContext;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BlockFunctionTest extends AbstractJtwigTest {
     
@@ -45,7 +49,7 @@ public class BlockFunctionTest extends AbstractJtwigTest {
 
     @Test
     public void expressionCalculationQueriesContext() throws Exception {
-        Template.CompiledTemplate template = mock(BasicTemplate.CompiledBasicTemplate.class);
+        Template.Compiled template = mock(Template.Compiled.class);
         when(template.getPrimordial()).thenReturn(template);
         doReturn(template).when(renderContext).getRenderingTemplate();
         BlockFunction block = new BlockFunction(null);
@@ -60,7 +64,7 @@ public class BlockFunctionTest extends AbstractJtwigTest {
     public void calculateCapturesRenderException() throws Exception {
         Block.CompiledBlock block = mock(Block.CompiledBlock.class);
         doThrow(RenderException.class).when(block).render(any(RenderContext.class));
-        Template.CompiledTemplate template = mock(BasicTemplate.CompiledBasicTemplate.class);
+        Template.Compiled template = mock(Template.Compiled.class);
         when(template.block(anyString())).thenReturn(block);
         when(template.getPrimordial()).thenReturn(template);
         doReturn(template).when(renderContext).getRenderingTemplate();

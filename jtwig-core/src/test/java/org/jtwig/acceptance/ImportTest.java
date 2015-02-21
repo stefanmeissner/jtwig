@@ -28,7 +28,7 @@ public class ImportTest extends AbstractJtwigTest {
     @Test
     public void basicExample() throws Exception {
         withResource(classpathResource("templates/acceptance/import/import.twig"));
-        then(theResult().trim(), is(equalTo("text (test)\n\n\npassword (pass)\n\n\npassword (password)")));
+        then(theResult().trim(), is(equalTo("text (test)\npassword (pass)\npassword (password)")));
     }
     
     @Test(expected = ParseException.class)

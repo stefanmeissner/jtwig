@@ -14,8 +14,6 @@
 
 package org.jtwig.content.model.compilable;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.Template;
@@ -57,8 +55,9 @@ public class Block extends Content<Block> {
         @Override
         public void render(final RenderContext context) throws RenderException {
             try {
+//                CompiledBlock b = context.getRenderingTemplate().getPrimordial().block(name);
                 String path = position.getResource().relativePath();
-                Template.CompiledTemplate t = context.environment().compile(path);
+                Template.Compiled t = context.environment().compile(path);
                 CompiledBlock b = t.block(name);
                 b.content.render(context);
             } catch (CompileException | ParseException | ResourceException ex) {

@@ -46,12 +46,12 @@ public class JtwigBasicParser extends BaseParser<String> {
         ));
     }
 
-    public Rule closeCode() {
-        return String(env.getSymbols().endTag());
-    }
-
     public Rule openCode() {
         return String(env.getSymbols().beginTag());
+    }
+
+    public Rule closeCode() {
+        return String(env.getSymbols().endTag());
     }
 
     public Rule openOutput() {
@@ -89,6 +89,10 @@ public class JtwigBasicParser extends BaseParser<String> {
     @SuppressNode
     public Rule keyword(JtwigKeyword keyword) {
         return terminal(keyword.getKeyword(), letterOrDigit());
+    }
+    @SuppressNode
+    public Rule keyword(String keyword) {
+        return terminal(keyword, letterOrDigit());
     }
 
     @SuppressNode
@@ -141,7 +145,7 @@ public class JtwigBasicParser extends BaseParser<String> {
      *
      * @return
      */
-    protected Rule stringLiteral() {
+    public Rule stringLiteral() {
         return FirstOf(
                 Sequence(
                         '"',

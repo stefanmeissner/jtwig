@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import static java.lang.String.format;
 
 public class Variable extends AbstractCompilableExpression {
-    private static Logger log = LoggerFactory.getLogger(Variable.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Variable.class);
     private String name;
 
     public Variable(JtwigPosition position, String name) {
@@ -72,8 +72,9 @@ public class Variable extends AbstractCompilableExpression {
             if (result instanceof Undefined) {
                 if (context.environment().isStrictMode())
                     throw new CalculateException(position + format(": Variable '%s' does not exist", name));
-                else if (context.environment().isLogNonStrictMode())
-                    log.debug(position + format(": Variable '%s' does not exist", name));
+                else if (context.environment().isLogNonStrictMode()) {
+                    LOGGER.debug(position + format(": Variable '%s' does not exist", name));
+                }
             }
             return result;
         }

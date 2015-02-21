@@ -25,14 +25,14 @@ public class MacroTest extends AbstractJtwigTest {
     @Test
     public void ensureMacrosAreAddedToTemplate() throws Exception {
         withResource(classpathResource("templates/acceptance/macro/macro.twig"));
-        Template.CompiledTemplate ct = theEnvironment().compile(resource);
+        Template.Compiled ct = theEnvironment().compile(resource);
         then(ct.macros().size(), is(equalTo(2)));
     }
     
     @Test
     public void ensureLastMacroDefinedWithSameNameIsUsed() throws Exception {
         withResource(classpathResource("templates/acceptance/macro/overloading.twig"));
-        Template.CompiledTemplate t = theEnvironment().compile(resource);
+        Template.Compiled t = theEnvironment().compile(resource);
         then(t.macros().size(), is(equalTo(1)));
         then(t.macros().entrySet().iterator().next().getValue().arguments().size(), is(equalTo(1)));
     }

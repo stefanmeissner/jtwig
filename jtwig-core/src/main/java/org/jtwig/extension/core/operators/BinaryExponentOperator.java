@@ -16,9 +16,7 @@ package org.jtwig.extension.core.operators;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import org.apfloat.Apfloat;
-import org.apfloat.ApfloatMath;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import org.jtwig.util.BigDecimalUtil;
@@ -33,13 +31,7 @@ public class BinaryExponentOperator extends BinaryOperator {
 
     @Override
     public Object render(RenderContext ctx, JtwigPosition pos, Object left, Object right) {
-        System.out.println("Left type: "+left.getClass().getName());
-        System.out.println("Left: "+left);
-        System.out.println("Right type: "+right.getClass().getName());
-        System.out.println("Right: "+right);
-        
         BigDecimal result = BigDecimalUtil.exp(BigDecimalUtil.ln(toDecimal(left), 5).multiply(toDecimal(right)), 5).round(new MathContext(5));
-        System.out.println("BigDecimal result: "+result.toString());
         if (isDecimal(left) || isDecimal(right) || result.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) != 0) {
             return result;
         }

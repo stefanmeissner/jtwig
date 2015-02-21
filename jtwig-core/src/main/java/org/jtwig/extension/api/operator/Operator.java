@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.operator;
+package org.jtwig.extension.api.operator;
 
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;

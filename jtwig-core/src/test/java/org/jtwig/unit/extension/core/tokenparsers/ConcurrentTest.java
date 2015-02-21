@@ -1,23 +1,23 @@
-package org.jtwig.unit.addons.concurrent;
+package org.jtwig.unit.extension.core.tokenparsers;
 
-import org.jtwig.addons.concurrent.Concurrent;
+import java.io.IOException;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.RenderException;
+import org.jtwig.extension.core.tokenparsers.ConcurrentTag;
 import org.jtwig.render.RenderContext;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ConcurrentTest {
     private final CompileContext compileContext = mock(CompileContext.class);
     private final RenderContext renderContext = mock(RenderContext.class);
-    private Concurrent concurrent = new Concurrent()
+    private ConcurrentTag.Concurrent concurrent = new ConcurrentTag.Concurrent()
             .withContent(new Sequence());
 
     @Before

@@ -35,7 +35,6 @@ import org.jtwig.parser.config.TagSymbols;
 import org.jtwig.parser.parboiled.JtwigBasicParser;
 import org.jtwig.parser.parboiled.JtwigConstantParser;
 import org.jtwig.parser.parboiled.JtwigContentParser;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.parser.parboiled.JtwigTagPropertyParser;
 import org.parboiled.Parboiled;
 import static org.parboiled.Parboiled.createParser;
@@ -225,7 +224,7 @@ public class Environment {
             return cached;
         } catch (ParserRuntimeException e) {
             if (e.getCause() instanceof ParseBypassException) {
-                ParseException innerException = ((ParseBypassException) e.getCause()).getInnerException();
+                ParseException innerException = ((ParseBypassException) e.getCause()).getCause();
                 innerException.setExpression(e.getMessage());
                 throw innerException;
             } else {
@@ -236,40 +235,40 @@ public class Environment {
         }
     }
     
-    public Template.CompiledTemplate compile(final String name)
+    public Template.Compiled compile(final String name)
             throws ResourceException, ParseException, CompileException {
         Loader.Resource resource = load(name);
         Template template = parse(resource);
         return compile(template, resource);
     }
-    public Template.CompiledTemplate compile(final String name,
+    public Template.Compiled compile(final String name,
             final CompileContext context)
             throws ResourceException, ParseException, CompileException {
         Loader.Resource resource = load(name);
         Template template = parse(resource);
         return compile(template, resource, context);
     }
-    public Template.CompiledTemplate compile(final Loader.Resource resource)
+    public Template.Compiled compile(final Loader.Resource resource)
             throws ResourceException, ParseException, CompileException {
         Template template = parse(resource);
         return compile(template, resource);
     }
-    public Template.CompiledTemplate compile(final Loader.Resource resource,
+    public Template.Compiled compile(final Loader.Resource resource,
             final CompileContext context)
             throws ResourceException, ParseException, CompileException {
         Template template = parse(resource);
         return compile(template, resource);
     }
-    public Template.CompiledTemplate compile(final Template template,
+    public Template.Compiled compile(final Template template,
             final Loader.Resource resource)
             throws ResourceException, ParseException, CompileException {
         CompileContext compileContext = new CompileContext(resource, this);
         return compile(template, resource, compileContext);
     }
-    public Template.CompiledTemplate compile(final Template template,
+    public Template.Compiled compile(final Template template,
             final Loader.Resource resource,
             final CompileContext context) throws CompileException {
-        Template.CompiledTemplate cached = getCache().getCompiled(resource.getCacheKey());
+        Template.Compiled cached = getCache().getCompiled(resource.getCacheKey());
         if (cached != null) {
             return cached;
         }

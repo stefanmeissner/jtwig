@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.operator;
+package org.jtwig.extension.api.operator;
 
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
@@ -20,42 +20,54 @@ import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.types.Undefined.UNDEFINED;
+import org.parboiled.Rule;
 
-public abstract class UnaryOperator extends AbstractOperator {
-    public UnaryOperator(final String name, final int precedence) {
+public abstract class BinaryOperator extends AbstractOperator {
+    public BinaryOperator(final String name, final int precedence) {
         super(name, precedence);
+    }
+    
+    public Rule getRightSideRule(JtwigExpressionParser expr) {
+        return null;
     }
 
     @Override
     public Expression compile(final Environment env, final JtwigPosition pos,
             final CompileContext ctx, final Object... args)
             throws CompileException {
-        assert args.length == 1;
+        assert args.length == 2;
         
-        final Expression input = (Expression)args[0];
-        return new UnaryCallback(pos, input);
+        final Expression left = (Expression)args[0];
+        final Expression right = (Expression)args[1];
+        return new BinaryCallback(pos, left, right);
     }
     
-    public abstract Object render(RenderContext ctx, JtwigPosition pos, Object input) throws CalculateException;
+    public abstract Object render(RenderContext ctx, JtwigPosition pos, Object left, Object right) throws CalculateException;
     
-    public class UnaryCallback implements Expression {
+    public class BinaryCallback implements Expression {
         protected final JtwigPosition pos;
-        protected final Expression input;
+        protected final Expression left;
+        protected final Expression right;
         
-        public UnaryCallback(final JtwigPosition pos, final Expression input) {
+        public BinaryCallback(final JtwigPosition pos, final Expression left, final Expression right) {
             this.pos = pos;
-            this.input = input;
+            this.left = left;
+            this.right = right;
         }
 
         @Override
         public Object calculate(final RenderContext context) throws CalculateException {
-            Object calculatedInput = input.calculate(context);
+            Object calculatedLeft = left.calculate(context);
+            Object calculatedRight = right.calculate(context);
 
-            if (calculatedInput == UNDEFINED)
-                calculatedInput = null;
-            return UnaryOperator.this.render(context, pos, calculatedInput);
+            if (calculatedLeft == UNDEFINED)
+                calculatedLeft = null;
+            if (calculatedRight == UNDEFINED)
+                calculatedRight = null;
+            return BinaryOperator.this.render(context, pos, calculatedLeft, calculatedRight);
         }
         
     }

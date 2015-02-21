@@ -15,7 +15,7 @@
 package org.jtwig.extension.core.operators;
 
 import java.util.Map;
-import org.jtwig.extension.operator.BinaryOperator;
+import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import org.jtwig.util.ObjectIterator;

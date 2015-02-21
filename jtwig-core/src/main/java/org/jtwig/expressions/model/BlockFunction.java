@@ -73,7 +73,7 @@ public class BlockFunction extends AbstractCompilableExpression {
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 RenderContext isolated = context.newRenderContext(baos);
-                Template.CompiledTemplate template = context.getRenderingTemplate();
+                Template.Compiled template = context.getRenderingTemplate();
                 Renderable block = template.getPrimordial().block(getFirstArgument().calculate(isolated).toString());
                 if (block != null) {
                     block.render(isolated);

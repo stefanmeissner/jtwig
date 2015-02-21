@@ -23,7 +23,7 @@ import org.jtwig.parser.model.JtwigPosition;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jtwig.extension.operator.Operator;
+import org.jtwig.extension.api.operator.Operator;
 
 public class OperationBinary extends AbstractCompilableExpression {
     private List<CompilableExpression> operands = new ArrayList<>();

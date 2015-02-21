@@ -28,6 +28,7 @@ import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.util.TypeUtil.toBoolean;
+import org.slf4j.LoggerFactory;
 
 public class IfControl extends AbstractElement {
     private List<Case> cases = new ArrayList<>();
@@ -43,24 +44,30 @@ public class IfControl extends AbstractElement {
             @Override
             public WhiteSpaceControl whiteSpaceControl() {
                 return new WhiteSpaceControl(){
+
                     @Override
-                    public boolean trimBeforeBegin() {
-                        return cases.get(0).tag().whiteSpaceControl().trimBeforeBegin();
+                    public WhiteSpaceControl trimBeforeOpen(boolean value) {
+                        return super.trimBeforeOpen(value);
+                    }
+                    
+                    @Override
+                    public boolean trimBeforeOpen() {
+                        return cases.get(0).tag().whiteSpaceControl().trimBeforeOpen();
                     }
 
                     @Override
-                    public boolean trimAfterBegin() {
-                        return cases.get(0).tag().whiteSpaceControl().trimAfterBegin();
+                    public boolean trimAfterOpen() {
+                        return cases.get(0).tag().whiteSpaceControl().trimAfterOpen();
                     }
 
                     @Override
-                    public boolean trimBeforeEnd() {
-                        return cases.get(cases.size()-1).tag().whiteSpaceControl().trimBeforeEnd();
+                    public boolean trimBeforeClose() {
+                        return cases.get(cases.size()-1).tag().whiteSpaceControl().trimBeforeClose();
                     }
 
                     @Override
-                    public boolean trimAfterEnd() {
-                        return cases.get(cases.size()-1).tag().whiteSpaceControl().trimAfterEnd();
+                    public boolean trimAfterClose() {
+                        return cases.get(cases.size()-1).tag().whiteSpaceControl().trimAfterClose();
                     }
                 };
             }

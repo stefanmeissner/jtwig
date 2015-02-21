@@ -18,7 +18,7 @@ import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.extension.operator.Operator;
+import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.parser.model.JtwigPosition;
 
 public class OperationUnary extends AbstractCompilableExpression {

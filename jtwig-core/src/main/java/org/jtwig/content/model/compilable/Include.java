@@ -109,7 +109,7 @@ public class Include extends AbstractElement {
                     return;
                 }
                 CompileContext compileCtx = compileContext.clone().withResource(resource);
-                Template.CompiledTemplate compiled = context.environment().compile(resource, compileCtx);
+                Template.Compiled compiled = context.environment().compile(resource, compileCtx);
 
                 // Isolate the render context if needed
                 RenderContext usedContext = context;

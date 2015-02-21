@@ -12,12 +12,8 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension;
+package org.jtwig.extension.core.functions;
 
-/**
- *
- * @author thomas
- */
-public class TokenParser {
+public class BlockFunction {
     
 }
