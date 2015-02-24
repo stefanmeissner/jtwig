@@ -12,16 +12,25 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core.filters;
+package org.jtwig.acceptance.extension.core.functions;
 
 import org.jtwig.AbstractJtwigTest;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
-public class BatchFilterTest extends AbstractJtwigTest {
+public class MaxFunctionTest extends AbstractJtwigTest {
+    
     @Test
-    public void generalTests() throws Exception {
-        assertEquals("g,none,none", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none')[2] }}")));
-        assertEquals("a,b,none", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3, 'none')[2] }}")));
+    public void maxPrefersIntegersOverCharacters() throws Exception {
+        Object result = underTest.max(1,2,'a','e');
+        assertEquals(2, result);
+    }
+    @Test
+    public void maxPrefersLowercase() throws Exception {
+        Object result = underTest.max('a','A','b');
+        assertEquals('b', result);
+    }
+    @Test
+    public void maxWorksAlphabetically() throws Exception {
+        Object result = underTest.max("hello","help",'z');
+        assertEquals('z', result);
     }
 }

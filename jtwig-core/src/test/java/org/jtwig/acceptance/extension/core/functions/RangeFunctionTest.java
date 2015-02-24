@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,23 +12,12 @@
  * limitations under the License.
  */
 
-package org.jtwig.functions.builtin;
+package org.jtwig.acceptance.extension.core.functions;
 
-import org.jtwig.functions.exceptions.FunctionException;
-import org.junit.Test;
+import org.jtwig.AbstractJtwigTest;
 
-import java.util.List;
-
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
-public class NumberFunctionsTest {
-    NumberFunctions underTest = new NumberFunctions();
-
-
-
-
+public class RangeFunctionTest extends AbstractJtwigTest {
+    
     @Test
     public void range() throws FunctionException {
         List<Integer> list = underTest.range(1, 10, 2);

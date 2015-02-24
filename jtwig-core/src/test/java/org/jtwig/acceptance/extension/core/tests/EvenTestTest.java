@@ -12,16 +12,18 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core.filters;
+package org.jtwig.acceptance.extension.core.tests;
 
 import org.jtwig.AbstractJtwigTest;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
-public class BatchFilterTest extends AbstractJtwigTest {
+public class EvenTestTest extends AbstractJtwigTest {
+    
     @Test
-    public void generalTests() throws Exception {
-        assertEquals("g,none,none", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none')[2] }}")));
-        assertEquals("a,b,none", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3, 'none')[2] }}")));
+    public void even() throws Exception {
+        assertTrue(underTest.even(2));
+    }
+    @Test
+    public void evenFalse() throws Exception {
+        assertFalse(underTest.even(3));
     }
 }
