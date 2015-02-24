@@ -14,26 +14,24 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Collection;
+import java.util.Map;
+import org.jtwig.extension.api.filters.Filter;
 
-public class LengthFilter implements Callback {
+public class LengthFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left instanceof Collection) {
+            return ((Collection)left).size();
+        }
+        if (left instanceof Map) {
+            return ((Map)left).size();
+        }
+        if (left instanceof CharSequence) {
+            return ((CharSequence)left).length();
+        }
+        return 1;
     }
     
 }

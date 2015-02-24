@@ -18,7 +18,9 @@ import org.jtwig.extension.api.tokenparser.TokenParser;
 import java.util.Collection;
 import java.util.Map;
 import org.jtwig.Environment;
+import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.api.test.Test;
 
 public interface Extension {
     /**
@@ -60,12 +62,12 @@ public interface Extension {
      * name.
      * @return A map of filters.
      */
-    Map<String, SimpleFilter> getFilters();
+    Map<String, Filter> getFilters();
     /**
      * Returns a map of tests registered by the extension, indexed by test name.
      * @return A map of tests.
      */
-    Map<String, SimpleTest> getTests();
+    Map<String, Test> getTests();
     /**
      * Returns a collection of token parser instances registered by the
      * extension.

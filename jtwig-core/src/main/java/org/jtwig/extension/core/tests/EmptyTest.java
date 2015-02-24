@@ -14,26 +14,55 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Collection;
+import java.util.Map;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import org.hamcrest.core.AnyOf;
+import org.jtwig.extension.api.test.Test;
+import org.jtwig.functions.util.CastMatcher;
 
-public class EmptyTest implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class EmptyTest implements Test {
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public boolean evaluate(Object... args) {
+        assert args.length == 1;
+        
+        return AnyOf.<Object>anyOf(
+                nullValue(Object.class),
+                emptyCollection(),
+                emptyMap(),
+                notHasNext(),
+                zeroValue()
+        ).matches(args[0]);
     }
-    
+
+    private Matcher<Object> emptyMap() {
+        return new CastMatcher<>(Map.class, new FeatureMatcher<Map, Collection>(emptyCollection(), "empty list", "empty list") {
+            @Override
+            protected Collection featureValueOf(Map actual) {
+                return actual.keySet();
+            }
+        });
+    }
+
+    private Matcher<Object> zeroValue() {
+        return new CastMatcher<>(Integer.class, equalTo(0));
+    }
+
+    private Matcher<Object> emptyCollection() {
+        return new CastMatcher<>(Collection.class, (Matcher) empty());
+    }
+
+    private Matcher<Object> notHasNext() {
+        return new CastMatcher<>(Iterable.class, new FeatureMatcher<Iterable, Boolean>(equalTo(false), "has next", "has next") {
+            @Override
+            protected Boolean featureValueOf(Iterable actual) {
+                return actual.iterator().hasNext();
+            }
+        });
+    }
 }

@@ -14,26 +14,27 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.ISODateTimeFormat;
+import org.jtwig.extension.api.filters.Filter;
 
-public class DateFilter implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class DateFilter implements Filter {
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        LocalDateTime ldt;
+        if (left instanceof Date) {
+            ldt = LocalDateTime.fromDateFields((Date)left);
+        } else {
+            ldt = LocalDateTime.parse(left.toString());
+        }
+        
+        if (args.length >= 1) {
+            return ldt.toString(DateTimeFormat.forPattern(args[0].toString()));
+        }
+        return ldt.toString(ISODateTimeFormat.dateHourMinuteSecond());
     }
-    
 }

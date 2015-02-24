@@ -24,7 +24,7 @@ import org.jtwig.types.Undefined;
  * A collection of type conversion and determination functions.
  */
 public class TypeUtil {
-    public static final String NUMBER_PATTERN = "([\\d]+(\\.[\\d]+)?).*";
+    public static final String NUMBER_PATTERN = "([\\-+]?[\\d]+?(\\.[\\d]+)?).*";
     public static final Pattern NUMBER = Pattern.compile("^"+NUMBER_PATTERN+"$");
     
     /**

@@ -14,26 +14,16 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.filters.Filter;
 
-public class Newline2BreakFilter implements Callback {
+public class Newline2BreakFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left.toString().isEmpty()) {
+            return null;
+        }
+        
+        return left.toString().replace("\n", "<br/>");
     }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
-    }
-    
 }

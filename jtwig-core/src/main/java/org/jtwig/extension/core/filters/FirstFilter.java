@@ -14,26 +14,48 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Collection;
+import java.util.Map;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.TypeUtil;
 
-public class FirstFilter implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class FirstFilter implements Filter {
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        if (left == null || left instanceof Undefined) {
+            return null;
+        }
+        if (left instanceof Collection) {
+            if (((Collection)left).isEmpty()) {
+                return null;
+            }
+            return ((Collection)left).iterator().next();
+        }
+        if (left instanceof Map) {
+            if (((Map)left).isEmpty()) {
+                return null;
+            }
+            return ((Map)left).values().iterator().next();
+        }
+        if (left instanceof CharSequence) {
+            if (((CharSequence)left).length() == 0) {
+                return null;
+            }
+            return ((CharSequence)left).charAt(0);
+        }
+        if (TypeUtil.isLong(left)) {
+            return left.toString().charAt(0);
+        }
+        if (TypeUtil.isDecimal(left)) {
+            return left.toString().charAt(0);
+        }
+        if (TypeUtil.isBoolean(left)) {
+            return left;
+        }
+        throw new FilterException("Object of type "+left.getClass().getName()+" could not be converted to string");
     }
     
 }

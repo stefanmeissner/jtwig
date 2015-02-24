@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import org.jtwig.util.TypeUtil;
 
-public class ObjectIterator implements Iterator<Object> {
+public class ObjectIterator implements Iterable<Object>, Iterator<Object> {
     private final List<Object> list;
     private final Iterator<Object> iterator;
     private final int size;
@@ -37,12 +37,18 @@ public class ObjectIterator implements Iterator<Object> {
                 for (Object obj : objects)
                     list.add(obj);
             } else if (context instanceof Map) {
-                list.addAll(((Map) context).keySet());
+                list.addAll(((Map) context).values());
             }
             else list.add(context);
         }
         size = list.size();
         iterator = list.iterator();
+    }
+    
+    //~ Iterable impl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public Iterator<Object> iterator() {
+        return this;
     }
 
     //~ Iterator impl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

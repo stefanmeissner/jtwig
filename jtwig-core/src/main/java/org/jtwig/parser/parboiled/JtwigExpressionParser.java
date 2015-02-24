@@ -14,18 +14,13 @@
 
 package org.jtwig.parser.parboiled;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jtwig.Environment;
-import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.expressions.api.CompilableExpression;
-import org.jtwig.expressions.model.BlockFunction;
 import org.jtwig.expressions.model.Constant;
 import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.MapSelection;
@@ -34,12 +29,11 @@ import org.jtwig.expressions.model.OperationTernary;
 import org.jtwig.expressions.model.OperationUnary;
 import org.jtwig.expressions.model.ValueList;
 import org.jtwig.expressions.model.ValueMap;
-import org.jtwig.expressions.model.ValueRange;
 import org.jtwig.expressions.model.Variable;
-import org.jtwig.extension.SimpleTest;
 import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.operator.UnaryOperator;
+import org.jtwig.extension.model.FilterCall;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigKeyword;
 import org.jtwig.parser.model.JtwigSymbol;
@@ -53,9 +47,9 @@ import static org.jtwig.parser.model.JtwigSymbol.OPEN_BRACKET;
 import static org.jtwig.parser.model.JtwigSymbol.OPEN_CURLY_BRACKET;
 import static org.jtwig.parser.model.JtwigSymbol.OPEN_PARENT;
 import static org.jtwig.parser.model.JtwigSymbol.QUESTION;
-import static org.jtwig.parser.model.JtwigSymbol.TWO_DOTS;
 import org.parboiled.MatcherContext;
 import org.parboiled.Rule;
+import org.parboiled.annotations.Label;
 import org.parboiled.annotations.SuppressNode;
 import org.parboiled.matchers.CustomMatcher;
 import org.parboiled.support.ValueStack;
@@ -75,10 +69,10 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         this.env = env;
     }
     
+    @Label("Expression")
     public Rule expression() {
         return Sequence(
                 operators(),
-//                primary(),
                 push(pop())
         );
     }
@@ -93,7 +87,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     Rule operatorsHierarchy() {
         List<Operator> operators = new ArrayList<>(env.getExtensions().getBinaryOperators().values());
         operators.addAll(env.getExtensions().getUnaryOperators().values());
-        Collections.sort(operators);
+        Collections.sort(operators, Collections.reverseOrder());
         
         Rule previous = primary();
         for (Operator op : operators) {
@@ -116,13 +110,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
 
     String[] tests() {
-        Collection<SimpleTest> tests = env.getExtensions().getTests().values();
-        return Collections2.transform(tests, new Function<SimpleTest, String>() {
-            @Override
-            public String apply(SimpleTest input) {
-                return input.getName();
-            }
-        }).toArray(new String[0]);
+        return env.getExtensions().getTests().keySet().toArray(new String[0]);
     }
 
     Rule primary() {
@@ -175,9 +163,9 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
                         Sequence(
                                 expression(),
                                 symbol(CLOSE_BRACKET),
-                                push(new MapSelection(currentPosition(), pop(1, Variable.class), pop()))
+                                push(new MapSelection(currentPosition(), pop(1), pop()))
                         ),
-                        new ParseException("Wring map selection syntax")
+                        new ParseException("Wrong map selection syntax")
                 )
         );
     }
@@ -269,6 +257,36 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
                                 symbol(CLOSE_PARENT)
                         ),
                         new ParseException("Wrong function syntax")
+                )
+        );
+    }
+    
+    public Rule filter() {
+        return FirstOf(
+                Sequence(
+                        identifierAsString(),
+                        symbol(OPEN_PARENT),
+                        push(new FilterCall(currentPosition(), popIdentifierAsString())),
+                        mandatory(
+                                Sequence(
+                                        Optional(
+                                                expression(),
+                                                action(peek(1, FilterCall.class).add(pop())),
+                                                ZeroOrMore(
+                                                        symbol(COMMA),
+                                                        expression(),
+                                                        action((peek(1, FilterCall.class)).add(pop()))
+                                                )
+                                        ),
+                                        symbol(CLOSE_PARENT)
+                                ),
+                                new ParseException("Wrong function syntax")
+                        )
+                ),
+                Sequence(
+                        identifierAsString(),
+                        push(new FilterCall(currentPosition(), popIdentifierAsString())),
+                        basic.spacing()
                 )
         );
     }

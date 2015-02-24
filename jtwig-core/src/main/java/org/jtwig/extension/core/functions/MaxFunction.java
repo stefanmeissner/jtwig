@@ -14,10 +14,14 @@
 
 package org.jtwig.extension.core.functions;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CompileException;
 import org.jtwig.extension.Callback;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
+import static org.jtwig.functions.util.ObjectUtils.compare;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.parboiled.Rule;
@@ -34,6 +38,19 @@ public class MaxFunction implements Callback {
     @Override
     public Rule getRightSideRule(JtwigExpressionParser expr) {
         return null;
+    }
+    
+    @JtwigFunction(name = "max")
+    public Object max (@Parameter Object ... values) {
+        Object result = values[0];
+        values = ArrayUtils.remove(values, 0);
+        for(Object value : values) {
+            int cmp = compare(result, value);
+            if(cmp < 0) {
+                result = value;
+            }
+        }
+        return result;
     }
     
 }

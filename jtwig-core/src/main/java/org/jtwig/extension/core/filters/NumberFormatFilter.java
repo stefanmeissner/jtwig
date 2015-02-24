@@ -14,26 +14,48 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.TypeUtil;
 
-public class NumberFormatFilter implements Callback {
+public class NumberFormatFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            left = 0;
+        }
+        if (TypeUtil.isLong(left)) {
+            left = TypeUtil.toLong(left);
+        }
+        if (TypeUtil.isDecimal(left)) {
+            left = TypeUtil.toDecimal(left);
+        }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+        DecimalFormat numberFormat = new DecimalFormat();
+        DecimalFormatSymbols decimalFormatSymbols = numberFormat.getDecimalFormatSymbols();
+        decimalFormatSymbols.setDecimalSeparator('.');
+        numberFormat.setGroupingUsed(false);
+
+        if (args.length > 0 && args[0] != null) {
+            numberFormat.setMaximumFractionDigits(TypeUtil.toLong(args[0]).intValue());
+            numberFormat.setMinimumFractionDigits(TypeUtil.toLong(args[0]).intValue());
+        }
+
+        if (args.length > 1 && args[1] != null && !args[1].toString().isEmpty()) {
+            decimalFormatSymbols.setDecimalSeparator(args[1].toString().charAt(0));
+        }
+
+        if (args.length > 2 && args[2] != null && !args[2].toString().isEmpty()) {
+            decimalFormatSymbols.setGroupingSeparator(args[2].toString().charAt(0));
+            numberFormat.setGroupingUsed(true);
+        }
+
+        numberFormat.setDecimalFormatSymbols(decimalFormatSymbols);
+
+        return numberFormat.format(left);
     }
     
 }

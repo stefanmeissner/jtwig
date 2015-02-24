@@ -14,26 +14,34 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.ArrayList;
+import java.util.List;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.util.ObjectIterator;
+import org.jtwig.util.TypeUtil;
 
-public class BatchFilter implements Callback {
+public class BatchFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) {
+        assert args.length >= 1;
+        
+        long groupSize = TypeUtil.toLong(args[0]);
+        Object padding = args.length > 1 ? args[1] : null;
+        
+        ObjectIterator iterator = new ObjectIterator(left);
+        List<List<Object>> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            List<Object> batch = new ArrayList<>();
+            for (int i = 0; i < groupSize; i++) {
+                if (iterator.hasNext()) {
+                    batch.add(iterator.next());
+                } else if (padding != null) {
+                    batch.add(padding);
+                }
+            }
+            result.add(batch);
+        }
+        return result;
     }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
-    }
-    
 }

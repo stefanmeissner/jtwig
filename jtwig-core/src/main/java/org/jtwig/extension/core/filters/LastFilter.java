@@ -14,26 +14,94 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.TypeUtil;
 
-public class LastFilter implements Callback {
+public class LastFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        if (left == null || left instanceof Undefined) {
+            return null;
+        }
+        if (left instanceof List) {
+            // Lists are easy, so let's handle them early
+            if (((List)left).isEmpty()) {
+                return null;
+            }
+            return ((List)left).get(((List)left).size()-1);
+        }
+        if (left instanceof Map) {
+            left = ((Map)left).values();
+        }
+        if (left instanceof Collection) {
+            if (((Collection)left).isEmpty()) {
+                return null;
+            }
+            Iterator it = ((Collection)left).iterator();
+            while (it.hasNext()) {
+                Object obj = it.next();
+                if (!it.hasNext()) {
+                    return obj;
+                }
+            }
+            return null;
+        }
+        if (left instanceof CharSequence) {
+            if (((CharSequence)left).length() == 0) {
+                return null;
+            }
+            return ((CharSequence)left).charAt(((CharSequence)left).length()-1);
+        }
+        if (TypeUtil.isLong(left)) {
+            String str = TypeUtil.toLong(left).toString().trim();
+            return str.charAt(str.length()-1);
+        }
+        if (TypeUtil.isDecimal(left)) {
+            String str = TypeUtil.toDecimal(left).toString().trim();
+            return str.charAt(str.length()-1);
+        }
+        if (TypeUtil.isBoolean(left)) {
+            return left;
+        }
+        throw new FilterException("Object of type "+left.getClass().getName()+" could not be converted to string");
     }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    @JtwigFunction(name = "last")
+    public Object last (@Parameter List input) {
+        if (input.isEmpty()) return null;
+        return input.get(input.size() - 1);
+    }
+    @JtwigFunction(name = "last")
+    public Object last (@Parameter Map input) {
+        if (input.isEmpty()) return null;
+        Iterator iterator = input.keySet().iterator();
+        Object key = iterator.next();
+        while (iterator.hasNext()) key = iterator.next();
+        return input.get(key);
+    }
+    @JtwigFunction(name = "last")
+    public Object last (@Parameter Object input) {
+        if (input == null) return input;
+        if (input.getClass().isArray()) {
+            int length = Array.getLength(input);
+            if (length == 0) return null;
+            return Array.get(input, length - 1);
+        } else return input;
+    }
+    @JtwigFunction(name = "last")
+    public Character last (@Parameter String input) {
+        if (input.isEmpty()) return null;
+        return input.charAt(input.length() - 1);
     }
     
 }

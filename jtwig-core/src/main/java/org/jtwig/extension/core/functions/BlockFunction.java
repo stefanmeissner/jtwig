@@ -14,6 +14,24 @@
 
 package org.jtwig.extension.core.functions;
 
-public class BlockFunction {
+import org.jtwig.Environment;
+import org.jtwig.compile.CompileContext;
+import org.jtwig.exception.CompileException;
+import org.jtwig.extension.Callback;
+import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
+import org.parboiled.Rule;
+
+public class BlockFunction implements Callback {
+
+    @Override
+    public Object invoke(Environment env, JtwigPosition pos, CompileContext ctx, Object... args) throws CompileException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rule getRightSideRule(JtwigExpressionParser expr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

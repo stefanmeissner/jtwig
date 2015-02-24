@@ -18,14 +18,17 @@ import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.FunctionElement;
-import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.api.operator.BinaryOperator;
+import org.jtwig.extension.model.FilterCall;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
 import org.parboiled.Rule;
 
+/**
+ * The composition operator is used to apply filters to left-hand arguments,
+ * including chaining filters.
+ */
 public class BinaryCompositionOperator extends BinaryOperator {
 
     public BinaryCompositionOperator(String name, int precedence) {
@@ -38,25 +41,16 @@ public class BinaryCompositionOperator extends BinaryOperator {
 
         final Expression left = (Expression)args[0];
         final Expression right = (Expression)args[1];
-        if (right instanceof Variable.Compiled) {
-            return function(((Variable.Compiled) right).toFunction(), left);
-        }
-        if (right instanceof FunctionElement.Compiled) {
-            return function((FunctionElement.Compiled) right, left);
+        
+        if (right instanceof FilterCall.Compiled) {
+            return ((FilterCall.Compiled)right).cloneAndAddLeftArgument(left);
         }
         throw new CompileException(pos + ": Composition always requires a function to execute as the right argument");
     }
 
     @Override
     public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return expr.FirstOf(
-                expr.functionWithBrackets(),
-                expr.variable()
-        );
-    }
-    
-    private Expression function(FunctionElement.Compiled compiled, Expression left) {
-        return compiled.cloneAndAddArgument(left);
+        return expr.filter();
     }
 
     @Override

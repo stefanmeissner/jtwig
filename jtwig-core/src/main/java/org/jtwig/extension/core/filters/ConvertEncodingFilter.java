@@ -14,26 +14,20 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import static java.nio.charset.Charset.forName;
+import org.apache.commons.lang3.ObjectUtils;
+import org.jtwig.extension.api.filters.Filter;
 
-public class ConvertEncodingFilter implements Callback {
+public class ConvertEncodingFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        assert args.length >= 2;
+        
+        String input = ObjectUtils.defaultIfNull(left, "").toString();
+        String from = args[0].toString();
+        String to = args[1].toString();
+        return new String(input.getBytes(forName(from)), forName(to));
     }
     
 }

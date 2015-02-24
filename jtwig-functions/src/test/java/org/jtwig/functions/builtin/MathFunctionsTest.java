@@ -34,18 +34,4 @@ public class MathFunctionsTest {
     public void absPositiveExecute() throws Exception {
         assertEquals(underTest.abs(1), (Integer) 1);
     }
-
-    @Test
-    public void roundExecuteCommon() throws Exception {
-        assertEquals(1, underTest.round(1.01));
-    }
-
-    @Test
-    public void roundExecuteFloor() throws Exception {
-        assertEquals(1, underTest.round(1.7, "floor"));
-    }
-    @Test
-    public void roundExecuteCeil() throws Exception {
-        assertEquals(2, underTest.round(1.01, "ceil"));
-    }
 }

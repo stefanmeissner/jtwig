@@ -14,26 +14,81 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.TypeUtil;
 
-public class SliceFilter implements Callback {
+public class SliceFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        int start = 0;
+        if (args.length > 0) {
+            start = TypeUtil.toLong(args[0]).intValue();
+        }
+        int length = Integer.MAX_VALUE;
+        if (args.length > 1) {
+            length = TypeUtil.toLong(args[1]).intValue();
+        }
+        
+        if (left instanceof CharSequence || left instanceof Number) {
+            String value = left.toString();
+            if (value.length() < start) {
+                return "";
+            }
+            start = resolveStart(start, value.length());
+            int end = resolveEnd(start, length, value.length());
+            System.out.println("Start: "+start);
+            System.out.println("End: "+end);
+            System.out.println("Requested length: "+length);
+            return value.substring(start, end);
+        }
+        if (left instanceof Collection) {
+            List list = new ArrayList((Collection)left);
+            start = resolveStart(start, list.size());
+            int end = resolveEnd(start, length, list.size());
+            return list.subList(start, end);
+        }
+        if (left instanceof Map) {
+            Map source = (Map)left;
+            Map result = new LinkedHashMap();
+            List keys = new ArrayList(source.keySet());
+            start = resolveStart(start, keys.size());
+            int end = resolveEnd(start, length, keys.size());
+            keys = new ArrayList(keys.subList(start, end));
+            for (Object key : keys) {
+                result.put(key, source.get(key));
+            }
+            return result;
+        }
+        throw new FilterException("Unable to convert "+left.getClass().getName()+" to string");
     }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    
+    protected int resolveStart(int requestedStart, int sourceLength) {
+        if (requestedStart < 0) {
+            return sourceLength + requestedStart;
+        }
+        return Math.min(requestedStart, sourceLength);
+    }
+    protected int resolveEnd(int start, int requestedLength, int sourceLength) {
+        if (requestedLength < 0) {
+            return sourceLength + requestedLength; // Adjust for end-index exclusivity
+        }
+        if (requestedLength == Integer.MAX_VALUE) {
+            return sourceLength;
+        }
+        return Math.min(start + requestedLength, sourceLength);
     }
     
 }

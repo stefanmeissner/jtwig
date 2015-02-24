@@ -12,21 +12,15 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension;
+package org.jtwig.extension.api.filters;
 
-public class SimpleFilter {
-    private final String name;
-    private final Callback callback;
-    
-    public SimpleFilter(final String name, final Callback callback) {
-        this.name = name;
-        this.callback = callback;
+import org.jtwig.exception.CalculateException;
+
+public class FilterException extends CalculateException {
+    public FilterException(String message) {
+        super(message);
     }
-    
-    public String getName() {
-        return name;
-    }
-    public Callback getCallback() {
-        return callback;
+    public FilterException(Throwable cause) {
+        super(cause);
     }
 }

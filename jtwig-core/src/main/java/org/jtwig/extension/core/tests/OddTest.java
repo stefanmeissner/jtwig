@@ -14,26 +14,17 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.math.BigDecimal;
+import org.jtwig.extension.api.test.Test;
+import org.jtwig.util.TypeUtil;
 
-public class OddTest implements Callback {
+public class OddTest implements Test {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public boolean evaluate(Object... args) {
+        assert args.length == 1;
+        
+        return TypeUtil.toDecimal(args).remainder(new BigDecimal("2")).compareTo(BigDecimal.ZERO) == 0;
     }
     
 }

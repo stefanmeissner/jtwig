@@ -14,26 +14,36 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Map;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
 
-public class ReplaceFilter implements Callback {
+public class ReplaceFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || !(left instanceof CharSequence) || args.length == 0
+                || !(args[0] instanceof Map)) {
+            return null;
+        }
+        
+        String input = left.toString();
+        Map replacements = (Map)args[0];
+        for (Object key : replacements.keySet()) {
+            input = input.replace(key.toString(), replacements.get(key).toString());
+        }
+        return input;
     }
     
+
+    @JtwigFunction(name = "replace")
+    public String replace (@Parameter String input, @Parameter Map<String, Object> replacements) {
+        for (String key : replacements.keySet()) {
+            if (replacements.containsKey(key)) {
+                input = input.replace(key, replacements.get(key).toString());
+            }
+        }
+        return input;
+    }
 }

@@ -27,23 +27,6 @@ public class NumberFunctionsTest {
     NumberFunctions underTest = new NumberFunctions();
 
 
-    @Test
-    public void numberFormat() throws FunctionException {
-        assertEquals("1,234.57", underTest.numberFormat(1234.5678, 2, ".", ","));
-    }
-    @Test
-    public void numberFormatWithoutGrouping() throws FunctionException {
-        assertEquals("1234.57", underTest.numberFormat(1234.5678, 2, "."));
-    }
-
-    @Test
-    public void numberFormatWithoutDecimalSeparator() throws FunctionException {
-        assertEquals("1234.57", underTest.numberFormat(1234.5678, 2));
-    }
-    @Test
-    public void numberFormatDefault() throws FunctionException {
-        assertEquals("1234.568", underTest.numberFormat(1234.5678));
-    }
 
 
     @Test

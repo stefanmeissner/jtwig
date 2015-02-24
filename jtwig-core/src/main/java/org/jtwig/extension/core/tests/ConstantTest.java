@@ -14,26 +14,32 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import static java.lang.Class.forName;
+import org.jtwig.extension.api.test.Test;
 
-public class ConstantTest implements Callback {
+public class ConstantTest implements Test {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean evaluate(Object... args) {
+        assert args.length == 2;
+        
+        Object value = args[0];
+        String constant = args[1].toString();
+        
+        int constantNamePosition = constant.lastIndexOf(".");
+        if (constantNamePosition == -1)
+//            throw new FunctionException(String.format("Invalid constant specified '%s'", constant));
+            return false;
+
+        String className = constant.substring(0, constantNamePosition);
+        String constantName = constant.substring(constantNamePosition + 1);
+
+        try {
+            return args[0].equals(forName(className).getDeclaredField(constantName).get(null));
+        } catch (Exception e) {
+//            throw new FunctionException(String.format("Constant '%s' does not exist", constant));
+            return false;
+        }
     }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
-    }
-    
 }

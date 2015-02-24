@@ -14,26 +14,63 @@
 
 package org.jtwig.extension.core.filters;
 
+import static java.util.Arrays.asList;
+import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CompileException;
 import org.jtwig.extension.Callback;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
+import org.jtwig.functions.builtin.StringFunctions;
+import org.jtwig.functions.exceptions.FunctionException;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
+import org.jtwig.types.Undefined;
 import org.parboiled.Rule;
 
-public class EscapeFilter implements Callback {
+public class EscapeFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left instanceof Undefined) {
+            return left;
+        }
+        
+        String input = left.toString();
+        String strategy = args.length > 0 ? args[0].toString() : EscapeStrategy.HTML.name();
+        
+        switch (EscapeStrategy.strategyByName(strategy.toLowerCase())) {
+            case JAVASCRIPT:
+                return StringEscapeUtils.escapeEcmaScript(input);
+            case XML:
+                return StringEscapeUtils.escapeXml(input);
+            case HTML: // Default html
+            default:
+                return StringEscapeUtils.escapeHtml4(input);
+        }
     }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    enum EscapeStrategy {
+        HTML("html"),
+        JAVASCRIPT("js", "javascript"),
+        XML("xml");
+
+        private List<String> representations;
+
+        EscapeStrategy(String... representations) {
+            this.representations = asList(representations);
+        }
+
+        public static EscapeStrategy strategyByName(String name) {
+            for (EscapeStrategy escape : EscapeStrategy.values()) {
+                if (escape.representations.contains(name))
+                    return escape;
+            }
+            throw new IllegalArgumentException(String.format("Unknown strategy '%s'", name));
+        }
     }
     
 }

@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.addons.Addon;
+import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.api.test.Test;
 import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.extension.core.CoreJtwigExtension;
 
@@ -39,9 +41,9 @@ public class ExtensionHolder {
     private final Map<String, Object> globals = new HashMap<>();
     private final Map<String, Operator> unaryOperators = new HashMap<>();
     private final Map<String, Operator> binaryOperators = new HashMap<>();
-    private final Map<String, SimpleFilter> filters = new HashMap<>();
+    private final Map<String, Filter> filters = new HashMap<>();
     private final Map<String, SimpleFunction> functions = new HashMap<>();
-    private final Map<String, SimpleTest> tests = new HashMap<>();
+    private final Map<String, Test> tests = new HashMap<>();
     private final Collection<Class<? extends TokenParser>> tokenParsers = new ArrayList<>();
 //    private final Collection<NodeVisitor> nodeVisitors = new ArrayList<>();
     
@@ -132,19 +134,19 @@ public class ExtensionHolder {
         return result;
     }
     
-    public ExtensionHolder addFilter(final SimpleFilter filter) {
-        filters.put(filter.getName(), filter);
+    public ExtensionHolder addFilter(final String name, final Filter filter) {
+        filters.put(name, filter);
         return this;
     }
-    public SimpleFilter getFilter(final String name) {
-        Map<String, SimpleFilter> filters = getFilters();
+    public Filter getFilter(final String name) {
+        Map<String, Filter> filters = getFilters();
         if (filters.containsKey(name)) {
             return filters.get(name);
         }
         return null;
     }
-    public Map<String, SimpleFilter> getFilters() {
-        Map<String, SimpleFilter> result = new HashMap<>();
+    public Map<String, Filter> getFilters() {
+        Map<String, Filter> result = new HashMap<>();
         for (Extension ex : extensions) {
             result.putAll(ex.getFilters());
         }
@@ -173,19 +175,19 @@ public class ExtensionHolder {
         return result;
     }
     
-    public ExtensionHolder addTest(final SimpleTest test) {
-        tests.put(test.getName(), test);
+    public ExtensionHolder addTest(final String name, final Test test) {
+        tests.put(name, test);
         return this;
     }
-    public SimpleTest getTest(final String name) {
-        Map<String, SimpleTest> tests = getTests();
+    public Test getTest(final String name) {
+        Map<String, Test> tests = getTests();
         if (tests.containsKey(name)) {
             return tests.get(name);
         }
         return null;
     }
-    public Map<String, SimpleTest> getTests() {
-        Map<String, SimpleTest> result = new HashMap<>();
+    public Map<String, Test> getTests() {
+        Map<String, Test> result = new HashMap<>();
         for (Extension ex : extensions) {
             result.putAll(ex.getTests());
         }

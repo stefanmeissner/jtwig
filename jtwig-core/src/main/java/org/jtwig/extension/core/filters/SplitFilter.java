@@ -14,25 +14,28 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.ArrayUtil;
 
-public class SplitFilter implements Callback {
+public class SplitFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        String separator = args.length > 0 ? args[0].toString() : "";
+        
+        if (left instanceof CharSequence || left instanceof Number) {
+            if (args.length > 0) {
+                return StringUtils.split(left.toString(), args[0].toString());
+            }
+            return ArrayUtils.toObject(left.toString().toCharArray());
+        }
         return null;
     }
     

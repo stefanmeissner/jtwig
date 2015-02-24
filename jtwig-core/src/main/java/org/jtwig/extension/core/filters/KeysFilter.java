@@ -14,26 +14,32 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
+import org.jtwig.util.ArrayUtil;
 
-public class KeysFilter implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class KeysFilter implements Filter {
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left instanceof Map) {
+            return ((Map)left).keySet();
+        }
+        System.out.println("Received: "+left.getClass().getName());
+        if (!(left instanceof Collection) || ((Collection)left).isEmpty()) {
+            return new Integer[0];
+        }
+        
+        int size = ((Collection)left).size() - 1;
+        Integer[] result = new Integer[size+1];
+        for (int i = 0; i <= size; i++) {
+            result[i] = i;
+        }
+        return result;
     }
     
 }

@@ -14,26 +14,25 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import static org.jtwig.types.Undefined.UNDEFINED;
 
-public class DefaultFilter implements Callback {
+public class DefaultFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        if (args.length == 0) {
+            throw new FilterException("Default filter requires a default value");
+        }
+        
+        if (left == null || left.equals(UNDEFINED)) {
+            return args[0];
+        }
+        if (left instanceof CharSequence && ((CharSequence)left).length() == 0) {
+            return args[0];
+        }
+        return left;
     }
     
 }

@@ -14,26 +14,43 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.ObjectIterator;
 
-public class JoinFilter implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class JoinFilter implements Filter {
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        if (left instanceof CharSequence) {
+            return left;
+        }
+        
+        if (!(left instanceof Collection) && !(left instanceof Map)
+                && !left.getClass().isArray()) {
+            return null;
+        }
+        
+        List<String> pieces = new ArrayList<>();
+        ObjectIterator iterator = new ObjectIterator(left);
+        while (iterator.hasNext()) {
+            Object next = iterator.next();
+            if (next == null) {
+                pieces.add("");
+            } else {
+                pieces.add(next.toString());
+            }
+        }
+        return StringUtils.join(pieces, args.length > 0 ? args[0].toString() : "");
     }
     
 }

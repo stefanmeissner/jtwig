@@ -14,26 +14,26 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.config.JsonConfiguration;
+import org.jtwig.types.Undefined;
 
-public class JsonEncodeFilter implements Callback {
-
-    @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+public class JsonEncodeFilter implements Filter {
+    private final JsonConfiguration jsonConfiguration;
+    
+    public JsonEncodeFilter() {
+        this(new JsonConfiguration());
+    }
+    public JsonEncodeFilter(JsonConfiguration jsonConfiguration) {
+        this.jsonConfiguration = jsonConfiguration;
     }
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        return jsonConfiguration.jsonMapper().apply(left);
     }
     
 }

@@ -14,26 +14,18 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.Map;
+import org.jtwig.extension.api.test.Test;
 
-public class IterableTest implements Callback {
+public class IterableTest implements Test {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public boolean evaluate(Object... args) {
+        assert args.length == 1;
+        
+        return args[0] instanceof Iterable
+                || args[0].getClass().isArray()
+                || args[0] instanceof Map;
     }
     
 }

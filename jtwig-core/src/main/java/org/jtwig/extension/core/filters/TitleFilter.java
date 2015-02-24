@@ -14,25 +14,21 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.apache.commons.lang3.text.WordUtils;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.types.Undefined;
 
-public class TitleFilter implements Callback {
+public class TitleFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        if (left instanceof CharSequence || left instanceof Number) {
+            return WordUtils.capitalizeFully(left.toString(), " \t\n\r0123456789".toCharArray());
+        }
         return null;
     }
     

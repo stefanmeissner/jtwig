@@ -14,25 +14,22 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.util.HtmlUtils;
+import org.jtwig.types.Undefined;
 
-public class StripTagsFilter implements Callback {
+public class StripTagsFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Object evaluate(Object left, Object... args) {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        if (left instanceof CharSequence || left instanceof Number) {
+            String allowed = args.length > 0 ? args[0].toString() : "";
+            return HtmlUtils.stripTags(left.toString(), allowed);
+        }
         return null;
     }
     

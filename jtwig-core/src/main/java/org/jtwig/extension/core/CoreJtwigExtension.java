@@ -19,9 +19,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.jtwig.extension.SimpleExtension;
-import org.jtwig.extension.SimpleFilter;
 import org.jtwig.extension.SimpleFunction;
-import org.jtwig.extension.SimpleTest;
+import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.extension.core.filters.*;
 import org.jtwig.extension.core.functions.*;
@@ -59,7 +58,6 @@ import org.jtwig.extension.core.operators.BinarySubtractionOperator;
 import org.jtwig.extension.core.operators.UnaryNegativeOperator;
 import org.jtwig.extension.core.operators.UnaryNotOperator;
 import org.jtwig.extension.core.operators.UnaryPositiveOperator;
-import org.jtwig.extension.core.tests.*;
 import org.jtwig.extension.core.tokenparsers.BlockDefinitionParser;
 import org.jtwig.extension.core.tokenparsers.EmbedStatementParser;
 import org.jtwig.extension.core.tokenparsers.ExtendsStatementParser;
@@ -71,6 +69,8 @@ import org.jtwig.extension.core.tokenparsers.IncludeStatementParser;
 import org.jtwig.extension.core.tokenparsers.MacroDefinitionParser;
 import org.jtwig.extension.core.tokenparsers.SetStatementParser;
 import org.jtwig.extension.api.operator.Operator;
+import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.core.tests.*;
 import org.jtwig.extension.core.tokenparsers.CommentParser;
 import org.jtwig.extension.core.tokenparsers.ConcurrentTag;
 import org.jtwig.extension.core.tokenparsers.FilterTag;
@@ -89,8 +89,8 @@ public class CoreJtwigExtension extends SimpleExtension {
             put("not", new UnaryNotOperator("not", 50));
             put("is not", new UnaryIsNotOperator("is not", 100));
             put("is", new UnaryIsOperator("is", 105));
-            put("-", new UnaryNegativeOperator("-", 500));
-            put("+", new UnaryPositiveOperator("+", 500));
+            put("-", new UnaryNegativeOperator("-", 3));
+            put("+", new UnaryPositiveOperator("+", 3));
         }};
     }
     
@@ -138,83 +138,88 @@ public class CoreJtwigExtension extends SimpleExtension {
     @Override
     public Map<String, SimpleFunction> getFunctions() {
         return new HashMap<String, SimpleFunction>(){{
-            put("max", new SimpleFunction("max", new MaxFunction()));
-            put("min", new SimpleFunction("min", new MinFunction()));
-            put("range", new SimpleFunction("range", new RangeFunction()));
+            put("attribute", new SimpleFunction("attribute", new AttributeFunction()));
+            put("block", new SimpleFunction("block", new BlockFunction()));
             put("constant", new SimpleFunction("constant", new ConstantFunction()));
             put("cycle", new SimpleFunction("cycle", new CycleFunction()));
-            put("random", new SimpleFunction("random", new RandomFunction()));
             put("date", new SimpleFunction("date", new DateFunction()));
+            put("dump", new SimpleFunction("dump", new DumpFunction()));
             put("include", new SimpleFunction("include", new IncludeFunction()));
+            put("max", new SimpleFunction("max", new MaxFunction()));
+            put("min", new SimpleFunction("min", new MinFunction()));
+            put("parent", new SimpleFunction("parent", new ParentFunction()));
+            put("random", new SimpleFunction("random", new RandomFunction()));
+            put("range", new SimpleFunction("range", new RangeFunction()));
             put("source", new SimpleFunction("source", new SourceFunction()));
+            put("template_from_string", new SimpleFunction("template_from_string", new TemplateFromStringFunction()));
         }};
     }
 
     @Override
-    public Map<String, SimpleFilter> getFilters() {
-        return new HashMap<String, SimpleFilter>(){{
+    public Map<String, Filter> getFilters() {
+        return new HashMap<String, Filter>(){{
             // Formatting
-            put("date", new SimpleFilter("date", new DateFilter()));
-            put("date_modify", new SimpleFilter("date_modify", new DateModifyFilter()));
-            put("format", new SimpleFilter("format", new FormatFilter()));
-            put("replace", new SimpleFilter("replace", new ReplaceFilter()));
-            put("number_format", new SimpleFilter("number_format", new NumberFormatFilter()));
-            put("abs", new SimpleFilter("abs", new AbsFilter()));
-            put("round", new SimpleFilter("round", new RoundFilter()));
+            put("date", new DateFilter());
+            put("date_modify", new DateModifyFilter());
+            put("format", new FormatFilter());
+            put("replace", new ReplaceFilter());
+            put("number_format", new NumberFormatFilter());
+            put("abs", new AbsFilter());
+            put("round", new RoundFilter());
 
             // Encoding
-            put("url_encode", new SimpleFilter("url_encode", new UrlEncodeFilter()));
-            put("json_encode", new SimpleFilter("json_encode", new JsonEncodeFilter()));
-            put("convert_encoding", new SimpleFilter("convert_encoding", new ConvertEncodingFilter()));
+            put("url_encode", new UrlEncodeFilter());
+            put("json_encode", new JsonEncodeFilter());
+            put("convert_encoding", new ConvertEncodingFilter());
 
             // String filters
-            put("title", new SimpleFilter("title", new TitleFilter()));
-            put("capitalize", new SimpleFilter("capitalize", new CapitalizeFilter()));
-            put("upper", new SimpleFilter("upper", new UpperFilter()));
-            put("lower", new SimpleFilter("lower", new LowerFilter()));
-            put("striptags", new SimpleFilter("striptags", new StripTagsFilter()));
-            put("trim", new SimpleFilter("trim", new TrimFilter()));
-            put("nl2br", new SimpleFilter("nl2br", new Newline2BreakFilter()));
+            put("title", new TitleFilter());
+            put("capitalize", new CapitalizeFilter());
+            put("upper", new UpperFilter());
+            put("lower", new LowerFilter());
+            put("striptags", new StripTagsFilter());
+            put("trim", new TrimFilter());
+            put("nl2br", new Newline2BreakFilter());
 
             // Array helpers
-            put("join", new SimpleFilter("join", new JoinFilter()));
-            put("split", new SimpleFilter("split", new SplitFilter()));
-            put("sort", new SimpleFilter("sort", new SortFilter()));
-            put("merge", new SimpleFilter("merge", new MergeFilter()));
-            put("batch", new SimpleFilter("batch", new BatchFilter()));
+            put("join", new JoinFilter());
+            put("split", new SplitFilter());
+            put("sort", new SortFilter());
+            put("merge", new MergeFilter());
+            put("batch", new BatchFilter());
 
             // String/array filters
-            put("reverse", new SimpleFilter("reverse", new ReverseFilter()));
-            put("length", new SimpleFilter("length", new LengthFilter()));
-            put("slice", new SimpleFilter("slice", new SliceFilter()));
-            put("first", new SimpleFilter("first", new FirstFilter()));
-            put("last", new SimpleFilter("last", new LastFilter()));
+            put("reverse", new ReverseFilter());
+            put("length", new LengthFilter());
+            put("slice", new SliceFilter());
+            put("first", new FirstFilter());
+            put("last", new LastFilter());
 
             // Iteration and runtime
-            put("default", new SimpleFilter("default", new DefaultFilter()));
-            put("keys", new SimpleFilter("keys", new KeysFilter()));
+            put("default", new DefaultFilter());
+            put("keys", new KeysFilter());
 
             // Escaping
-            put("escape", new SimpleFilter("escape", new EscapeFilter()));
-            put("e", new SimpleFilter("e", new EscapeFilter()));
+            put("escape", new EscapeFilter());
+            put("e", new EscapeFilter());
         }};
     }
     
     @Override
-    public Map<String, SimpleTest> getTests() {
-        return new HashMap<String, SimpleTest>(){{
-            put("even", new SimpleTest("even", new EvenTest()));
-            put("odd", new SimpleTest("odd", new OddTest()));
-            put("defined", new SimpleTest("defined", new DefinedTest()));
-            put("sameas", new SimpleTest("sameas", new SameAsTest()));
-            put("same as", new SimpleTest("same as", new SameAsTest()));
-            put("none", new SimpleTest("none", new NoneTest()));
-            put("null", new SimpleTest("null", new NullTest()));
-            put("divisibleby", new SimpleTest("divisibleby", new DivisibleByTest()));
-            put("divisible by", new SimpleTest("divisible by", new DivisibleByTest()));
-            put("constant", new SimpleTest("constant", new ConstantTest()));
-            put("empty", new SimpleTest("empty", new EmptyTest()));
-            put("iterable", new SimpleTest("iterable", new IterableTest()));
+    public Map<String, Test> getTests() {
+        return new HashMap<String, Test>(){{
+            put("even", new EvenTest());
+            put("odd", new OddTest());
+            put("defined", new DefinedTest());
+//            put("sameas", new SameAsTest());
+//            put("same as", new SameAsTest());
+            put("none", new NoneTest());
+            put("null", new NullTest());
+            put("divisibleby", new DivisibleByTest());
+            put("divisible by", new DivisibleByTest());
+            put("constant", new ConstantTest());
+            put("empty", new EmptyTest());
+            put("iterable", new IterableTest());
         }};
     }
 

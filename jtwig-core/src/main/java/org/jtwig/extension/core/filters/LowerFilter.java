@@ -14,25 +14,22 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.util.TypeUtil;
 
-public class LowerFilter implements Callback {
+public class LowerFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Object evaluate(Object left, Object... args) {
+        if (left instanceof CharSequence) {
+            return ((CharSequence)left).toString().toLowerCase();
+        }
+        if (TypeUtil.isLong(left)) {
+            return TypeUtil.toLong(left).toString();
+        }
+        if (TypeUtil.isDecimal(left)) {
+            return TypeUtil.toDecimal(left).toString();
+        }
         return null;
     }
     

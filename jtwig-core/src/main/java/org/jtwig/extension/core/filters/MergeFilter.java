@@ -14,26 +14,77 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import org.jtwig.util.ObjectIterator;
 
-public class MergeFilter implements Callback {
+public class MergeFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        assert args.length > 0;
+        
+        if (!(args[0] instanceof Iterable) && !(args[0] instanceof Map) && !args[0].getClass().isArray()) {
+            throw new FilterException("The merge filter only works with arrays, collections, and maps");
+        }
+        
+        if (left instanceof Iterable) {
+            return mergeList((Iterable)left, args);
+        }
+        if (left instanceof Map) {
+            return mergeMap((Map)left, args);
+        }
+        return mergeArray(left, args);
     }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    private Object mergeArray(Object first, Object... args) {
+        List<Object> result = new ArrayList<>();
+        result.addAll(Arrays.asList((Object[]) first));
+        ObjectIterator it = new ObjectIterator(args[0]);
+        for (Object val : it) {
+            result.add(val);
+        }
+        return result.toArray();
+    }
+
+    private Object mergeMap(Object first, Object... args) {
+        Map<Object, Object> result;
+        if (first instanceof TreeMap) {
+            result = new TreeMap<>((Map)first);
+        } else {
+            result = new LinkedHashMap<>((Map)first);
+        }
+        
+        if (args[0] instanceof Map) {
+            result.putAll((Map) args[0]);
+        } else {
+            int i = 0;
+            for (Object val : new ObjectIterator(first)) {
+                result.put(i, val);
+                i++;
+            }
+        }
+        return result;
+    }
+
+    private Object mergeList(Object first, Object... args) {
+        List<Object> result = new ArrayList<>();
+        result.addAll((List) first);
+        if (args[0] instanceof Map) {
+            args[0] = ((Map)args[0]).values();
+        } else if (args[0].getClass().isArray()) {
+            args[0] = Arrays.asList((Object[])args[0]);
+        }
+        result.addAll((Collection)args[0]);
+        return result;
     }
     
 }

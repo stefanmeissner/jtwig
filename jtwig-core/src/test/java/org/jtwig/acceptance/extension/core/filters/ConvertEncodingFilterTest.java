@@ -12,21 +12,14 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension;
+package org.jtwig.acceptance.extension.core.filters;
 
-public class SimpleTest {
-    private final String name;
-    private final Callback callback;
-    
-    public SimpleTest(final String name, final Callback callback) {
-        this.name = name;
-        this.callback = callback;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    public Callback getCallback() {
-        return callback;
+import org.jtwig.AbstractJtwigTest;
+import org.junit.Test;
+
+public class ConvertEncodingFilterTest extends AbstractJtwigTest {
+    @Test
+    public void generalTests() throws Exception {
+        
     }
 }

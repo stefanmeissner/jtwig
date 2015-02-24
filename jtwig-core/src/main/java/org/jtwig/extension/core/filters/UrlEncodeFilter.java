@@ -14,25 +14,56 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.filters.FilterException;
+import org.jtwig.types.Undefined;
+import org.jtwig.util.ObjectIterator;
 
-public class UrlEncodeFilter implements Callback {
+public class UrlEncodeFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) throws FilterException {
+        try {
+            return doEvaluate(left);
+        } catch (UnsupportedEncodingException ex) {
+            throw new FilterException(ex);
+        }
     }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    
+    protected Object doEvaluate(Object left) throws UnsupportedEncodingException {
+        if (left == null || left == Undefined.UNDEFINED) {
+            return null;
+        }
+        
+        if (left instanceof CharSequence || left instanceof Number) {
+            return URLEncoder.encode(left.toString(), Charset.defaultCharset().displayName())
+                    .replaceAll("\\+", "%20"); // PHP doesn't handle spaces to spec
+        }
+        if (left instanceof Collection) {
+            List<String> pieces = new ArrayList<>();
+            int idx = 0;
+            for (Object obj : new ObjectIterator(left)) {
+                pieces.add(idx+"="+doEvaluate(obj.toString()));
+                ++idx;
+            }
+            return StringUtils.join(pieces, "&");
+        }
+        if (left instanceof Map) {
+            Map source = (Map)left;
+            List<String> pieces = new ArrayList<>();
+            for (Object key : source.keySet()) {
+                pieces.add(doEvaluate(key.toString()) + "=" + doEvaluate(source.get(key).toString()));
+            }
+            return StringUtils.join(pieces, "&");
+        }
         return null;
     }
     

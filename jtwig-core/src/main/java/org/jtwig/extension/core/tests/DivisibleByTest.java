@@ -14,26 +14,17 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.math.BigDecimal;
+import org.jtwig.extension.api.test.Test;
+import static org.jtwig.util.TypeUtil.toDecimal;
 
-public class DivisibleByTest implements Callback {
+public class DivisibleByTest implements Test {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public boolean evaluate(Object... args) {
+        assert args.length == 2;
+        
+        return toDecimal(args[0]).remainder(toDecimal(args[1])).compareTo(BigDecimal.ZERO) == 0;
     }
     
 }

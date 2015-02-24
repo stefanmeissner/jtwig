@@ -14,26 +14,67 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.functions.annotations.JtwigFunction;
+import org.jtwig.functions.annotations.Parameter;
+import org.jtwig.util.TypeUtil;
 
-public class RoundFilter implements Callback {
+public class RoundFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object evaluate(Object left, Object... args) {
+        int precision = 0;
+        if (args.length > 0) {
+            precision = TypeUtil.toLong(args[0]).intValue();
+        }
+        
+        RoundStrategy strategy = RoundStrategy.COMMON;
+        if (args.length > 1) {
+            strategy = RoundStrategy.valueOf(args[1].toString().toUpperCase());
+        }
+        
+        if (TypeUtil.isDecimal(left)) {
+            return TypeUtil.toDecimal(left).setScale(precision, strategy.mode);
+        }
+        if (TypeUtil.isLong(left)) {
+            return TypeUtil.toLong(left);
+        }
+        if (left instanceof CharSequence) {
+            return 0; // No clue why Twig does this, as string normally == '1'
+        }
+        return null;
+    }
+    
+    @JtwigFunction(name = "round")
+    public int round (@Parameter Double input, @Parameter String strategy) {
+        switch (RoundStrategy.valueOf(strategy.toUpperCase())) {
+            case CEIL:
+                return (int) Math.ceil(input);
+            case FLOOR:
+                return (int) Math.floor(input);
+            default:
+                return (int) Math.round(input);
+        }
+    }
+    @JtwigFunction(name = "round")
+    public int round (@Parameter Double input) {
+        return round(input, RoundStrategy.COMMON.name());
     }
 
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+
+    public static enum RoundStrategy {
+        COMMON(RoundingMode.HALF_UP),
+        CEIL(RoundingMode.UP),
+        FLOOR(RoundingMode.DOWN);
+        
+        public final RoundingMode mode;
+        
+        RoundStrategy(RoundingMode mode) {
+            this.mode = mode;
+        }
     }
     
 }

@@ -14,26 +14,33 @@
 
 package org.jtwig.extension.core.filters;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import java.math.BigDecimal;
+import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.util.TypeUtil;
 
-public class AbsFilter implements Callback {
+public class AbsFilter implements Filter {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
+    public Object evaluate(Object left, Object... args) {
+        if (left instanceof BigDecimal) {
+            return ((BigDecimal)left).abs();
+        }
+        if (left instanceof Double) {
+            return Math.abs((Double)left);
+        }
+        if (left instanceof Float) {
+            return Math.abs((Float)left);
+        }
+        if (left instanceof Long) {
+            return Math.abs((Long)left);
+        }
+        if (left instanceof Integer) {
+            return Math.abs((Integer)left);
+        }
+        if (TypeUtil.isDecimal(left) || left instanceof String) {
+            return TypeUtil.toDecimal(left).abs();
+        }
+        return TypeUtil.toLong(left);
     }
     
 }
