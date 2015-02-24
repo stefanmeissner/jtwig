@@ -40,7 +40,7 @@ public class BinarySelectionOperator extends BinaryOperator {
     }
     
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
         return expr.FirstOf(
                 expr.functionWithBrackets(),
                 expr.mapEntry(),

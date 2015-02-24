@@ -15,15 +15,15 @@
 package org.jtwig.acceptance.extension.core.tests;
 
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class OddTestTest extends AbstractJtwigTest {
-
+    
     @Test
-    public void odd() throws Exception {
-        assertTrue(underTest.odd(3));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ 3 is odd }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 2 is odd }}")));
     }
-    @Test
-    public void oddFalse() throws Exception {
-        assertFalse(underTest.odd(2));
-    }
+    
 }

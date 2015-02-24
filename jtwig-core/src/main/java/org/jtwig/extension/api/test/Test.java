@@ -15,5 +15,5 @@
 package org.jtwig.extension.api.test;
 
 public interface Test {
-    boolean evaluate(Object...args);
+    boolean evaluate(Object left, Object...args) throws TestException;
 }

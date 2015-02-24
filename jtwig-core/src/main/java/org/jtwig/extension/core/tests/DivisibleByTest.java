@@ -21,10 +21,10 @@ import static org.jtwig.util.TypeUtil.toDecimal;
 public class DivisibleByTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 2;
+    public boolean evaluate(Object left, Object... args) {
+        assert args.length > 0;
         
-        return toDecimal(args[0]).remainder(toDecimal(args[1])).compareTo(BigDecimal.ZERO) == 0;
+        return toDecimal(left).remainder(toDecimal(args[0])).compareTo(BigDecimal.ZERO) == 0;
     }
     
 }

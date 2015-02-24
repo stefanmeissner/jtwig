@@ -15,15 +15,15 @@
 package org.jtwig.acceptance.extension.core.tests;
 
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class EvenTestTest extends AbstractJtwigTest {
     
     @Test
-    public void even() throws Exception {
-        assertTrue(underTest.even(2));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ 2 is even }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 1 is even }}")));
     }
-    @Test
-    public void evenFalse() throws Exception {
-        assertFalse(underTest.even(3));
-    }
+    
 }

@@ -49,8 +49,8 @@ public class BinaryCompositionOperator extends BinaryOperator {
     }
 
     @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return expr.filter();
+    public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
+        return expr.callable(FilterCall.class);
     }
 
     @Override

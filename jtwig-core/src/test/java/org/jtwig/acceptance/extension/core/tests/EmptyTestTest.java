@@ -14,48 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import org.jtwig.AbstractJtwigTest;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class EmptyTestTest extends AbstractJtwigTest {
     
-
     @Test
-    public void isEmpty() throws Exception {
-        assertTrue(underTest.isEmpty(new ArrayList<>()));
-        assertTrue(underTest.isEmpty(new HashMap<>()));
-        assertTrue(underTest.isEmpty(null));
-        assertTrue(underTest.isEmpty(0));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ [] is empty }}")));
+        assertEquals("1", theResultOf(stringResource("{{ {} is empty }}")));
+        assertEquals("1", theResultOf(stringResource("{{ null is empty }}")));
+        assertEquals("1", theResultOf(stringResource("{{ 0 is empty }}")));
+        assertEquals("0", theResultOf(stringResource("{{ ['a'] is empty }}")));
+        assertEquals("0", theResultOf(stringResource("{{ {'a':'1'} is empty }}")));
     }
-
-    @Test
-    public void someOnNonEmptyIterator() throws Exception {
-        assertFalse(underTest.isEmpty(nonEmptyIterator()));
-    }
-
-    @Test
-    public void emptyOnEmptyIterator() throws Exception {
-        assertTrue(underTest.isEmpty(emptyIterator()));
-    }
-
-    private Iterable<Object> nonEmptyIterator() {
-        return new Iterable<Object>() {
-            @Override
-            public Iterator iterator() {
-                return asList(1).iterator();
-            }
-        };
-    }
-
-    private Iterable<Object> emptyIterator() {
-        return new Iterable<Object>() {
-            @Override
-            public Iterator iterator() {
-                return new ArrayList<>().iterator();
-            }
-        };
-    }
+    
 }

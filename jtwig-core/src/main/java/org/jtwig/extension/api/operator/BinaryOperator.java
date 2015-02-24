@@ -30,7 +30,7 @@ public abstract class BinaryOperator extends AbstractOperator {
         super(name, precedence);
     }
     
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
+    public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
         return null;
     }
 

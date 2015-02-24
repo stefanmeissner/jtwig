@@ -12,16 +12,16 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.core.tests;
+package org.jtwig.extension.api.test;
 
-import org.jtwig.extension.api.test.Test;
-import org.jtwig.types.Undefined;
+import org.jtwig.extension.api.filters.*;
+import org.jtwig.exception.CalculateException;
 
-public class NullTest implements Test {
-
-    @Override
-    public boolean evaluate(Object left, Object... args) {
-        return left == null || left instanceof Undefined;
+public class TestException extends CalculateException {
+    public TestException(String message) {
+        super(message);
     }
-    
+    public TestException(Throwable cause) {
+        super(cause);
+    }
 }

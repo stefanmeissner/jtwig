@@ -28,16 +28,14 @@ import org.jtwig.functions.util.CastMatcher;
 public class EmptyTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 1;
-        
+    public boolean evaluate(Object left, Object... args) {
         return AnyOf.<Object>anyOf(
                 nullValue(Object.class),
                 emptyCollection(),
                 emptyMap(),
                 notHasNext(),
                 zeroValue()
-        ).matches(args[0]);
+        ).matches(left);
     }
 
     private Matcher<Object> emptyMap() {

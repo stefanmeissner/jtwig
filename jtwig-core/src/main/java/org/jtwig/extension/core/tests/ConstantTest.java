@@ -16,28 +16,34 @@ package org.jtwig.extension.core.tests;
 
 import static java.lang.Class.forName;
 import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.TestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConstantTest implements Test {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConstantTest.class);
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 2;
+    public boolean evaluate(Object left, Object... args) throws TestException {
+        if (args.length == 0) {
+            throw new TestException("Constant test requires a constant to compare to.");
+        }
         
-        Object value = args[0];
-        String constant = args[1].toString();
+        String constant = args[0].toString();
         
         int constantNamePosition = constant.lastIndexOf(".");
-        if (constantNamePosition == -1)
-//            throw new FunctionException(String.format("Invalid constant specified '%s'", constant));
-            return false;
+        if (constantNamePosition == -1) {
+            LOGGER.warn("Invalid constant specified: {}", constant);
+            return false; // Twig doesn't throw an exception here
+        }
 
         String className = constant.substring(0, constantNamePosition);
         String constantName = constant.substring(constantNamePosition + 1);
 
         try {
-            return args[0].equals(forName(className).getDeclaredField(constantName).get(null));
-        } catch (Exception e) {
-//            throw new FunctionException(String.format("Constant '%s' does not exist", constant));
+            return left.equals(forName(className).getDeclaredField(constantName).get(null));
+        } catch (Exception ex) {
+            LOGGER.warn("Constant '{}' does not exist", constant);
             return false;
         }
     }

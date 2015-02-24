@@ -15,27 +15,19 @@
 package org.jtwig.acceptance.extension.core.tests;
 
 import org.jtwig.AbstractJtwigTest;
+import org.jtwig.exception.RenderException;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class ConstantTestTest extends AbstractJtwigTest {
-
-    @Test
-    public void constant() throws Exception {
-        assertTrue(underTest.isEqualToConstant("value", getClass().getName() + ".STATIC"));
+    public static final String CONSTANT = "value";
+    
+    @Test(expected = RenderException.class)
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ 'value' is constant('"+getClass().getName()+".CONSTANT') }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 'test' is constant('"+getClass().getName()+".CONSTANT') }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 'value' is constant('UnknownClass') }}")));
+        theResultOf(stringResource("{{ 'value' is constant() }}"));
     }
-
-    @Test
-    public void invalidConstant() throws Exception {
-        expectedException.expect(FunctionException.class);
-        expectedException.expectMessage(equalTo("Invalid constant specified 'UnknownClass'"));
-
-        underTest.isEqualToConstant("value", "UnknownClass");
-    }
-
-    @Test
-    public void undefinedConstant() throws Exception {
-        expectedException.expect(FunctionException.class);
-        expectedException.expectMessage(equalTo("Constant 'UnknownClass.TEST' does not exist"));
-
-        underTest.isEqualToConstant("value", "UnknownClass.TEST");
-    }
+    
 }

@@ -14,15 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-public class DefinedTestTest {
+import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
+public class DefinedTestTest extends AbstractJtwigTest {
+    
     @Test
-    public void defined() throws Exception {
-        assertTrue(underTest.isDefined("value"));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ 'value' is defined }}")));
+        assertEquals("0", theResultOf(stringResource("{{ val is defined }}")));
     }
-
-    @Test
-    public void notDefined() throws Exception {
-        assertFalse(underTest.isDefined(UNDEFINED));
-    }
+    
 }

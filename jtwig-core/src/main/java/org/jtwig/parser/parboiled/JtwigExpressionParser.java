@@ -14,11 +14,13 @@
 
 package org.jtwig.parser.parboiled;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jtwig.Environment;
+import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.model.Constant;
@@ -33,9 +35,10 @@ import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.operator.UnaryOperator;
-import org.jtwig.extension.model.FilterCall;
+import org.jtwig.extension.model.Callable;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigKeyword;
+import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.model.JtwigSymbol;
 import static org.jtwig.parser.model.JtwigSymbol.CLOSE_BRACKET;
 import static org.jtwig.parser.model.JtwigSymbol.CLOSE_CURLY_BRACKET;
@@ -99,7 +102,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
             } else if (op instanceof BinaryOperator) {
                 previous = binary(
                         previous,
-                        ObjectUtils.defaultIfNull(((BinaryOperator)op).getRightSideRule(this), previous),
+                        ObjectUtils.defaultIfNull(((BinaryOperator)op).getRightSideRule(this, env), previous),
                         op.getName()
                 );
             } else {
@@ -261,21 +264,21 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
         );
     }
     
-    public Rule filter() {
+    public Rule callable(final Class<? extends Callable> model) {
         return FirstOf(
                 Sequence(
                         identifierAsString(),
                         symbol(OPEN_PARENT),
-                        push(new FilterCall(currentPosition(), popIdentifierAsString())),
+                        push(createCallableModel(model)),
                         mandatory(
                                 Sequence(
                                         Optional(
                                                 expression(),
-                                                action(peek(1, FilterCall.class).add(pop())),
+                                                action(peek(1, Callable.class).add(pop())),
                                                 ZeroOrMore(
                                                         symbol(COMMA),
                                                         expression(),
-                                                        action((peek(1, FilterCall.class)).add(pop()))
+                                                        action((peek(1, Callable.class)).add(pop()))
                                                 )
                                         ),
                                         symbol(CLOSE_PARENT)
@@ -285,10 +288,49 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
                 ),
                 Sequence(
                         identifierAsString(),
-                        push(new FilterCall(currentPosition(), popIdentifierAsString())),
+                        push(createCallableModel(model)),
                         basic.spacing()
                 )
         );
+    }
+    public Rule callable(final Class<? extends Callable> model, final String[] identifiers) {
+        return FirstOf(
+                Sequence(
+                        FirstOf(identifiers),
+                        push(new Constant<>(match())),
+                        basic.spacing(),
+                        symbol(OPEN_PARENT),
+                        push(createCallableModel(model)),
+                        mandatory(
+                                Sequence(
+                                        Optional(
+                                                expression(),
+                                                action(peek(1, Callable.class).add(pop())),
+                                                ZeroOrMore(
+                                                        symbol(COMMA),
+                                                        expression(),
+                                                        action((peek(1, Callable.class)).add(pop()))
+                                                )
+                                        ),
+                                        symbol(CLOSE_PARENT)
+                                ),
+                                new ParseException("Wrong function syntax")
+                        )
+                ),
+                Sequence(
+                        FirstOf(identifiers),
+                        push(new Constant<>(match())),
+                        push(createCallableModel(model)),
+                        basic.spacing()
+                )
+        );
+    }
+    Callable createCallableModel(final Class<? extends Callable> model) {
+        try {
+            return model.getConstructor(JtwigPosition.class, String.class).newInstance(currentPosition(), popIdentifierAsString());
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new ParseBypassException(new ParseException(ex));
+        }
     }
     
 //    public Rule blockFunction() {

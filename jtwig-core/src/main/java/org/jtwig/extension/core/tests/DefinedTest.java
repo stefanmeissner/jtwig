@@ -20,10 +20,8 @@ import static org.jtwig.types.Undefined.UNDEFINED;
 public class DefinedTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 1;
-        
-        return !UNDEFINED.equals(args[0]);
+    public boolean evaluate(Object left, Object... args) {
+        return left != UNDEFINED;
     }
     
 }

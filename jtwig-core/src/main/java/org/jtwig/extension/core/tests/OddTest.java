@@ -21,10 +21,8 @@ import org.jtwig.util.TypeUtil;
 public class OddTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 1;
-        
-        return TypeUtil.toDecimal(args).remainder(new BigDecimal("2")).compareTo(BigDecimal.ZERO) == 0;
+    public boolean evaluate(Object left, Object... args) {
+        return TypeUtil.toDecimal(left).remainder(new BigDecimal("2")).compareTo(BigDecimal.ONE) == 0;
     }
     
 }

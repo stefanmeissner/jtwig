@@ -19,7 +19,7 @@ import org.jtwig.extension.api.test.Test;
 public class NoneTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
+    public boolean evaluate(Object left, Object... args) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -20,12 +20,10 @@ import org.jtwig.extension.api.test.Test;
 public class IterableTest implements Test {
 
     @Override
-    public boolean evaluate(Object... args) {
-        assert args.length == 1;
-        
-        return args[0] instanceof Iterable
-                || args[0].getClass().isArray()
-                || args[0] instanceof Map;
+    public boolean evaluate(Object left, Object... args) {
+        return left instanceof Iterable
+                || left.getClass().isArray()
+                || left instanceof Map;
     }
     
 }

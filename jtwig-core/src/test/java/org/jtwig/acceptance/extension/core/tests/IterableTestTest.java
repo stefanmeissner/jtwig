@@ -15,14 +15,15 @@
 package org.jtwig.acceptance.extension.core.tests;
 
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class IterableTestTest extends AbstractJtwigTest {
     
-
     @Test
-    public void isIterable() throws Exception {
-        assertTrue(underTest.iterable(new ArrayList<>()));
-        assertTrue(underTest.iterable(new Object[0]));
-        assertTrue(underTest.iterable(new HashMap<>()));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ [] is iterable }}")));
+        assertEquals("1", theResultOf(stringResource("{{ {} is iterable }}")));
     }
+    
 }
