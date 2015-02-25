@@ -23,6 +23,6 @@ public class DefaultFilterTest extends AbstractJtwigTest {
     public void generalTest() throws Exception {
         assertEquals("a", theResultOf(stringResource("{{ null|default('a') }}")));
         assertEquals("1", theResultOf(stringResource("{{ null|default(1) }}")));
-        assertEquals("a", theResultOf(stringResource("{{ 'a'|default(1) }} ")));
+        assertEquals("a", theResultOf(stringResource("{{ 'a'|default(1) }}")));
     }
 }
