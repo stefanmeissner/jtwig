@@ -27,7 +27,7 @@ public class BinaryRangeOperatorTest extends AbstractJtwigTest {
     @Test
     public void generalTests() throws Exception {
         // Quick little smoke test. The range functionality is tested elsewhere
-        assertArrayEquals(new char[]{'a','b','c'}, (char[])underTest.render(renderContext, position, "a", "c"));
-        assertArrayEquals(new char[]{'c','b','a'}, (char[])underTest.render(renderContext, position, "c", "a"));
+        assertArrayEquals(new Character[]{'a','b','c'}, (Character[])underTest.render(renderContext, position, "a", "c"));
+        assertArrayEquals(new Character[]{'c','b','a'}, (Character[])underTest.render(renderContext, position, "c", "a"));
     }
 }
