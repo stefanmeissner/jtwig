@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.functions;
+package org.jtwig.acceptance.extension.core;
 
 import org.jtwig.AbstractJtwigTest;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.jtwig.util.SyntacticSugar.then;
 
-public class ListFunctionsTest extends AbstractJtwigTest {
+public class __old__ListFunctionsTest extends AbstractJtwigTest {
     @Test
     public void batch() throws Exception {
         withResource("{{ batch([1,2,3,4], 3) }}");

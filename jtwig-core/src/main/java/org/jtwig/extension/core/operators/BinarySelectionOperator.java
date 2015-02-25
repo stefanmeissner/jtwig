@@ -19,9 +19,9 @@ import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.api.operator.BinaryOperator;
+import org.jtwig.extension.model.FunctionCall;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
@@ -42,7 +42,7 @@ public class BinarySelectionOperator extends BinaryOperator {
     @Override
     public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
         return expr.FirstOf(
-                expr.functionWithBrackets(),
+                expr.callableWithBrackets(FunctionCall.class),
                 expr.mapEntry(),
                 expr.variable()
         );
@@ -67,8 +67,8 @@ public class BinarySelectionOperator extends BinaryOperator {
         // more important
         if (right instanceof Variable.Compiled) {
             name = ((Variable.Compiled)right).name();
-        } else if (right instanceof FunctionElement.Compiled) {
-            name = ((FunctionElement.Compiled)right).name();
+        } else if (right instanceof FunctionCall.Compiled) {
+            name = ((FunctionCall.Compiled)right).name();
         } else {
             throw new CalculateException("Selection operator must be given a variable/function as right argument");
         }
@@ -85,8 +85,8 @@ public class BinarySelectionOperator extends BinaryOperator {
             if (right instanceof Variable.Compiled) {
                 return ((Variable.Compiled) right).extract(extractor);
             }
-            if (right instanceof FunctionElement.Compiled) {
-                return ((FunctionElement.Compiled) right).extract(ctx, extractor);
+            if (right instanceof FunctionCall.Compiled) {
+                return ((FunctionCall.Compiled) right).extract(ctx, extractor);
             }
             throw new CalculateException("Selection operator must be given a variable/function as right argument");
         } catch (ObjectExtractor.ExtractException e) {

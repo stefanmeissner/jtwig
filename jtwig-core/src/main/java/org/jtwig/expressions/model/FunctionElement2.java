@@ -33,16 +33,16 @@ import org.jtwig.content.api.ability.ExecutionAware;
 
 import static org.jtwig.functions.parameters.input.InputParameters.parameters;
 
-public class FunctionElement extends AbstractCompilableExpression {
+public class FunctionElement2 extends AbstractCompilableExpression {
     private final String name;
     private final List<CompilableExpression> arguments = new ArrayList<>();
 
-    public FunctionElement(JtwigPosition position, String name) {
+    public FunctionElement2(JtwigPosition position, String name) {
         super(position);
         this.name = name;
     }
 
-    public FunctionElement add(CompilableExpression argument) {
+    public FunctionElement2 add(CompilableExpression argument) {
         arguments.add(argument);
         return this;
     }

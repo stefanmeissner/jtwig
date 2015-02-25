@@ -7,8 +7,8 @@ import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.extension.core.tokenparsers.FilterTag;
+import org.jtwig.extension.model.FilterCall;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import org.junit.Before;
@@ -23,18 +23,18 @@ public class FilterTest {
     private final CompileContext compileContext = mock(CompileContext.class);
     private final RenderContext renderContext = mock(RenderContext.class);
     private final JtwigPosition position = mock(JtwigPosition.class);
-    private final FunctionElement.Compiled function = mock(FunctionElement.Compiled.class);
+    private final FilterCall.Compiled function = mock(FilterCall.Compiled.class);
     private FilterTag.Filter underTest = new FilterTag.Filter(position)
             .withFilterExpression(expression)
             .withContent(new Sequence());
 
     @Before
     public void setUp() throws Exception {
-        when(compileContext.clone()).thenReturn(compileContext);
-        when(function.calculate(renderContext)).thenReturn(null);
-        when(expression.compile(compileContext)).thenReturn(new FilterTag.DelegateCalculable(function));
-        when(renderContext.newRenderContext(any(OutputStream.class))).thenReturn(renderContext);
-        when(function.cloneAndAddArgument(any(Expression.class))).thenReturn(function);
+//        when(compileContext.clone()).thenReturn(compileContext);
+//        when(function.calculate(renderContext)).thenReturn(null);
+//        when(expression.compile(compileContext)).thenReturn(new FilterTag.DelegateCalculable(function));
+//        when(renderContext.newRenderContext(any(OutputStream.class))).thenReturn(renderContext);
+//        when(function.cloneAndAddLeftArgument(any(Expression.class))).thenReturn(function);
     }
 
     @Test(expected = RenderException.class)

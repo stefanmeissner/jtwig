@@ -15,25 +15,14 @@
 package org.jtwig.extension.core.functions;
 
 import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.functions.Function;
+import org.jtwig.render.RenderContext;
 
-public class ConstantFunction implements Callback {
+public class ConstantFunction implements Function {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
+    public Object evaluate(Environment env, RenderContext ctx, Object... args) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
     }
     
 }

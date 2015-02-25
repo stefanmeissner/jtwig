@@ -37,13 +37,15 @@ public class ArrayUtil {
         if (isLong(start) || isLong(end)) {
             return rangeLong(toLong(start), toLong(end), toLong(step));
         }
-        if ((start instanceof Object && !(start instanceof CharSequence)
-                || (end instanceof Object && !(end instanceof CharSequence)))) {
+        if ((start instanceof Object
+                && !(start instanceof CharSequence || start instanceof Character))
+                || (end instanceof Object
+                && !(end instanceof CharSequence || end instanceof Character))) {
             return rangeLong(toLong(start), toLong(end), toLong(step));
         }
         if (start == null || end == null || start.toString().isEmpty()
                 || end.toString().isEmpty()) {
-            return new long[]{0L};
+            return new Long[]{0L};
         }
         return rangeChar(start.toString(), end.toString(), step.intValue());
     }
@@ -66,7 +68,10 @@ public class ArrayUtil {
         }
         return result;
     }
-    private static long[] rangeLong(Long start, Long end, Long step) {
+    private static Long[] rangeLong(Long start, Long end, Long step) {
+        System.out.println("Start long: "+start);
+        System.out.println("End long: "+end);
+        System.out.println("Step: "+step);
         if (Math.abs(start - end) < Math.abs(step)) {
             LOGGER.warn("Step exceeds the specified range");
             return null;
@@ -78,17 +83,20 @@ public class ArrayUtil {
         int intervals = Double.valueOf(Math.floor(Math.abs(start - end) / Math.abs(step))).intValue();
         
         long current = start;
-        long[] result = new long[intervals + 1];
+        Long[] result = new Long[intervals + 1];
         result[0] = start;
         for (int i = 1; i <= intervals; i++) {
             result[i] = current = current + step;
         }
         return result;
     }
-    private static char[] rangeChar(String start, String end, int step) {
+    private static Character[] rangeChar(String start, String end, int step) {
         // Twig only uses the first char from each string
         char startChar = start.charAt(0);
         char endChar = end.charAt(0);
+        System.out.println("Start char: "+(int)startChar);
+        System.out.println("End char: "+(int)endChar);
+        System.out.println("Step: "+step);
         
         if (Math.abs(startChar - endChar) < Math.abs(step)) {
             LOGGER.warn("Step exceeds the specified range");
@@ -101,7 +109,7 @@ public class ArrayUtil {
         int intervals = Double.valueOf(Math.floor(Math.abs(startChar - endChar) / Math.abs(step))).intValue();
         
         char current = startChar;
-        char[] result = new char[intervals + 1];
+        Character[] result = new Character[intervals + 1];
         result[0] = startChar;
         for (int i = 1; i <= intervals; i++) {
             result[i] = current = (char)(current + step);

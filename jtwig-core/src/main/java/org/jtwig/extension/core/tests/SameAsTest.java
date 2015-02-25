@@ -14,26 +14,14 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.TestException;
 
-public class SameAsTest implements Callback {
+public class SameAsTest implements Test {
 
     @Override
-    public Object invoke(final Environment env,
-            final JtwigPosition pos, final CompileContext ctx,
-            Object... args) throws CompileException {
+    public boolean evaluate(Object left, Object... args) throws TestException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr) {
-        return null;
     }
     
 }

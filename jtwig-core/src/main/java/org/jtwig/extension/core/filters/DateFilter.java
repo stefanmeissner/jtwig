@@ -14,27 +14,27 @@
 
 package org.jtwig.extension.core.filters;
 
-import java.util.Date;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormatter;
 import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.core.functions.DateFunction;
+import org.jtwig.util.DateFormatUtil;
 
 public class DateFilter implements Filter {
 
     @Override
     public Object evaluate(Object left, Object... args) {
-        LocalDateTime ldt;
-        if (left instanceof Date) {
-            ldt = LocalDateTime.fromDateFields((Date)left);
-        } else {
-            ldt = LocalDateTime.parse(left.toString());
+        DateTimeZone zone = DateTimeZone.getDefault();
+        if (args.length > 1) {
+            zone = DateTimeZone.forID(args[1].toString());
         }
         
-        if (args.length >= 1) {
-            return ldt.toString(DateTimeFormat.forPattern(args[0].toString()));
-        }
-        return ldt.toString(ISODateTimeFormat.dateHourMinuteSecond());
+        DateTime dt = new DateFunction().evaluate(null, null, left, zone)
+                .withZone(zone);
+        // TODO Move the default format somewhere central
+        DateTimeFormatter formatter = DateFormatUtil.output(args.length > 0 ? args[0].toString() : "F j, Y H:i");
+        
+        return dt.toString(formatter);
     }
 }

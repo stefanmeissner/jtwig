@@ -12,17 +12,27 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.core.functions;
+package org.jtwig.util.dateformat;
 
-import org.jtwig.Environment;
-import org.jtwig.extension.api.functions.Function;
-import org.jtwig.render.RenderContext;
+import java.util.Locale;
+import org.joda.time.DateTimeField;
+import org.joda.time.LocalDateTime;
+import org.joda.time.ReadablePartial;
 
-public class RandomFunction implements Function {
+public class IsLeapYearPrinter extends AbstractPrinter {
 
     @Override
-    public Object evaluate(Environment env, RenderContext ctx, Object... args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String fromPartial(ReadablePartial partial, Locale locale) {
+        DateTimeField year = partial.getChronology().year();
+        if (new LocalDateTime(partial.get(year.getType()), 1, 1, 1, 0).year().isLeap()) {
+            return "1";
+        }
+        return "0";
+    }
+
+    @Override
+    public int estimatePrintedLength() {
+        return 1;
     }
     
 }

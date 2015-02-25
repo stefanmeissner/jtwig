@@ -24,8 +24,10 @@ import org.jtwig.types.Undefined;
  * A collection of type conversion and determination functions.
  */
 public class TypeUtil {
-    public static final String NUMBER_PATTERN = "([\\-+]?[\\d]+?(\\.[\\d]+)?).*";
-    public static final Pattern NUMBER = Pattern.compile("^"+NUMBER_PATTERN+"$");
+    public static final String PATTERN_STR = "([\\-+]?([\\d]+)?(\\.[\\d]+)?).*";
+    public static final Pattern PATTERN = Pattern.compile("^"+PATTERN_STR+"$");
+//    public static final String DECIMAL_PATTERN = "([\\-+]?(?:[\\d]+)?(\\.[\\d]+)?).*";
+//    public static final Pattern DECIMAL = Pattern.compile("^"+DECIMAL_PATTERN+"$");
     
     /**
      * Determines the twig-compatible boolean equivalent of the given object.
@@ -89,11 +91,12 @@ public class TypeUtil {
             if (obj.toString().trim().isEmpty()) {
                 return false;
             }
-            Matcher matcher = NUMBER.matcher(obj.toString());
+            Matcher matcher = PATTERN.matcher(obj.toString());
             if (!matcher.matches()) {
                 return false;
             }
-            return matcher.group(2) == null;
+            
+            return matcher.group(2) != null && matcher.group(3) == null;
         }
         return obj instanceof Number && !(obj instanceof Double
                 || obj instanceof Float || obj instanceof BigDecimal);
@@ -135,11 +138,11 @@ public class TypeUtil {
                 return false;
             }
             
-            Matcher matcher = NUMBER.matcher(obj.toString());
+            Matcher matcher = PATTERN.matcher(obj.toString());
             if (!matcher.matches()) {
                 return false;
             }
-            return matcher.group(2) != null;
+            return matcher.group(3) != null;
         }
         return obj instanceof BigDecimal || obj instanceof Double
                 || obj instanceof Float;
@@ -171,11 +174,12 @@ public class TypeUtil {
         }
         
         // Twig supports pulling numbers from the beginning of strings
-        Matcher matcher = NUMBER.matcher(str);
-        if (!matcher.matches()) {
+        Matcher matcher = PATTERN.matcher(str);
+        if (!matcher.matches() || (matcher.group(2) == null
+                && matcher.group(3) == null)) {
             return 0L;
         }
-        if (matcher.group(2) != null) {
+        if (matcher.group(3) != null) {
             return new BigDecimal(matcher.group(1));
         }
         return Long.valueOf(matcher.group(1));

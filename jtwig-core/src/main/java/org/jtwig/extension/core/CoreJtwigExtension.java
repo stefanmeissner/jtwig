@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.jtwig.extension.SimpleExtension;
-import org.jtwig.extension.SimpleFunction;
 import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.functions.Function;
 import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.extension.core.filters.*;
 import org.jtwig.extension.core.functions.*;
@@ -136,22 +136,22 @@ public class CoreJtwigExtension extends SimpleExtension {
     }
 
     @Override
-    public Map<String, SimpleFunction> getFunctions() {
-        return new HashMap<String, SimpleFunction>(){{
-            put("attribute", new SimpleFunction("attribute", new AttributeFunction()));
-            put("block", new SimpleFunction("block", new BlockFunction()));
-            put("constant", new SimpleFunction("constant", new ConstantFunction()));
-            put("cycle", new SimpleFunction("cycle", new CycleFunction()));
-            put("date", new SimpleFunction("date", new DateFunction()));
-            put("dump", new SimpleFunction("dump", new DumpFunction()));
-            put("include", new SimpleFunction("include", new IncludeFunction()));
-            put("max", new SimpleFunction("max", new MaxFunction()));
-            put("min", new SimpleFunction("min", new MinFunction()));
-            put("parent", new SimpleFunction("parent", new ParentFunction()));
-            put("random", new SimpleFunction("random", new RandomFunction()));
-            put("range", new SimpleFunction("range", new RangeFunction()));
-            put("source", new SimpleFunction("source", new SourceFunction()));
-            put("template_from_string", new SimpleFunction("template_from_string", new TemplateFromStringFunction()));
+    public Map<String, Function> getFunctions() {
+        return new HashMap<String, Function>(){{
+            put("attribute", new AttributeFunction());
+            put("block", new BlockFunction());
+            put("constant", new ConstantFunction());
+            put("cycle", new CycleFunction());
+            put("date", new DateFunction());
+            put("dump", new DumpFunction());
+            put("include", new IncludeFunction());
+            put("max", new MaxFunction());
+            put("min", new MinFunction());
+            put("parent", new ParentFunction());
+            put("random", new RandomFunction());
+            put("range", new RangeFunction());
+            put("source", new SourceFunction());
+            put("template_from_string", new TemplateFromStringFunction());
         }};
     }
 

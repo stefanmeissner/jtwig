@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 import org.jtwig.Environment;
 import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.functions.Function;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.test.Test;
 
@@ -56,7 +57,7 @@ public interface Extension {
      * function name.
      * @return A map of functions.
      */
-    Map<String, SimpleFunction> getFunctions();
+    Map<String, Function> getFunctions();
     /**
      * Returns a map of filters registered by the extension, indexed by filter
      * name.

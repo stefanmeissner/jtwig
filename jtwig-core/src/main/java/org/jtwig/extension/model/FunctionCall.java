@@ -17,35 +17,37 @@ package org.jtwig.extension.model;
 import java.util.ArrayList;
 import java.util.List;
 import org.jtwig.compile.CompileContext;
+import org.jtwig.content.api.ability.ExecutionAware;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
+import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.functions.Function;
+import org.jtwig.functions.exceptions.FunctionException;
+import org.jtwig.functions.exceptions.FunctionNotFoundException;
+import static org.jtwig.functions.parameters.input.InputParameters.parameters;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 
-public class FilterCall extends Callable {
-    public FilterCall(final JtwigPosition position, final String name) {
+public class FunctionCall extends Callable {
+
+    public FunctionCall(JtwigPosition position, String name) {
         super(position, name);
     }
 
     @Override
     public Expression compile(CompileContext context) throws CompileException {
-        if (context.environment().getExtensions().getFilter(name) == null) {
-            throw new CompileException("Unable to find filter '"+name+"'");
-        }
-        
+        // Delay checking for known functions, because we also deal with Macro
+        // calls here
         List<Expression> compiledArguments = new ArrayList<>();
         for (CompilableExpression argument : arguments) {
             compiledArguments.add(argument.compile(context));
         }
-        return new Compiled(position(), name, compiledArguments);
+        return new FunctionCall.Compiled(position(), name, compiledArguments);
     }
-
+    
     public static class Compiled extends Callable.Compiled {
-        
-        private Expression left;
 
         public Compiled(JtwigPosition position, String name, List<Expression> arguments) {
             super(position, name, arguments);
@@ -53,30 +55,26 @@ public class FilterCall extends Callable {
 
         @Override
         public Object calculate(RenderContext context) throws CalculateException {
-            Filter filter = context.environment().getExtensions().getFilter(name);
-            if (filter == null) {
-                throw new CalculateException("Unable to find filter '"+name+"'");
+            try {
+                if (context.map(name) instanceof ExecutionAware) {
+                    return ((ExecutionAware)context.map(name)).execute(context, null, calculateArguments(context));
+                }
+                
+                Function function = context.environment().getExtensions().getFunction(name);
+                if (function != null) {
+                    return function.evaluate(context.environment(), context, calculateArguments(context));
+                }
+                
+                try {
+                    return context.executeFunction(name, parameters(calculateArguments(context)));
+                } catch (FunctionNotFoundException e) {
+                    throw new CalculateException(position + ": " + e.getMessage(), e);
+                }
+            } catch (FunctionException | RenderException e) {
+                throw new CalculateException(e);
             }
-
-            return filter.evaluate(left.calculate(context), calculateArguments(context));
-        }
-
-        public Compiled cloneAndAddLeftArgument (final Expression left) {
-            return new Compiled(position(), name, arguments).withLeft(left);
         }
         
-        public Compiled withLeft(final Expression left) {
-            this.left = left;
-            return this;
-        }
-        
-        public Compiled passLeft(final Expression left) {
-            if (this.left instanceof FilterCall.Compiled) {
-                ((FilterCall.Compiled)this.left).passLeft(left);
-            } else {
-                this.left = left;
-            }
-            return this;
-        }
     }
+    
 }

@@ -12,16 +12,11 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension;
+package org.jtwig.extension.api.functions;
 
 import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
-import org.parboiled.Rule;
+import org.jtwig.render.RenderContext;
 
-public interface Callback {
-    Object invoke(Environment env, JtwigPosition pos, CompileContext ctx, Object...args) throws CompileException;
-    Rule getRightSideRule(JtwigExpressionParser expr);
+public interface Function {
+    Object evaluate(Environment env, RenderContext ctx, Object...args);
 }

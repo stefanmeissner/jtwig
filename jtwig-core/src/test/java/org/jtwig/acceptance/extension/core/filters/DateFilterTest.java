@@ -12,19 +12,24 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core.functions;
+package org.jtwig.acceptance.extension.core.filters;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.jtwig.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class RangeFunctionTest extends AbstractJtwigTest {
+public class DateFilterTest extends AbstractJtwigTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("123", theResultOf(stringResource("{{ range(1,3)|join }}")));
-        assertEquals("13", theResultOf(stringResource("{{ range(1,3,2)|join }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ range('a', 'c')|join }}")));
-        assertEquals("AB", theResultOf(stringResource("{{ range('AA', 'BZ')|join }}")));
+        DateTimeZone zone = DateTimeZone.forID("America/Toronto");
+        DateTime dt = new DateTime(2014, 4, 6, 14, 5, 8, 298, zone);
+        theModel().withModelAttribute("d", dt);
+        assertEquals("April 6, 2014 14:05", theResultOf(stringResource("{{ d|date }}")));
+        assertEquals("April 6, 2014 20:05", theResultOf(stringResource("{{ d|date('F j, Y H:i', 'Europe/Paris') }}")));
+        assertEquals("06/04/2014 14:05:08", theResultOf(stringResource("{{ d|date('d/m/Y H:i:s') }}")));
     }
+    
 }

@@ -20,16 +20,15 @@ import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.Variable;
+import org.jtwig.extension.model.TestCall;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.util.TypeUtil.isBoolean;
+import org.parboiled.Rule;
 
 public class BinaryIsNotOperator extends BinaryIsOperator {
-    private final CompositionExpressionFactory delegate = new CompositionExpressionFactory();
-    private final Function<Object, Object> function = isNotTrueFunction();
-
     public BinaryIsNotOperator(String name, int precedence) {
         super(name, precedence);
     }
@@ -39,7 +38,11 @@ public class BinaryIsNotOperator extends BinaryIsOperator {
         Expression left = (Expression)args[0];
         Expression right = (Expression)args[1];
         
-        return new Compiled(delegate.expression(pos, left, right), function);
+        
+        if (!(right instanceof TestCall.Compiled)) {
+            throw new CompileException("Is operator expects a test as the right-side operand");
+        }
+        return ((TestCall.Compiled)right).withLeft(left);
     }
 
     @Override
@@ -47,60 +50,9 @@ public class BinaryIsNotOperator extends BinaryIsOperator {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    
-    
-    
-
-//    @Override
-//    public Boolean render(RenderContext ctx, JtwigPosition pos, Object left, Object right) {
-//        return toBoolean(left) == toBoolean(right);
-//    }
-    
-    
-    
-    private static Function<Object, Object> isNotTrueFunction() {
-        return new Function<Object, Object>() {
-            @Override
-            public Object apply(Object input) {
-                return isBoolean(input);
-            }
-        };
-    }
-    
-
-    private class Compiled implements Expression {
-
-        private final Expression expression;
-        private final Function<Object, Object> function;
-
-        public Compiled(Expression expression, Function<Object, Object> function) {
-            this.expression = expression;
-            this.function = function;
-        }
-
-        @Override
-        public Object calculate(RenderContext context) throws CalculateException {
-            return function.apply(expression.calculate(context));
-        }
-    }
-    
-
-
-    public class CompositionExpressionFactory {
-
-        public Expression expression(JtwigPosition position, Expression left, Expression right) throws CompileException {
-            if (right instanceof Variable.Compiled) {
-                return function(((Variable.Compiled) right).toFunction(), left);
-            } else if (right instanceof FunctionElement.Compiled) {
-                return function((FunctionElement.Compiled) right, left);
-            } else {
-                throw new CompileException(position + ": Composition always requires a function to execute as the right argument");
-            }
-        }
-
-        private Expression function(FunctionElement.Compiled compiled, Expression left) {
-            return compiled.cloneAndAddArgument(left);
-        }
+    @Override
+    public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
+        String[] identifiers = env.getExtensions().getTests().keySet().toArray(new String[0]);
+        return expr.callable(TestCall.class, identifiers);
     }
 }

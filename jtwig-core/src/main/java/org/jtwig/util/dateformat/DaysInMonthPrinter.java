@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,17 +12,22 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance;
+package org.jtwig.util.dateformat;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.jtwig.AbstractJtwigTest;
-import org.junit.Test;
+import java.util.Locale;
+import org.joda.time.ReadablePartial;
 
-public class SetTest extends AbstractJtwigTest {
-    @Test
-    public void testShouldChangeTheContext() throws Exception {
-        withResource("{% set a = 1 %}{{ a }}");
-        assertThat(theResult(), is("1"));
+public class DaysInMonthPrinter extends AbstractPrinter {
+
+    @Override
+    public String fromPartial(ReadablePartial partial, Locale locale) {
+        // Surely there's a better way to do this?
+        return partial.getChronology().dayOfMonth().getMaximumValue(partial)+"";
     }
+
+    @Override
+    public int estimatePrintedLength() {
+        return 2;
+    }
+    
 }

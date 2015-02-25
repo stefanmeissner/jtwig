@@ -21,6 +21,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jtwig.addons.Addon;
 import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.functions.Function;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.test.Test;
 import org.jtwig.extension.api.tokenparser.TokenParser;
@@ -42,7 +43,7 @@ public class ExtensionHolder {
     private final Map<String, Operator> unaryOperators = new HashMap<>();
     private final Map<String, Operator> binaryOperators = new HashMap<>();
     private final Map<String, Filter> filters = new HashMap<>();
-    private final Map<String, SimpleFunction> functions = new HashMap<>();
+    private final Map<String, Function> functions = new HashMap<>();
     private final Map<String, Test> tests = new HashMap<>();
     private final Collection<Class<? extends TokenParser>> tokenParsers = new ArrayList<>();
 //    private final Collection<NodeVisitor> nodeVisitors = new ArrayList<>();
@@ -155,19 +156,19 @@ public class ExtensionHolder {
     }
     
     
-    public ExtensionHolder addFunction(final SimpleFunction function) {
-        functions.put(function.getName(), function);
+    public ExtensionHolder addFunction(final String name, final Function function) {
+        functions.put(name, function);
         return this;
     }
-    public SimpleFunction getFunction(final String name) {
-        Map<String, SimpleFunction> functions = getFunctions();
+    public Function getFunction(final String name) {
+        Map<String, Function> functions = getFunctions();
         if (functions.containsKey(name)) {
             return functions.get(name);
         }
         return null;
     }
-    public Map<String, SimpleFunction> getFunctions() {
-        Map<String, SimpleFunction> result = new HashMap<>();
+    public Map<String, Function> getFunctions() {
+        Map<String, Function> result = new HashMap<>();
         for (Extension ex : extensions) {
             result.putAll(ex.getFunctions());
         }

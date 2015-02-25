@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance;
+package org.jtwig.acceptance.extension.core.tokenparsers;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;

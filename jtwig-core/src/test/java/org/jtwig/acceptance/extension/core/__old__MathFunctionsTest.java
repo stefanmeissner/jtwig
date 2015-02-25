@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.functions;
+package org.jtwig.acceptance.extension.core;
 
 import org.jtwig.AbstractJtwigTest;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.jtwig.util.SyntacticSugar.then;
 import static org.jtwig.util.SyntacticSugar.when;
 
-public class MathFunctionsTest extends AbstractJtwigTest {
+public class __old__MathFunctionsTest extends AbstractJtwigTest {
     @Test
     public void absTest() throws Exception {
         withResource("{{ abs(-1) }}");

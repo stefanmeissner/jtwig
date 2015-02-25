@@ -48,9 +48,9 @@ public class Variable extends AbstractCompilableExpression {
         return new Compiled(position(), name);
     }
 
-    public CompilableExpression toFunction() {
-        return new FunctionElement(position(), name);
-    }
+//    public CompilableExpression toFunction() {
+//        return new FunctionElement(position(), name);
+//    }
 
     public static class Compiled implements Expression {
         private final String name;
@@ -62,9 +62,9 @@ public class Variable extends AbstractCompilableExpression {
         }
 
 
-        public FunctionElement.Compiled toFunction () {
-            return new FunctionElement.Compiled(position, name, new ArrayList<Expression>());
-        }
+//        public FunctionElement.Compiled toFunction () {
+//            return new FunctionElement.Compiled(position, name, new ArrayList<Expression>());
+//        }
 
         @Override
         public Object calculate(RenderContext context) throws CalculateException {

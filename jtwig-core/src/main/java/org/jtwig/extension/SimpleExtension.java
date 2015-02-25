@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.jtwig.Environment;
 import org.jtwig.extension.api.filters.Filter;
+import org.jtwig.extension.api.functions.Function;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.test.Test;
 
@@ -46,7 +47,7 @@ public abstract class SimpleExtension implements Extension {
     }
 
     @Override
-    public Map<String, SimpleFunction> getFunctions() {
+    public Map<String, Function> getFunctions() {
         return Collections.EMPTY_MAP;
     }
 

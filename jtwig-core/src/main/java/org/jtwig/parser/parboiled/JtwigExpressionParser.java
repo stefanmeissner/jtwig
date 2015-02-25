@@ -24,7 +24,6 @@ import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.model.Constant;
-import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.MapSelection;
 import org.jtwig.expressions.model.OperationBinary;
 import org.jtwig.expressions.model.OperationTernary;
@@ -36,6 +35,7 @@ import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.operator.UnaryOperator;
 import org.jtwig.extension.model.Callable;
+import org.jtwig.extension.model.FunctionCall;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigKeyword;
 import org.jtwig.parser.model.JtwigPosition;
@@ -174,87 +174,133 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
 
     public Rule function() {
+//        return FirstOf(
+//                functionWithBrackets(),
+//                functionWithoutBrackets()
+//        );
+        return callableWithBrackets(FunctionCall.class);
+    }
+
+//    Rule nonExpressionFunction() {
+//        return FirstOf(
+//                functionWithBrackets(),
+//                nonExpressionFunctionWithoutBrackets()
+//        );
+//    }
+
+//    public Rule functionWithTwoWordsAsName() {
+//        return Sequence(
+//                basic.identifier(),
+//                push(new Constant<>(match())),
+//                basic.spacing(),
+//                basic.identifier(),
+//                push(new Constant<>(match())),
+//                basic.spacing(),
+//                push(new FunctionElement(currentPosition(), popVariableName(1) + " " + popVariableName())),
+//                mandatory(
+//                        Sequence(
+//                                expression(),
+//                                action(peek(1, FunctionElement.class).add(pop()))
+//                        ),
+//                        new ParseException("Wrong function named with two words syntax")
+//                )
+//        );
+//    }
+
+//    Rule functionWithoutBrackets() {
+//        return Sequence(
+//                basic.identifier(),
+//                push(new Constant<>(match())),
+//                basic.spacing(),
+//                TestNot(
+//                        basic.spacing(),
+//                        basic.terminal("-")
+//                ),
+//                expression(),
+//                push(new FunctionElement(currentPosition(), popVariableName(1))),
+//                action(peek(FunctionElement.class).add(pop(1)))
+//        );
+//    }
+
+//    Rule nonExpressionFunctionWithoutBrackets() {
+//        return Sequence(
+//                basic.identifier(),
+//                push(new Constant<>(match())),
+//                basic.spacing(),
+//                TestNot(
+//                        basic.spacing(),
+//                        basic.terminal("-")
+//                ),
+//                FirstOf(
+//                        Sequence(
+//                                expression(),
+//                                push(new FunctionElement(currentPosition(), popVariableName(1))) ,
+//                                action(peek(FunctionElement.class).add(pop(1)))
+//                        ),
+//                        push(new FunctionElement(currentPosition(), popVariableName()))
+//                )
+//        );
+//    }
+
+//    public Rule functionWithBrackets() {
+//        return Sequence(
+//                identifierAsString(),
+//                symbol(OPEN_PARENT),
+//                push(new FunctionElement(currentPosition(), popIdentifierAsString())),
+//                mandatory(
+//                        Sequence(
+//                                Optional(
+//                                        expression(),
+//                                        action(peek(1, FunctionElement.class).add(pop())),
+//                                        ZeroOrMore(
+//                                                symbol(COMMA),
+//                                                expression(),
+//                                                action((peek(1, FunctionElement.class)).add(pop()))
+//                                        )
+//                                ),
+//                                symbol(CLOSE_PARENT)
+//                        ),
+//                        new ParseException("Wrong function syntax")
+//                )
+//        );
+//    }
+    
+    public Rule callable(final Class<? extends Callable> model) {
+        return callable(model, identifierAsString());
+    }
+    public Rule callable(final Class<? extends Callable> model,
+            final Rule identifierRule) {
         return FirstOf(
-                functionWithBrackets(),
-                functionWithoutBrackets()
+                callableWithBrackets(model, identifierRule),
+                callableWithoutBrackets(model, identifierRule)
         );
     }
-
-    Rule nonExpressionFunction() {
-        return FirstOf(
-                functionWithBrackets(),
-                nonExpressionFunctionWithoutBrackets()
-        );
-    }
-
-    public Rule functionWithTwoWordsAsName() {
-        return Sequence(
-                basic.identifier(),
+    public Rule callable(final Class<? extends Callable> model,
+            final String[] identifiers) {
+        return callable(model, Sequence(
+                FirstOf(identifiers),
                 push(new Constant<>(match())),
-                basic.spacing(),
-                basic.identifier(),
-                push(new Constant<>(match())),
-                basic.spacing(),
-                push(new FunctionElement(currentPosition(), popVariableName(1) + " " + popVariableName())),
-                mandatory(
-                        Sequence(
-                                expression(),
-                                action(peek(1, FunctionElement.class).add(pop()))
-                        ),
-                        new ParseException("Wrong function named with two words syntax")
-                )
-        );
+                basic.spacing()
+        ));
     }
-
-    Rule functionWithoutBrackets() {
-        return Sequence(
-                basic.identifier(),
-                push(new Constant<>(match())),
-                basic.spacing(),
-                TestNot(
-                        basic.spacing(),
-                        basic.terminal("-")
-                ),
-                expression(),
-                push(new FunctionElement(currentPosition(), popVariableName(1))),
-                action(peek(FunctionElement.class).add(pop(1)))
-        );
+    public Rule callableWithBrackets(final Class<? extends Callable> model) {
+        return callableWithBrackets(model, identifierAsString());
     }
-
-    Rule nonExpressionFunctionWithoutBrackets() {
+    public Rule callableWithBrackets(final Class<? extends Callable> model,
+            final Rule identifierRule) {
         return Sequence(
-                basic.identifier(),
-                push(new Constant<>(match())),
-                basic.spacing(),
-                TestNot(
-                        basic.spacing(),
-                        basic.terminal("-")
-                ),
-                FirstOf(
-                        Sequence(
-                                expression(),
-                                push(new FunctionElement(currentPosition(), popVariableName(1))) ,
-                                action(peek(FunctionElement.class).add(pop(1)))
-                        ),
-                        push(new FunctionElement(currentPosition(), popVariableName()))
-                )
-        );
-    }
-
-    public Rule functionWithBrackets() {
-        return Sequence(
-                identifierAsString(),
+                identifierRule,
                 symbol(OPEN_PARENT),
-                push(new FunctionElement(currentPosition(), popIdentifierAsString())),
+                push(createCallableModel(model)),
                 mandatory(
                         Sequence(
                                 Optional(
                                         expression(),
-                                        action(peek(1, FunctionElement.class).add(pop())),
+                                        action(peek(1, Callable.class).add(pop())),
                                         ZeroOrMore(
                                                 symbol(COMMA),
                                                 expression(),
-                                                action((peek(1, FunctionElement.class)).add(pop()))
+                                                action((peek(1, Callable.class)).add(pop()))
                                         )
                                 ),
                                 symbol(CLOSE_PARENT)
@@ -263,66 +309,15 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
                 )
         );
     }
-    
-    public Rule callable(final Class<? extends Callable> model) {
-        return FirstOf(
-                Sequence(
-                        identifierAsString(),
-                        symbol(OPEN_PARENT),
-                        push(createCallableModel(model)),
-                        mandatory(
-                                Sequence(
-                                        Optional(
-                                                expression(),
-                                                action(peek(1, Callable.class).add(pop())),
-                                                ZeroOrMore(
-                                                        symbol(COMMA),
-                                                        expression(),
-                                                        action((peek(1, Callable.class)).add(pop()))
-                                                )
-                                        ),
-                                        symbol(CLOSE_PARENT)
-                                ),
-                                new ParseException("Wrong function syntax")
-                        )
-                ),
-                Sequence(
-                        identifierAsString(),
-                        push(createCallableModel(model)),
-                        basic.spacing()
-                )
-        );
+    public Rule callableWithoutBrackets(final Class<? extends Callable> model) {
+        return callableWithoutBrackets(model, identifierAsString());
     }
-    public Rule callable(final Class<? extends Callable> model, final String[] identifiers) {
-        return FirstOf(
-                Sequence(
-                        FirstOf(identifiers),
-                        push(new Constant<>(match())),
-                        basic.spacing(),
-                        symbol(OPEN_PARENT),
-                        push(createCallableModel(model)),
-                        mandatory(
-                                Sequence(
-                                        Optional(
-                                                expression(),
-                                                action(peek(1, Callable.class).add(pop())),
-                                                ZeroOrMore(
-                                                        symbol(COMMA),
-                                                        expression(),
-                                                        action((peek(1, Callable.class)).add(pop()))
-                                                )
-                                        ),
-                                        symbol(CLOSE_PARENT)
-                                ),
-                                new ParseException("Wrong function syntax")
-                        )
-                ),
-                Sequence(
-                        FirstOf(identifiers),
-                        push(new Constant<>(match())),
-                        push(createCallableModel(model)),
-                        basic.spacing()
-                )
+    public Rule callableWithoutBrackets(final Class<? extends Callable> model,
+            final Rule identifierRule) {
+        return Sequence(
+                identifierRule,
+                push(createCallableModel(model)),
+                basic.spacing()
         );
     }
     Callable createCallableModel(final Class<? extends Callable> model) {
@@ -445,12 +440,12 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
 
 
-    public Rule variableAsFunction() {
-        return Sequence(
-                variable(),
-                push(pop(Variable.class).toFunction())
-        );
-    }
+//    public Rule variableAsFunction() {
+//        return Sequence(
+//                variable(),
+//                push(pop(Variable.class).toFunction())
+//        );
+//    }
 
     public Rule identifierAsString() {
         return Sequence(

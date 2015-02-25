@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance;
+package org.jtwig.acceptance.extension.core.tokenparsers;
 
 import java.util.ArrayList;
 import java.util.Arrays;

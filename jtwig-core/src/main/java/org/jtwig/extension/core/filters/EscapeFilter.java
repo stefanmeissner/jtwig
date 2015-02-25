@@ -17,19 +17,8 @@ package org.jtwig.extension.core.filters;
 import static java.util.Arrays.asList;
 import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jtwig.Environment;
-import org.jtwig.compile.CompileContext;
-import org.jtwig.exception.CompileException;
-import org.jtwig.extension.Callback;
 import org.jtwig.extension.api.filters.Filter;
-import org.jtwig.functions.annotations.JtwigFunction;
-import org.jtwig.functions.annotations.Parameter;
-import org.jtwig.functions.builtin.StringFunctions;
-import org.jtwig.functions.exceptions.FunctionException;
-import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.types.Undefined;
-import org.parboiled.Rule;
 
 public class EscapeFilter implements Filter {
 

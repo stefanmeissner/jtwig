@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.functions;
+package org.jtwig.acceptance.extension.core;
 
 import org.jtwig.AbstractJtwigTest;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.jtwig.util.SyntacticSugar.*;
 
-public class BlockFunctionTest extends AbstractJtwigTest {
+public class __old__BlockFunctionTest extends AbstractJtwigTest {
     @Test
     public void ensureBlockFunctionWorksWithVariables() throws Exception {
         given(theModel().withModelAttribute("var", "title"));

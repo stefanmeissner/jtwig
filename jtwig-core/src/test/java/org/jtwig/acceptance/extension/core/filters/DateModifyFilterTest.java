@@ -22,39 +22,39 @@ import org.junit.Test;
 public class DateModifyFilterTest extends AbstractJtwigTest {
     @Test
     public void addDay() throws Exception {
-        assertEquals("2011-01-02T00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 day')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
-        assertEquals("2011-01-02", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 day')|date('yyyy-MM-dd') }}")));
+        assertEquals("2011-01-02 00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 day')|date('y-m-d H:i:s') }}")));
+        assertEquals("2011-01-02", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 day')|date('y-m-d') }}")));
     }
 
     @Test
     public void addMonth() throws Exception {
-        assertEquals("2011-02-01T00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 month')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
-        assertEquals("2011-02-01", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 month')|date('yyyy-MM-dd') }}")));
+        assertEquals("2011-02-01 00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 month')|date('y-m-d H:i:s') }}")));
+        assertEquals("2011-02-01", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 month')|date('y-m-d') }}")));
     }
 
     @Test
     public void addYear() throws Exception {
-        assertEquals("2012-01-01T00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 year')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
-        assertEquals("2012-01-01", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 year')|date('yyyy-MM-dd') }}")));
+        assertEquals("2012-01-01 00:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 year')|date('y-m-d H:i:s') }}")));
+        assertEquals("2012-01-01", theResultOf(stringResource("{{ '2011-01-01'|date_modify('+1 year')|date('y-m-d') }}")));
     }
 
     @Test
     public void addMinute() throws Exception {
-        assertEquals("2011-01-01T00:01:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 minute')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
+        assertEquals("2011-01-01 00:01:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 minute')|date('y-m-d H:i:s') }}")));
     }
 
     @Test
     public void addSecond() throws Exception {
-        assertEquals("2011-01-01T00:00:01", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 second')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
+        assertEquals("2011-01-01 00:00:01", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 second')|date('y-m-d H:i:s') }}")));
     }
 
     @Test
     public void addHour() throws Exception {
-        assertEquals("2011-01-01T01:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 hour')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
+        assertEquals("2011-01-01 01:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 hour')|date('y-m-d H:i:s') }}")));
     }
 
     @Test(expected = RenderException.class)
     public void addUnknown() throws Exception {
-        assertEquals("2011-01-01T01:00:00", theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 unknown')|date('yyyy-MM-dd\\'T\\'HH:mm:ss') }}")));
+        theResultOf(stringResource("{{ '2011-01-01T00:00:00'|date_modify('+1 unknown')|date('y-m-d H:i:s') }}"));
     }
 }

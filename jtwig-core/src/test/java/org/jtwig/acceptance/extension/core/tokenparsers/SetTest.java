@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,21 +12,17 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension;
+package org.jtwig.acceptance.extension.core.tokenparsers;
 
-public class SimpleFunction {
-    private final String name;
-    private final Callback callback;
-    
-    public SimpleFunction(final String name, final Callback callback) {
-        this.name = name;
-        this.callback = callback;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    public Callback getCallback() {
-        return callback;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.jtwig.AbstractJtwigTest;
+import org.junit.Test;
+
+public class SetTest extends AbstractJtwigTest {
+    @Test
+    public void testShouldChangeTheContext() throws Exception {
+        withResource("{% set a = 1 %}{{ a }}");
+        assertThat(theResult(), is("1"));
     }
 }

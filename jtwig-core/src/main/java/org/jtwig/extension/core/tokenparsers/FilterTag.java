@@ -17,7 +17,6 @@ package org.jtwig.extension.core.tokenparsers;
 import com.google.common.base.Function;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.jtwig.addons.AddonModel;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
@@ -28,9 +27,9 @@ import org.jtwig.exception.ParseException;
 import org.jtwig.exception.RenderException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.FunctionElement;
 import org.jtwig.expressions.model.OperationBinary;
 import org.jtwig.extension.api.tokenparser.Tag;
+import org.jtwig.extension.model.FilterCall;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.parser.parboiled.JtwigBasicParser;
@@ -67,34 +66,16 @@ public class FilterTag extends Tag {
     public Rule getAttributeRule() {
         return mandatory(
                 Sequence(
+                        basic.spacing(),
                         expr.binary(
-                                FirstOf(
-                                        expr.functionWithBrackets(),
-                                        expr.variableAsFunction()
-                                ),
+                                expr.callable(FilterCall.class),
                                 "|"
                         ),
                         action(peek(1, Filter.class).withFilterExpression(expr.pop()))
                 ),
                 new ParseException("Filter should have at least one function")
-        ).label("Attributes");
+        );
     }
-    
-//    public static class Filter extends Content<Filter> {
-//        private final JtwigPosition pos;
-//        private CompilableExpression filterExpression;
-//        
-//        public Filter(final JtwigPosition pos) {
-//            this.pos = pos;
-//        }
-//        
-//        public Filter withFilterExpression(final CompilableExpression filterExpression) {
-//            this.filterExpression = filterExpression;
-//            return this;
-//        }
-//    }
-    
-    
     
     public static class Filter extends Content<Filter> {
         private final JtwigPosition position;
@@ -111,27 +92,14 @@ public class FilterTag extends Tag {
 
         @Override
         public Renderable compile(final CompileContext context) throws CompileException {
-            if (filterExpression instanceof OperationBinary) {
-                OperationBinary operationBinary = (OperationBinary) filterExpression;
-                operationBinary.transformFirst(toSpecialFunction());
-            }
             return new Compiled(position, super.compile(context), filterExpression.compile(context));
-        }
-
-        private Function<CompilableExpression, CompilableExpression> toSpecialFunction() {
-            return new Function<CompilableExpression, CompilableExpression>() {
-                @Override
-                public CompilableExpression apply(CompilableExpression input) {
-                    return new DelegateCompilable((FunctionElement)input);
-                }
-            };
         }
     }
     
     private static class Compiled implements Renderable {
         private final JtwigPosition position;
         private final Renderable content;
-        private Expression expression;
+        private final Expression expression;
 
         private Compiled(JtwigPosition position, Renderable content, Expression expression) {
             this.position = position;
@@ -144,57 +112,10 @@ public class FilterTag extends Tag {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             content.render(context.newRenderContext(outputStream));
             try {
-                if (expression instanceof DelegateCalculable)
-                    ((DelegateCalculable) expression).withArgument(outputStream.toString());
-                else
-                    getDelegateExpression(position, (FunctionElement.Compiled) expression).withArgument(outputStream.toString());
-                context.write(String.valueOf(expression.calculate(context)).getBytes());
-            } catch (IOException | CalculateException e) {
+                context.write(((FilterCall.Compiled)expression).passLeft(valueOf(outputStream.toString())).calculate(context).toString().getBytes());
+            } catch (CalculateException | IOException e) {
                 throw new RenderException(e);
             }
-        }
-
-        private DelegateCalculable getDelegateExpression(JtwigPosition position, FunctionElement.Compiled function) {
-            Expression firstArgument = function.getFirstArgument();
-            if (firstArgument instanceof DelegateCalculable) {
-                return (DelegateCalculable) firstArgument;
-            } else {
-                if ((firstArgument instanceof FunctionElement.Compiled) && ((FunctionElement.Compiled) firstArgument).hasArguments()) {
-                    return getDelegateExpression(position, (FunctionElement.Compiled) firstArgument);
-                } else throw new RuntimeException(position+": Unable to find function to replace input.");
-            }
-        }
-    }
-
-    private static class DelegateCompilable implements CompilableExpression {
-        private final FunctionElement delegate;
-
-        public DelegateCompilable(FunctionElement delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        public Expression compile(CompileContext context) throws CompileException {
-            FunctionElement.Compiled compile = (FunctionElement.Compiled) delegate.compile(context);
-            return new DelegateCalculable(compile);
-        }
-    }
-
-    public static class DelegateCalculable implements Expression {
-        private FunctionElement.Compiled function;
-
-        public DelegateCalculable(FunctionElement.Compiled function) {
-            this.function = function;
-        }
-
-        public DelegateCalculable withArgument (final String value) {
-            this.function = function.cloneAndAddArgument(valueOf(value));
-            return this;
-        }
-
-        @Override
-        public Object calculate(RenderContext context) throws CalculateException {
-            return function.calculate(context);
         }
     }
 
