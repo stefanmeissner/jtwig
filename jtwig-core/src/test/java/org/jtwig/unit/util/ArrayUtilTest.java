@@ -23,25 +23,25 @@ import org.junit.Test;
 public class ArrayUtilTest {
     @Test
     public void testRange() throws Exception {
-        assertArrayEquals(new char[]{'a','b','c'}, (char[])ArrayUtil.range("a", "c"));
+        assertArrayEquals(new Character[]{'a','b','c'}, (Character[])ArrayUtil.range("a", "c"));
 
-        assertArrayEquals(new long[]{1,2,3}, (long[])ArrayUtil.range(1, 3));
-        assertArrayEquals(new long[]{1,2,3}, (long[])ArrayUtil.range("1", 3));
-        assertArrayEquals(new long[]{1,2,3}, (long[])ArrayUtil.range(1, "3"));
-        assertArrayEquals(new long[]{1,2,3}, (long[])ArrayUtil.range("1", "3"));
+        assertArrayEquals(new Long[]{1L,2L,3L}, (Long[])ArrayUtil.range(1, 3));
+        assertArrayEquals(new Long[]{1L,2L,3L}, (Long[])ArrayUtil.range("1", 3));
+        assertArrayEquals(new Long[]{1L,2L,3L}, (Long[])ArrayUtil.range(1, "3"));
+        assertArrayEquals(new Long[]{1L,2L,3L}, (Long[])ArrayUtil.range("1", "3"));
 
-        assertArrayEquals(new long[]{0,1,2,3}, (long[])ArrayUtil.range("a", 3));
-        assertArrayEquals(new long[]{1,0}, (long[])ArrayUtil.range(1, "c"));
+        assertArrayEquals(new Long[]{0L,1L,2L,3L}, (Long[])ArrayUtil.range("a", 3));
+        assertArrayEquals(new Long[]{1L,0L}, (Long[])ArrayUtil.range(1, "c"));
 
-        assertArrayEquals(new long[]{0,1,2,3}, (long[])ArrayUtil.range(null, 3));
-        assertArrayEquals(new long[]{3,2,1,0}, (long[])ArrayUtil.range(3, null));
-        assertArrayEquals(new long[]{0}, (long[])ArrayUtil.range(null, "c"));
-        assertArrayEquals(new long[]{0}, (long[])ArrayUtil.range("c", null));
+        assertArrayEquals(new Long[]{0L,1L,2L,3L}, (Long[])ArrayUtil.range(null, 3));
+        assertArrayEquals(new Long[]{3L,2L,1L,0L}, (Long[])ArrayUtil.range(3, null));
+        assertArrayEquals(new Long[]{0L}, (Long[])ArrayUtil.range(null, "c"));
+        assertArrayEquals(new Long[]{0L}, (Long[])ArrayUtil.range("c", null));
 
-        assertArrayEquals(new long[]{1,2,3}, (long[])ArrayUtil.range(new Object(), 3));
-        assertArrayEquals(new long[]{3,2,1}, (long[])ArrayUtil.range(3, new Object()));
-        assertArrayEquals(new long[]{1,0}, (long[])ArrayUtil.range(new Object(), "c"));
-        assertArrayEquals(new long[]{0,1}, (long[])ArrayUtil.range("c", new Object()));
+        assertArrayEquals(new Long[]{1L,2L,3L}, (Long[])ArrayUtil.range(new Object(), 3));
+        assertArrayEquals(new Long[]{3L,2L,1L}, (Long[])ArrayUtil.range(3, new Object()));
+        assertArrayEquals(new Long[]{1L,0L}, (Long[])ArrayUtil.range(new Object(), "c"));
+        assertArrayEquals(new Long[]{0L,1L}, (Long[])ArrayUtil.range("c", new Object()));
 
         assertNull(ArrayUtil.range(1.1, 1.3));
         assertArrayEquals(new BigDecimal[]{new BigDecimal("1.1"), new BigDecimal("2.1")}, (BigDecimal[])ArrayUtil.range(1.1, 2.3));
@@ -49,7 +49,7 @@ public class ArrayUtilTest {
         assertArrayEquals(new BigDecimal[]{new BigDecimal("1.1"), new BigDecimal("0.1")}, (BigDecimal[])ArrayUtil.range("1.1", "d"));
 
         assertArrayEquals(new BigDecimal[]{new BigDecimal("3.1"), new BigDecimal("4.3"), new BigDecimal("5.5"), new BigDecimal("6.7")}, (BigDecimal[])ArrayUtil.range(3.1, 7.2, 1.2));
-        assertArrayEquals(new char[]{'Z','[','\\',']','^','_','`','a'}, (char[])ArrayUtil.range("Z", "a"));
-        assertArrayEquals(new long[]{0L}, (long[])ArrayUtil.range("AZ", ""));
+        assertArrayEquals(new Character[]{'Z','[','\\',']','^','_','`','a'}, (Character[])ArrayUtil.range("Z", "a"));
+        assertArrayEquals(new Long[]{0L}, (Long[])ArrayUtil.range("AZ", ""));
     }
 }

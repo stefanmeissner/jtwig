@@ -22,7 +22,8 @@ public class AbsFilterTest extends AbstractJtwigTest {
     @Test
     public void generalTests() throws Exception {
         theModel().withModelAttribute("var", new Object());
-        assertEquals("82.49", theResultOf(stringResource("{{ -82.49|abs }}")));
+        assertEquals("-82.49", theResultOf(stringResource("{{ -82.49|abs }}")));
+        assertEquals("82.49", theResultOf(stringResource("{{ (-82.49)|abs }}")));
         assertEquals("82.49", theResultOf(stringResource("{{ '-82.49'|abs }}")));
         assertEquals("1", theResultOf(stringResource("{{ var|abs }}")));
         assertEquals("0", theResultOf(stringResource("{{ null|abs }}")));

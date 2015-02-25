@@ -18,5 +18,5 @@ import org.jtwig.Environment;
 import org.jtwig.render.RenderContext;
 
 public interface Function {
-    Object evaluate(Environment env, RenderContext ctx, Object...args);
+    Object evaluate(Environment env, RenderContext ctx, Object...args) throws FunctionException;
 }

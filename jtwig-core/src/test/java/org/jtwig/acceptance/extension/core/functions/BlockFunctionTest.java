@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,26 +12,23 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core;
+package org.jtwig.acceptance.extension.core.functions;
 
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.jtwig.util.SyntacticSugar.*;
-
-public class __old__BlockFunctionTest extends AbstractJtwigTest {
+public class BlockFunctionTest extends AbstractJtwigTest {
+    
     @Test
     public void ensureBlockFunctionWorksWithVariables() throws Exception {
-        given(theModel().withModelAttribute("var", "title"));
-        withResource(classpathResource("templates/acceptance/block/tested.twig"));
-        then(theResult(), is(equalTo("title!")));
+        theModel().withModelAttribute("var", "title");
+        assertEquals("title!", theResultOf(classpathResource("templates/acceptance/block/tested.twig")));
     }
     @Test
     public void ensureBlockFunctionWorksWithVariables2() throws Exception {
-        given(theModel().withModelAttribute("var", "body"));
-        withResource(classpathResource("templates/acceptance/block/tested.twig"));
-        then(theResult(), is(equalTo("body!")));
+        theModel().withModelAttribute("var", "body");
+        assertEquals("body!", theResultOf(classpathResource("templates/acceptance/block/tested.twig")));
     }
+    
 }

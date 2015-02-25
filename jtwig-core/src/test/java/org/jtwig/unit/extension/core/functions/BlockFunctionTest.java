@@ -12,19 +12,17 @@
  * limitations under the License.
  */
 
-package org.jtwig.unit.expressions.model;
+package org.jtwig.unit.extension.core.functions;
 
 import org.jtwig.AbstractJtwigTest;
 import org.jtwig.content.model.Template;
 import org.jtwig.content.model.compilable.Block;
-import org.jtwig.exception.CalculateException;
-import org.jtwig.exception.CompileException;
 import org.jtwig.exception.RenderException;
-import org.jtwig.expressions.model.BlockFunction;
-import org.jtwig.expressions.model.Constant;
+import org.jtwig.extension.core.functions.BlockFunction;
 import org.jtwig.render.RenderContext;
-import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -35,16 +33,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BlockFunctionTest extends AbstractJtwigTest {
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
     
     @Test
     public void complainsOnLackOfArgument() throws Exception {
-        BlockFunction block = new BlockFunction(null);
-        try {
-            block.compile(compileContext);
-            Assert.fail("Should have complained about lack of argument");
-        } catch (CompileException e) {
-            Assert.assertEquals("Block function requires a single argument", e.getMessage());
-        }
+        expectedException.expectMessage("The block function requires a block name");
+        
+        BlockFunction block = new BlockFunction();
+        block.evaluate(null, null);
     }
 
     @Test
@@ -52,16 +49,16 @@ public class BlockFunctionTest extends AbstractJtwigTest {
         Template.Compiled template = mock(Template.Compiled.class);
         when(template.getPrimordial()).thenReturn(template);
         doReturn(template).when(renderContext).getRenderingTemplate();
-        BlockFunction block = new BlockFunction(null);
-        block.add(new Constant<>("title"));
-        block.compile(compileContext)
-                .calculate(renderContext);
+        BlockFunction block = new BlockFunction();
+        block.evaluate(env, renderContext, "title");
 
         verify(template).block(eq("title"));
     }
     
-    @Test(expected = CalculateException.class)
+    @Test
     public void calculateCapturesRenderException() throws Exception {
+        expectedException.expectMessage("Unable to render the block.");
+        
         Block.CompiledBlock block = mock(Block.CompiledBlock.class);
         doThrow(RenderException.class).when(block).render(any(RenderContext.class));
         Template.Compiled template = mock(Template.Compiled.class);
@@ -69,9 +66,7 @@ public class BlockFunctionTest extends AbstractJtwigTest {
         when(template.getPrimordial()).thenReturn(template);
         doReturn(template).when(renderContext).getRenderingTemplate();
         
-        BlockFunction function = new BlockFunction(null);
-        function.add(new Constant<>("title"));
-        function.compile(compileContext)
-                .calculate(renderContext);
+        BlockFunction function = new BlockFunction();
+        function.evaluate(env, renderContext, "title");
     }
 }

@@ -14,13 +14,20 @@
 
 package org.jtwig.extension.api.functions;
 
-import org.jtwig.extension.api.filters.*;
 import org.jtwig.exception.CalculateException;
 
 public class FunctionException extends CalculateException {
+    public FunctionException() {
+    }
+
     public FunctionException(String message) {
         super(message);
     }
+
+    public FunctionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public FunctionException(Throwable cause) {
         super(cause);
     }
