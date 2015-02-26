@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance;
+package org.jtwig.acceptance.extension.core.tokenparsers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.jtwig.AbstractJtwigTest;
 import org.junit.Test;
 
-public class VerbatimTest extends AbstractJtwigTest {
+public class VerbatimTagTest extends AbstractJtwigTest {
     @Test
     public void verbatimDoesntTryToResolveExpressions() throws Exception {
         withResource("{% verbatim %}{{ name }}{% endverbatim %}");

@@ -20,6 +20,8 @@ import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.compilable.Content;
+import org.jtwig.content.model.compilable.Sequence;
+import org.jtwig.content.model.compilable.Verbatim;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.exception.ParseException;
@@ -38,15 +40,15 @@ import org.jtwig.render.RenderContext;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Label;
 
-public class FilterTag extends Tag {
+public class VerbatimTag extends Tag {
 
-    public FilterTag(Loader.Resource resource, JtwigContentParser content, JtwigBasicParser basic, JtwigExpressionParser expr, JtwigTagPropertyParser tag) {
+    public VerbatimTag(Loader.Resource resource, JtwigContentParser content, JtwigBasicParser basic, JtwigExpressionParser expr, JtwigTagPropertyParser tag) {
         super(resource, content, basic, expr, tag);
     }
 
     @Override
     public String getKeyword() {
-        return "filter";
+        return "verbatim";
     }
 
     @Override
@@ -54,10 +56,35 @@ public class FilterTag extends Tag {
         return new Filter(pos);
     }
 
-    @Label("Filter tag")
+    @Label("Verbatim tag")
     @Override
     public Rule rule() {
-        return super.rule();
+        return Sequence(
+                content.openCode(),
+                basic.spacing(),
+                basic.keyword(getKeyword()),
+                basic.spacing(),
+                mandatory(
+                        Sequence(
+                                push(new Verbatim()),
+                                action(content.beforeBeginTrim()),
+                                content.closeCode(),
+                                content.text(Sequence(
+                                        content.openCode(),
+                                        basic.spacing(),
+                                        basic.keyword(getEndKeyword())
+                                )),
+                                action(peek(1, Verbatim.class).withContent(new Sequence().add(pop(Compilable.class)))),
+                                content.openCode(),
+                                basic.spacing(),
+                                basic.keyword(getEndKeyword()),
+                                basic.spacing(),
+                                content.closeCode(),
+                                action(content.afterEndTrim())
+                        ),
+                        new ParseException("Wrong verbatim syntax")
+                )
+        );
     }
     
     @Override

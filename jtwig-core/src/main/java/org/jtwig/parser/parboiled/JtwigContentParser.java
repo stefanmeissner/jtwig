@@ -33,18 +33,14 @@ import org.jtwig.content.api.Tag;
 import org.jtwig.content.api.ability.ElementList;
 import org.jtwig.content.api.ability.ElementTracker;
 import org.jtwig.content.model.Template;
-import org.jtwig.content.model.compilable.Comment;
 import org.jtwig.content.model.compilable.Output;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.content.model.compilable.Text;
-import org.jtwig.content.model.compilable.Verbatim;
 import org.jtwig.content.model.tag.WhiteSpaceControl;
 import org.jtwig.exception.ParseException;
 import org.jtwig.extension.api.tokenparser.TokenParser;
 import org.jtwig.loader.Loader;
 import org.jtwig.parser.model.JtwigKeyword;
-import static org.jtwig.parser.model.JtwigKeyword.ENDVERBATIM;
-import static org.jtwig.parser.model.JtwigKeyword.VERBATIM;
 import org.jtwig.parser.model.JtwigSymbol;
 import static org.jtwig.parser.model.JtwigTagProperty.Trim;
 import org.parboiled.BaseParser;
@@ -246,57 +242,15 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
         );
     }
 
-    Rule text() {
-        return Sequence(
-                push(new Text()),
-                OneOrMore(
-                        FirstOf(
-                                Sequence(
-                                        basicParser.escape(),
-                                        action(peek(Text.class).append(match()))
-                                ),
-                                Sequence(
-                                        TestNot(
-                                                FirstOf(
-                                                        basicParser.openCode(),
-                                                        basicParser.openOutput(),
-                                                        basicParser.openComment()
-                                                )
-                                        ),
-                                        ANY,
-                                        action(peek(Text.class).append(match()))
-                                )
-                        )
-                ).suppressSubnodes()
-        );
+    public Rule text() {
+        return text(FirstOf(
+                basicParser.openCode(),
+                basicParser.openOutput(),
+                basicParser.openComment()
+        ));
     }
 
-    Rule verbatim() {
-        return Sequence(
-                openCode(),
-                keyword(VERBATIM),
-                mandatory(
-                        Sequence(
-                                push(new Verbatim()),
-                                action(beforeBeginTrim()),
-                                closeCode(),
-                                text(Sequence(
-                                        basicParser.openCode(),
-                                        basicParser.spacing(),
-                                        keyword(ENDVERBATIM)
-                                )),
-                                action(peek(1, Verbatim.class).withContent(new Sequence().add(pop(Compilable.class)))),
-                                openCode(),
-                                keyword(JtwigKeyword.ENDVERBATIM),
-                                closeCode(),
-                                action(afterEndTrim())
-                        ),
-                        new ParseException("Wrong verbatim syntax")
-                )
-        );
-    }
-
-    Rule text(Rule until) {
+    public Rule text(Rule until) {
         return Sequence(
                 push(new Text()),
                 OneOrMore(

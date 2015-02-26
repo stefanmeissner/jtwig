@@ -26,13 +26,13 @@ import org.junit.Test;
 public class ForExpressionTest extends AbstractJtwigTest {
     @Test
     public void generalTests() throws Exception {
-        assertEquals("", theResultOf(stringResource("{{ for item in [] %}{{ item }}{% endfor %}")));
-        assertEquals("abc", theResultOf(stringResource("{{ for item in ['a','b','c'] %}{{ item }}{% endfor %}")));
-        assertEquals("333", theResultOf(stringResource("{{ for item in ['a','b','c'] %}{{ loop.length }}{% endfor %}")));
-        assertEquals("0a", theResultOf(stringResource("{{ for key, value in ['a'] %}{{ key }}{{ value }}{% endfor %}")));
-        assertEquals("alt", theResultOf(stringResource("{{ for key, value in [] %}{{ key }}{{ value }}{% else %}alt{% endfor %}")));
-        assertEquals("one = 1|two = 2|three = 3|", theResultOf(stringResource("{% for key, value in {'one': '1', 'two': '2', 'three': '3' %}{{ key }} = {{ value }}|{% endfor %}")));
-        assertEquals("ab", theResultOf(stringResource("{% for value in list %}{{ value }}{% else %}nothing{% endfor %}")));
+        assertEquals("", theResultOf(stringResource("{% for item in [] %}{{ item }}{% endfor %}")));
+        assertEquals("abc", theResultOf(stringResource("{% for item in ['a','b','c'] %}{{ item }}{% endfor %}")));
+        assertEquals("333", theResultOf(stringResource("{% for item in ['a','b','c'] %}{{ loop.length }}{% endfor %}")));
+        assertEquals("0a", theResultOf(stringResource("{% for key, value in ['a'] %}{{ key }}{{ value }}{% endfor %}")));
+        assertEquals("alt", theResultOf(stringResource("{% for key, value in [] %}{{ key }}{{ value }}{% else %}alt{% endfor %}")));
+        assertEquals("one = 1|two = 2|three = 3|", theResultOf(stringResource("{% for key, value in {'one': '1', 'two': '2', 'three': '3'} %}{{ key }} = {{ value }}|{% endfor %}")));
+        assertEquals("nothing", theResultOf(stringResource("{% for value in missing %}{{ value }}{% else %}nothing{% endfor %}")));
     }
 
     @Test

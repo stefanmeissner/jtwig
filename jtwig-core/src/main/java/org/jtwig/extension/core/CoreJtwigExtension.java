@@ -75,6 +75,7 @@ import org.jtwig.extension.core.tokenparsers.CommentParser;
 import org.jtwig.extension.core.tokenparsers.ConcurrentTag;
 import org.jtwig.extension.core.tokenparsers.FilterTag;
 import org.jtwig.extension.core.tokenparsers.SpacelessTag;
+import org.jtwig.extension.core.tokenparsers.VerbatimTag;
 
 public class CoreJtwigExtension extends SimpleExtension {
 
@@ -247,7 +248,8 @@ public class CoreJtwigExtension extends SimpleExtension {
                 
                 ConcurrentTag.class,
                 SpacelessTag.class,
-                FilterTag.class
+                FilterTag.class,
+                VerbatimTag.class
         );
     }
     

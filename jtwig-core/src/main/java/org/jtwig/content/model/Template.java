@@ -31,7 +31,6 @@ import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.content.model.compilable.SetVariable;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
-import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.exception.RenderException;
 import org.jtwig.exception.ResourceException;
@@ -68,10 +67,6 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
     
     @Override
     public Template add(Compilable compilable) {
-        if (compilable instanceof Comment) {
-            return this; // Discard
-        }
-        
         if (compilable instanceof Sequence) {
             for (Compilable c : ((Sequence)compilable).elements()) {
                 add(c);

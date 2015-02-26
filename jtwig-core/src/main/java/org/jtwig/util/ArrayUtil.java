@@ -17,6 +17,12 @@ package org.jtwig.util;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.ArrayUtils;
 import static org.jtwig.util.TypeUtil.isDecimal;
 import static org.jtwig.util.TypeUtil.isLong;
 import static org.jtwig.util.TypeUtil.toDecimal;
@@ -116,4 +122,46 @@ public class ArrayUtil {
         }
         return result;
     }
+    
+    public static List<Object> toList(final Object obj) {
+        if (obj instanceof Collection) {
+            return new ArrayList<>((Collection)obj);
+        }
+        if (obj instanceof Map) {
+            return new ArrayList<>(((Map)obj).values());
+        }
+        if (!obj.getClass().isArray()) {
+            return new ArrayList<>(Arrays.asList(obj));
+        }
+        return toList(obj);
+    }
+    
+    public static List<Object> toList(final Object[] arr) {
+        return Arrays.asList(arr);
+    }
+    public static List<Byte> toList(final byte[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Short> toList(final short[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Integer> toList(final int[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Long> toList(final long[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Float> toList(final float[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Double> toList(final double[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Character> toList(final char[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    public static List<Boolean> toList(final boolean[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+    
 }

@@ -27,6 +27,7 @@ import org.jtwig.types.Undefined;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import org.jtwig.util.ArrayUtil;
 
 public class For extends Content<For> {
     private final String key;
@@ -90,7 +91,7 @@ public class For extends Content<For> {
                 }
                 
                 if(resolved.getClass().isArray()) {
-                    resolved = Arrays.asList(resolved);
+                    resolved = ArrayUtil.toList(resolved);
                 }
                 if(resolved instanceof Map) {
                     handleMap((Map)resolved, context);
