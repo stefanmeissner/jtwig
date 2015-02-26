@@ -19,21 +19,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class BatchFilterTest extends AbstractJtwigTest {
+    
     @Test
     public void generalTests() throws Exception {
-        assertEquals("g,none,none", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none')[2] }}")));
-        assertEquals("a,b,none", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3, 'none')[2] }}")));
+        assertEquals("[[a, b, c], [d, e, f], [g, none, none]]", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none') }}")));
+        assertEquals("[[a, b]]", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3) }}")));
     }
     
-//    @Test
-//    public void batch() throws Exception {
-//        withResource("{{ batch([1,2,3,4], 3) }}");
-//        then(theResult(), is(equalTo("[[1, 2, 3], [4]]")));
-//    }
-//
-//    @Test
-//    public void batchWithPadding() throws Exception {
-//        withResource("{{ batch([1,2,3,4], 3, 1) }}");
-//        then(theResult(), is(equalTo("[[1, 2, 3], [4, 1, 1]]")));
-//    }
 }

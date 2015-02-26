@@ -14,19 +14,14 @@
 
 package org.jtwig.extension.core.operators;
 
-import com.google.common.base.Function;
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.model.TestCall;
 import org.jtwig.parser.model.JtwigPosition;
-import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.render.RenderContext;
-import static org.jtwig.util.TypeUtil.isBoolean;
-import org.parboiled.Rule;
 
 public class BinaryIsNotOperator extends BinaryIsOperator {
     public BinaryIsNotOperator(String name, int precedence) {
@@ -35,24 +30,18 @@ public class BinaryIsNotOperator extends BinaryIsOperator {
 
     @Override
     public Expression compile(Environment env, JtwigPosition pos, CompileContext ctx, Object... args) throws CompileException {
-        Expression left = (Expression)args[0];
-        Expression right = (Expression)args[1];
-        
+        final Expression left = (Expression)args[0];
+        final Expression right = (Expression)args[1];
         
         if (!(right instanceof TestCall.Compiled)) {
             throw new CompileException("Is operator expects a test as the right-side operand");
         }
-        return ((TestCall.Compiled)right).withLeft(left);
-    }
+        return new Expression() {
 
-    @Override
-    public Object render(RenderContext ctx, JtwigPosition pos, Object left, Object right) throws CalculateException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
-        String[] identifiers = env.getExtensions().getTests().keySet().toArray(new String[0]);
-        return expr.callable(TestCall.class, identifiers);
+            @Override
+            public Object calculate(RenderContext context) throws CalculateException {
+                return !((TestCall.Compiled)right).withLeft(left).calculate(context);
+            }
+        };
     }
 }

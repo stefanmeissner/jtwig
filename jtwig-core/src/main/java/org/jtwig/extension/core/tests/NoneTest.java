@@ -14,9 +14,9 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 
-public class NoneTest implements Test {
+public class NoneTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

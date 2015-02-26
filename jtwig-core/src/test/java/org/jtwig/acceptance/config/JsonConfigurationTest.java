@@ -20,7 +20,7 @@ public class JsonConfigurationTest extends AbstractJtwigTest {
             }
         });
 
-        withResource("{{ json_encode 'three' }}");
+        withResource("{{ 'three'|json_encode }}");
 
         assertThat(theResult(), equalTo("ohoh"));
     }

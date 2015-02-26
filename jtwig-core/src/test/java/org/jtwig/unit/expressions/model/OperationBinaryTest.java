@@ -20,9 +20,10 @@ import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.OperationBinary;
-import org.jtwig.expressions.model.Variable;
+import org.jtwig.extension.model.FilterCall;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.mockito.Matchers.any;
@@ -50,15 +51,15 @@ public class OperationBinaryTest extends AbstractJtwigTest {
     public void compositionOperator() throws Exception {
         Expression left = mock(Expression.class);
         when(left.calculate(any(RenderContext.class))).thenReturn(1);
-        Variable right = new Variable(null, "defined");
+        FilterCall filter = new FilterCall(null, "split");
 
         Object result = new OperationBinary(null, expression(left))
                 .addOperator("|")
-                .addOperand(right)
+                .addOperand(filter)
                 .compile(compileContext)
                 .calculate(renderContext);
 
-        assertEquals(true, result);
+        assertArrayEquals(new Character[]{'1'}, (Character[])result);
     }
 
     @Test(expected = CompileException.class)

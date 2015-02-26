@@ -75,9 +75,6 @@ public class ArrayUtil {
         return result;
     }
     private static Long[] rangeLong(Long start, Long end, Long step) {
-        System.out.println("Start long: "+start);
-        System.out.println("End long: "+end);
-        System.out.println("Step: "+step);
         if (Math.abs(start - end) < Math.abs(step)) {
             LOGGER.warn("Step exceeds the specified range");
             return null;
@@ -100,9 +97,6 @@ public class ArrayUtil {
         // Twig only uses the first char from each string
         char startChar = start.charAt(0);
         char endChar = end.charAt(0);
-        System.out.println("Start char: "+(int)startChar);
-        System.out.println("End char: "+(int)endChar);
-        System.out.println("Step: "+step);
         
         if (Math.abs(startChar - endChar) < Math.abs(step)) {
             LOGGER.warn("Step exceeds the specified range");
@@ -123,7 +117,7 @@ public class ArrayUtil {
         return result;
     }
     
-    public static List<Object> toList(final Object obj) {
+    public static List<? extends Object> toList(final Object obj) {
         if (obj instanceof Collection) {
             return new ArrayList<>((Collection)obj);
         }
@@ -133,35 +127,32 @@ public class ArrayUtil {
         if (!obj.getClass().isArray()) {
             return new ArrayList<>(Arrays.asList(obj));
         }
-        return toList(obj);
-    }
-    
-    public static List<Object> toList(final Object[] arr) {
-        return Arrays.asList(arr);
-    }
-    public static List<Byte> toList(final byte[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Short> toList(final short[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Integer> toList(final int[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Long> toList(final long[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Float> toList(final float[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Double> toList(final double[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Character> toList(final char[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
-    }
-    public static List<Boolean> toList(final boolean[] arr) {
-        return Arrays.asList(ArrayUtils.toObject(arr));
+        
+        if (obj instanceof byte[]) {
+            return Arrays.asList(ArrayUtils.toObject((byte[])obj));
+        }
+        if (obj instanceof short[]) {
+            return Arrays.asList(ArrayUtils.toObject((short[])obj));
+        }
+        if (obj instanceof int[]) {
+            return Arrays.asList(ArrayUtils.toObject((int[])obj));
+        }
+        if (obj instanceof long[]) {
+            return Arrays.asList(ArrayUtils.toObject((long[])obj));
+        }
+        if (obj instanceof float[]) {
+            return Arrays.asList(ArrayUtils.toObject((float[])obj));
+        }
+        if (obj instanceof double[]) {
+            return Arrays.asList(ArrayUtils.toObject((double[])obj));
+        }
+        if (obj instanceof char[]) {
+            return Arrays.asList(ArrayUtils.toObject((char[])obj));
+        }
+        if (obj instanceof boolean[]) {
+            return Arrays.asList(ArrayUtils.toObject((boolean[])obj));
+        }
+        return Arrays.asList((Object[])obj);
     }
     
 }

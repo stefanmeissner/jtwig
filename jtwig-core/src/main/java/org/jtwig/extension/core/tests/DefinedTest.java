@@ -15,13 +15,18 @@
 package org.jtwig.extension.core.tests;
 
 import org.jtwig.extension.api.test.Test;
-import static org.jtwig.types.Undefined.UNDEFINED;
+import org.jtwig.types.Undefined;
 
 public class DefinedTest implements Test {
 
     @Override
     public boolean evaluate(Object left, Object... args) {
-        return left != UNDEFINED;
+        return !(left instanceof Undefined);
+    }
+
+    @Override
+    public boolean acceptUndefinedArguments() {
+        return true;
     }
     
 }

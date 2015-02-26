@@ -13,15 +13,18 @@
  */
 package org.jtwig.acceptance.issues;
 
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import org.jtwig.AbstractJtwigTest;
 import org.jtwig.exception.CalculateException;
+import static org.jtwig.util.SyntacticSugar.given;
+import static org.jtwig.util.SyntacticSugar.then;
+import static org.jtwig.util.matchers.ExceptionMatcher.exception;
+import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.jtwig.util.SyntacticSugar.*;
-import static org.jtwig.util.matchers.ExceptionMatcher.exception;
 
 public class Issue112Test extends AbstractJtwigTest {
 
@@ -140,10 +143,8 @@ public class Issue112Test extends AbstractJtwigTest {
     @Test
     public void booleanValuesShouldBePrintItsIntegerRepresentation() throws Exception {
         given(theEnvironment().setStrictMode(false));
-        withResource("{{ true }}");
-        then(theResult(), is(equalTo("1")));
-        withResource("{{ false }}");
-        then(theResult(), is(equalTo("0")));
+        assertEquals("1", theResultOf(stringResource("{{ true }}")));
+        assertEquals("0", theResultOf(stringResource("{{ false }}")));
     }
 
     @Test

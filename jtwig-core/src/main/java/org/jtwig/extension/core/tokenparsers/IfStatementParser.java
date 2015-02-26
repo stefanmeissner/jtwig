@@ -42,6 +42,7 @@ public class IfStatementParser extends TokenParser {
                 mandatory(
                         Sequence(
                                 getExpressionParser().expression(),
+                                basic.spacing(),
                                 push(new IfControl.Case(getExpressionParser().pop())),
                                 action(content.beforeBeginTrim()),
                                 action(content.beforeBeginTrim(1)),
@@ -60,6 +61,7 @@ public class IfStatementParser extends TokenParser {
                                                 push(new IfControl.Case(getExpressionParser().pop())),
                                                 action(content.beforeEndTrim(1)),
                                                 action(content.beforeBeginTrim()),
+                                                basic.spacing(),
                                                 content.closeCode(),
                                                 action(content.afterBeginTrim()),
                                                 action(pop(1)),
@@ -71,6 +73,7 @@ public class IfStatementParser extends TokenParser {
                                         Sequence(
                                                 action(peek(1, IfControl.class).add(peek(IfControl.Case.class))),
                                                 content.openCode(),
+                                                basic.spacing(),
                                                 basic.keyword("else"),
                                                 basic.spacing(),
                                                 push(new IfControl.Case(new Constant<>(true))),

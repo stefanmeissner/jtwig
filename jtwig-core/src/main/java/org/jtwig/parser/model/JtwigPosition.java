@@ -66,6 +66,6 @@ public class JtwigPosition {
 
     @Override
     public String toString() {
-        return "["+hashCode()+"]" + resource + " -> Line "+row+", column "+column;
+        return resource + " -> Line "+row+", column "+column;
     }
 }

@@ -16,11 +16,7 @@ package org.jtwig.extension.core.filters;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import org.jtwig.extension.api.filters.Filter;
-import org.jtwig.functions.annotations.JtwigFunction;
-import org.jtwig.functions.annotations.Parameter;
-import org.jtwig.util.ArrayUtil;
 
 public class KeysFilter implements Filter {
 
@@ -29,7 +25,6 @@ public class KeysFilter implements Filter {
         if (left instanceof Map) {
             return ((Map)left).keySet();
         }
-        System.out.println("Received: "+left.getClass().getName());
         if (!(left instanceof Collection) || ((Collection)left).isEmpty()) {
             return new Integer[0];
         }

@@ -37,9 +37,8 @@ public class Issue140Test extends AbstractJtwigTest {
     @Test
     public void undefinedVarThrowsExceptionOnEvaluation() throws Exception {
         expectedException.expect(exception().withInnerException(exception().ofType(CalculateException.class)));
-        given(theEnvironment().setStrictMode(true));
-        withResource("{{ var is null }}");
-        render();
+        env.setStrictMode(true).setLogNonStrictMode(true);
+        theResultOf(stringResource("{{ var is null }}"));
     }
 
     /**

@@ -28,12 +28,14 @@ public class BinaryInOperatorTest extends AbstractJtwigTest {
     @Test
     public void generalTest() throws Exception {
         assertFalse(underTest.render(renderContext, position, null, null));
-        assertTrue(underTest.render(renderContext, position, null, Arrays.asList(0, null)));
         assertTrue(underTest.render(renderContext, position, null, Arrays.asList(0, 1)));
+        assertTrue(underTest.render(renderContext, position, null, Arrays.asList(1, null)));
+        assertFalse(underTest.render(renderContext, position, null, Arrays.asList(1, 2)));
         assertTrue(underTest.render(renderContext, position, 0, Arrays.asList("0", "1")));
         assertTrue(underTest.render(renderContext, position, "0", Arrays.asList(0, 1)));
         assertTrue(underTest.render(renderContext, position, true, Arrays.asList(0, 1)));
         assertTrue(underTest.render(renderContext, position, true, Arrays.asList("0", "1")));
         assertTrue(underTest.render(renderContext, position, true, Arrays.asList("test", "tester")));
+        assertTrue(underTest.render(renderContext, position, "test", "tester"));
     }
 }

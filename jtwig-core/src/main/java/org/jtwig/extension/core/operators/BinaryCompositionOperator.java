@@ -45,7 +45,7 @@ public class BinaryCompositionOperator extends BinaryOperator {
         if (right instanceof FilterCall.Compiled) {
             return ((FilterCall.Compiled)right).cloneAndAddLeftArgument(left);
         }
-        throw new CompileException(pos + ": Composition always requires a function to execute as the right argument");
+        throw new CompileException(pos + ": Composition always requires a filter to execute as the right argument");
     }
 
     @Override

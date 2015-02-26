@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.jtwig.Environment;
 import org.jtwig.extension.SimpleExtension;
 import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.functions.Function;
@@ -78,6 +79,11 @@ import org.jtwig.extension.core.tokenparsers.SpacelessTag;
 import org.jtwig.extension.core.tokenparsers.VerbatimTag;
 
 public class CoreJtwigExtension extends SimpleExtension {
+    private final Environment env;
+    
+    public CoreJtwigExtension(final Environment env) {
+        this.env = env;
+    }
 
     @Override
     public String getName() {
@@ -87,9 +93,9 @@ public class CoreJtwigExtension extends SimpleExtension {
     @Override
     public Map<String, Operator> getUnaryOperators() {
         return new HashMap<String, Operator>(){{
-            put("not", new UnaryNotOperator("not", 50));
-            put("is not", new UnaryIsNotOperator("is not", 100));
-            put("is", new UnaryIsOperator("is", 105));
+            put("not", new UnaryNotOperator("not", 19));
+            put("is", new UnaryIsOperator("is", 100));
+            put("is not", new UnaryIsNotOperator("is not", 105));
             put("-", new UnaryNegativeOperator("-", 3));
             put("+", new UnaryPositiveOperator("+", 3));
         }};
@@ -99,6 +105,8 @@ public class CoreJtwigExtension extends SimpleExtension {
     public Map<String, Operator> getBinaryOperators() {
         return new HashMap<String, Operator>(){{
             // These aren't operators in Twig, but they function like it
+            put("is", new BinaryIsOperator("is", 4));
+            put("is not", new BinaryIsNotOperator("is not", 4));
             put(".", new BinarySelectionOperator(".", 5));
             put("|", new BinaryCompositionOperator("|", 5));
             
@@ -130,8 +138,6 @@ public class CoreJtwigExtension extends SimpleExtension {
             put("/", new BinaryDivisionOperator("/", 60));
             put("//", new BinaryFloorDivisionOperator("//", 60));
             put("%", new BinaryModulusOperator("%", 60));
-            put("is", new BinaryIsOperator("is", 100));
-            put("is not", new BinaryIsNotOperator("is not", 100));
             put("**", new BinaryExponentOperator("**", 200));
         }};
     }
@@ -170,7 +176,7 @@ public class CoreJtwigExtension extends SimpleExtension {
 
             // Encoding
             put("url_encode", new UrlEncodeFilter());
-            put("json_encode", new JsonEncodeFilter());
+            put("json_encode", new JsonEncodeFilter(env.getJsonConfiguration()));
             put("convert_encoding", new ConvertEncodingFilter());
 
             // String filters

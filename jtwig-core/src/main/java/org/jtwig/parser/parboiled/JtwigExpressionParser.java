@@ -147,6 +147,11 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
                 function(),
                 map(),
                 list(),
+                Sequence(
+                        constants.booleanValue(),
+                        push(constants.pop()),
+                        basic.spacing()
+                ),
                 variable(),
                 constant(),
                 Sequence(

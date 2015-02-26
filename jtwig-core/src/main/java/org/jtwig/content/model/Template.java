@@ -25,7 +25,6 @@ import org.jtwig.content.api.ability.ElementList;
 import org.jtwig.content.api.ability.ElementTracker;
 import org.jtwig.content.api.ability.ExecutionAware;
 import org.jtwig.content.model.compilable.Block;
-import org.jtwig.content.model.compilable.Comment;
 import org.jtwig.content.model.compilable.Macro;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.content.model.compilable.SetVariable;

@@ -15,9 +15,9 @@
 package org.jtwig.extension.core.tests;
 
 import java.util.Map;
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 
-public class IterableTest implements Test {
+public class IterableTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

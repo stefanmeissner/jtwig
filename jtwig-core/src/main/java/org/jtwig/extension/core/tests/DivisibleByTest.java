@@ -15,10 +15,10 @@
 package org.jtwig.extension.core.tests;
 
 import java.math.BigDecimal;
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 import static org.jtwig.util.TypeUtil.toDecimal;
 
-public class DivisibleByTest implements Test {
+public class DivisibleByTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

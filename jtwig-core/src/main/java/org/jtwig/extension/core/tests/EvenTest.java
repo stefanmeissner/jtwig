@@ -15,10 +15,10 @@
 package org.jtwig.extension.core.tests;
 
 import java.math.BigDecimal;
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 import org.jtwig.util.TypeUtil;
 
-public class EvenTest implements Test {
+public class EvenTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

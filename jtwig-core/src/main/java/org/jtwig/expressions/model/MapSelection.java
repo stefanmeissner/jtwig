@@ -30,6 +30,8 @@ import java.util.Map;
 
 import static org.jtwig.types.Undefined.UNDEFINED;
 import org.jtwig.util.TypeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MapSelection extends AbstractCompilableExpression {
     private final CompilableExpression source;
@@ -47,6 +49,7 @@ public class MapSelection extends AbstractCompilableExpression {
     }
 
     private static class Compiled implements Expression {
+        private static final Logger LOGGER = LoggerFactory.getLogger(Compiled.class);
         private final JtwigPosition position;
         private final Expression variable;
         private final Expression key;
@@ -63,27 +66,42 @@ public class MapSelection extends AbstractCompilableExpression {
             Object variableValue = variable.calculate(context);
             Object keyValue = key.calculate(context);
 
-            if (keyValue instanceof Undefined)
+            if (keyValue instanceof Undefined) {
                 throw new CalculateException(position + ": Given key is undefined");
+            }
+            
+            if (variableValue == null || variableValue instanceof Undefined) {
+                error(context, variableValue, keyValue);
+            }
 
             if (variableValue instanceof Map) {
                 Map map = (Map) variableValue;
                 if (map.containsKey(keyValue)) {
                     return map.get(keyValue);
                 }
+                error(context, variableValue, keyValue);
                 return UNDEFINED;
             }
             if (!(variableValue instanceof Collection)) {
-                throw new CalculateException(position + ": Unable to retrieve " + keyValue + " from " + variableValue);
+                error(context, variableValue, keyValue);
             }
             int idx = TypeUtil.toLong(keyValue).intValue();
-            if (((Collection)variableValue).size() < idx) {
-                return null;
+            if (((Collection)variableValue).size() <= idx) {
+                error(context, variableValue, keyValue);
+                return UNDEFINED;
             }
             if (!(variableValue instanceof List)) {
                 variableValue = new ArrayList<>((Collection)variableValue);
             }
             return ((List)variableValue).get(idx);
+        }
+        
+        private void error(RenderContext context, Object value, Object key) throws CalculateException {
+            if (context.environment().isStrictMode()) {
+                throw new CalculateException(position + ": Unable to retrieve "+key+" from "+value);
+            } else if (context.environment().isLogNonStrictMode()) {
+                LOGGER.warn(position + ": Unable to retrieve "+key+" from "+value);
+            }
         }
     }
 }

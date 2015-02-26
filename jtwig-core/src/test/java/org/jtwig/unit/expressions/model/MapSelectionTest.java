@@ -64,6 +64,7 @@ public class MapSelectionTest extends AbstractJtwigTest {
 
     @Test(expected = CalculateException.class)
     public void nonMapVariable() throws Exception {
+        env.setStrictMode(true);
         Variable variable = mock(Variable.class);
         CompilableExpression key = new Constant<>("test");
 

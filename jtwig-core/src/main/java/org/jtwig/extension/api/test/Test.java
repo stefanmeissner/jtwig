@@ -16,4 +16,10 @@ package org.jtwig.extension.api.test;
 
 public interface Test {
     boolean evaluate(Object left, Object...args) throws TestException;
+    /**
+     * Determines whether or not the test accepts Undefined arguments. If false,
+     * undefined arguments should be converted to null first.
+     * @return 
+     */
+    boolean acceptUndefinedArguments();
 }

@@ -22,10 +22,10 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import org.hamcrest.core.AnyOf;
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 import org.jtwig.functions.util.CastMatcher;
 
-public class EmptyTest implements Test {
+public class EmptyTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

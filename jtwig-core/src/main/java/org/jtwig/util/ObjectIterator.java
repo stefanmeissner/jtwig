@@ -14,6 +14,7 @@
 
 package org.jtwig.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,10 +78,39 @@ public class ObjectIterator implements Iterable<Object>, Iterator<Object> {
     }
     
     public boolean containsLoose(Object item) {
+        BigDecimal itemDecimal = TypeUtil.toDecimal(item);
+        Long itemLong = TypeUtil.toLong(item);
+        Boolean itemBool = TypeUtil.toBoolean(item);
+        
         // Use a new iterator so that we don't confuse anything
         Iterator<Object> it = list.iterator();
         while (it.hasNext()) {
-            if (TypeUtil.areLooselyEqual(item, it.next())) {
+            Object obj = it.next();
+            if (obj == null) {
+                if (item == null) {
+                    return true;
+                }
+                continue;
+            }
+            if (TypeUtil.isDecimal(obj)) {
+                if (TypeUtil.toDecimal(obj).equals(itemDecimal)) {
+                    return true;
+                }
+                continue;
+            }
+            if (TypeUtil.isLong(obj)) {
+                if (TypeUtil.toLong(obj).equals(itemLong)) {
+                    return true;
+                }
+                continue;
+            }
+            if (TypeUtil.isBoolean(obj) || TypeUtil.isBoolean(item)) {
+                if (TypeUtil.toBoolean(obj).equals(itemBool)) {
+                    return true;
+                }
+                continue;
+            }
+            if (obj.toString().contains(item.toString())) {
                 return true;
             }
         }

@@ -14,10 +14,10 @@
 
 package org.jtwig.extension.core.tests;
 
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 import org.jtwig.types.Undefined;
 
-public class NullTest implements Test {
+public class NullTest extends AbstractTest {
 
     @Override
     public boolean evaluate(Object left, Object... args) {

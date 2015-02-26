@@ -15,12 +15,12 @@
 package org.jtwig.extension.core.tests;
 
 import static java.lang.Class.forName;
-import org.jtwig.extension.api.test.Test;
+import org.jtwig.extension.api.test.AbstractTest;
 import org.jtwig.extension.api.test.TestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConstantTest implements Test {
+public class ConstantTest extends AbstractTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConstantTest.class);
 
     @Override

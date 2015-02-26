@@ -14,7 +14,6 @@
 
 package org.jtwig.extension.core.operators;
 
-import org.jtwig.exception.CalculateException;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 

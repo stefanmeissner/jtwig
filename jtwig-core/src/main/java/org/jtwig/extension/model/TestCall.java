@@ -21,7 +21,6 @@ import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
-import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.api.test.Test;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
@@ -54,20 +53,16 @@ public class TestCall extends Callable {
         }
 
         @Override
-        public Object calculate(RenderContext context) throws CalculateException {
+        public Boolean calculate(RenderContext context) throws CalculateException {
             Test test = context.environment().getExtensions().getTest(name);
             if (test == null) {
                 throw new CalculateException("Unable to find test '"+name+"'");
             }
-            Object calculatedLeft = Undefined.UNDEFINED;
-            if (left instanceof Variable.Compiled) {
-                try {
-                    calculatedLeft = left.calculate(context);
-                } catch (CalculateException ex) {}
-            } else {
-                calculatedLeft = left.calculate(context);
+            Object calculatedLeft = left.calculate(context);
+            if (!test.acceptUndefinedArguments() && calculatedLeft == Undefined.UNDEFINED)  {
+                calculatedLeft = null;
             }
-
+            
             return test.evaluate(calculatedLeft, calculateArguments(context));
         }
 

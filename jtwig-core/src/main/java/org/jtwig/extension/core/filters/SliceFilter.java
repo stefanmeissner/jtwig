@@ -16,7 +16,6 @@ package org.jtwig.extension.core.filters;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +48,6 @@ public class SliceFilter implements Filter {
             }
             start = resolveStart(start, value.length());
             int end = resolveEnd(start, length, value.length());
-            System.out.println("Start: "+start);
-            System.out.println("End: "+end);
-            System.out.println("Requested length: "+length);
             return value.substring(start, end);
         }
         if (left instanceof Collection) {

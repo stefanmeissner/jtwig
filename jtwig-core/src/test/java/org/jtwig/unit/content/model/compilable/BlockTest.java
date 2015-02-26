@@ -15,15 +15,14 @@
 package org.jtwig.unit.content.model.compilable;
 
 import org.jtwig.AbstractJtwigTest;
-import org.jtwig.Environment;
 import org.jtwig.content.model.compilable.Block;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.ParseException;
 import org.jtwig.exception.RenderException;
 import org.jtwig.parser.model.JtwigPosition;
 import org.junit.Test;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class BlockTest extends AbstractJtwigTest {
     @Test(expected = RenderException.class)
@@ -35,10 +34,5 @@ public class BlockTest extends AbstractJtwigTest {
         block.withContent(new Sequence());
         
         block.compile(compileContext).render(renderContext);
-    }
-
-    @Override
-    protected Environment buildEnvironment() {
-        return spy(super.buildEnvironment());
     }
 }

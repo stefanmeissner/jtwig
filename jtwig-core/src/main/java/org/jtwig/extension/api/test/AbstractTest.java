@@ -12,16 +12,13 @@
  * limitations under the License.
  */
 
-package org.jtwig.extension.core.tests;
+package org.jtwig.extension.api.test;
 
-import org.jtwig.extension.api.test.AbstractTest;
-import org.jtwig.extension.api.test.TestException;
-
-public class SameAsTest extends AbstractTest {
+public abstract class AbstractTest implements Test {
 
     @Override
-    public boolean evaluate(Object left, Object... args) throws TestException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean acceptUndefinedArguments() {
+        return false;
     }
     
 }

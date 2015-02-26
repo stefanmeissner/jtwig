@@ -48,7 +48,7 @@ public class Environment {
     protected boolean strictMode = false;
     protected boolean logNonStrictMode = true;
     protected Symbols symbols = TagSymbols.DEFAULT;
-    protected ExtensionHolder extensions = new ExtensionHolder();
+    protected ExtensionHolder extensions = new ExtensionHolder(this);
     
     protected int minThreads = 20;
     protected int maxThreads = 100;
