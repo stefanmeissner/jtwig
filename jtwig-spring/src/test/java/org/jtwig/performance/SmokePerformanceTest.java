@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.util.Locale.ENGLISH;
+import org.apache.commons.lang3.math.NumberUtils;
 import static org.joda.time.DateTime.now;
 
 /**
@@ -65,9 +66,9 @@ public class SmokePerformanceTest extends AbstractJtwigAcceptanceTest {
 
         System.out.println("Jobs queued... waiting to finish...");
         counter.await();
-        Seconds seconds = new Period(startDate, DateTime.now()).toStandardSeconds();
+        int seconds = new Period(startDate, DateTime.now()).toStandardSeconds().getSeconds();
         System.out.println(String.format("Finished in %s seconds (Speed: %d requests per second)",
-                seconds.toString(), CALLS / seconds.get(DurationFieldType.seconds())));
+                seconds, CALLS / NumberUtils.max(new int[]{1, seconds})));
     }
 
     @RequestMapping("/performance")

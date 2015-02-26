@@ -38,8 +38,7 @@ public class BlockDefinitionParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
-                basic.spacing(),
+                content.openCode(),
                 basic.keyword("block"),
                 basic.spacing(),
                 mandatory(
@@ -47,14 +46,12 @@ public class BlockDefinitionParser extends TokenParser {
                                 expr.identifierAsString(),
                                 push(new Block(currentPosition(), expr.popIdentifierAsString())),
                                 basic.spacing(),
-//                                action(content.beforeBeginTrim()),
-                                basic.closeCode(),
-//                                action(afterBeginTrim()),
+                                action(content.beforeBeginTrim()),
+                                content.closeCode(),
+                                action(content.afterBeginTrim()),
                                 content.content(),
                                 action(peek(1, Block.class).withContent(pop(Sequence.class))),
-                                basic.openCode(),
-//                                action(beforeEndTrim()),
-                                basic.spacing(),
+                                content.openCode(),
                                 basic.keyword("endblock"),
                                 basic.spacing(),
                                 Optional(
@@ -65,8 +62,9 @@ public class BlockDefinitionParser extends TokenParser {
                                                 expr.popIdentifierAsString()
                                         )
                                 ),
-                                basic.closeCode()
-//                                action(afterEndTrim())
+                                action(content.beforeEndTrim()),
+                                content.closeCode(),
+                                action(content.afterEndTrim())
                         ),
                         new ParseException("Wrong block syntax")
                 )

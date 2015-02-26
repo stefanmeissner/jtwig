@@ -14,6 +14,7 @@
 
 package org.jtwig.acceptance;
 
+import java.io.IOException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.jetty.server.Server;
@@ -22,6 +23,9 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
+import org.jtwig.Environment;
+import org.jtwig.extension.spring.SpringExtension;
+import org.jtwig.loader.impl.ClasspathLoader;
 import org.jtwig.mvc.JtwigViewResolver;
 import org.junit.After;
 import org.junit.Before;
@@ -35,15 +39,6 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.theme.FixedThemeResolver;
-
-import java.io.IOException;
-import java.util.Arrays;
-import javax.servlet.ServletContext;
-import org.jtwig.Environment;
-import org.jtwig.functions.SpringFunctions;
-import org.jtwig.loader.impl.ChainLoader;
-import org.jtwig.loader.impl.ClasspathLoader;
-import org.jtwig.loader.impl.WebResourceLoader;
 
 public abstract class AbstractJtwigAcceptanceTest {
     private HttpClient httpClient = httpClient();
@@ -136,14 +131,15 @@ public abstract class AbstractJtwigAcceptanceTest {
             
             Environment env = new Environment();
             env.setLoader(classpath);
+            env.getExtensions().addExtension(springExtension());
             
 //            env.getFunctionRepository().include(springFunctions());
             return env;
         }
         
         @Bean
-        public SpringFunctions springFunctions () {
-            return new SpringFunctions();
+        public SpringExtension springExtension () {
+            return new SpringExtension();
         }
     }
 
