@@ -24,6 +24,7 @@ import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.loader.Loader;
 import org.jtwig.loader.impl.ClasspathLoader;
 import org.jtwig.loader.impl.StringLoader;
+import org.jtwig.parser.parboiled.JtwigContentParser;
 import org.jtwig.render.RenderContext;
 import org.jtwig.util.LoaderUtil;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
+import org.parboiled.Parboiled;
 import org.parboiled.Rule;
 import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
@@ -143,6 +145,10 @@ public abstract class AbstractJtwigTest {
         doAnswer(new ReturnsArgumentAt(0)).when(resource).resolve(any(String.class));
     }
     
+    protected Compilable traceParse(String template) {
+        JtwigContentParser parser = Parboiled.createParser(JtwigContentParser.class, stringResource(template), env);
+        return traceParse(template, parser.start(), Compilable.class);
+    }
     protected <T> T traceParse(String template, Rule rule, Class<T> cls) {
         TracingParseRunner<T> runner = new TracingParseRunner<>(rule);
         ParsingResult<T> result = runner.run(template);

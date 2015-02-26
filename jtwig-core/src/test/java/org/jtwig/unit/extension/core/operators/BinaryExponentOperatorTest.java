@@ -15,6 +15,8 @@
 package org.jtwig.unit.extension.core.operators;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.BinaryExponentOperator;
 import org.jtwig.parser.model.JtwigPosition;
@@ -29,8 +31,9 @@ public class BinaryExponentOperatorTest extends AbstractJtwigTest {
     public void generalTest() throws Exception {
         assertEquals(8L, underTest.render(renderContext, position, 2, 3));
         assertEquals(8L, underTest.render(renderContext, position, "2", 3));
-        assertEquals(new BigDecimal("9.261"), underTest.render(renderContext, position, 2.1D, 3));
-        assertEquals(new BigDecimal("9.261"), (double)underTest.render(renderContext, position, 2.1F, "3"));
+        // Rounding necessary due to floating-point arithmetic. Any better solutions? - Thomas Wilson
+        assertEquals(new BigDecimal("9.261"), ((BigDecimal)underTest.render(renderContext, position, 2.1D, 3)).round(new MathContext(4, RoundingMode.HALF_UP)));
+        assertEquals(new BigDecimal("9.261"), ((BigDecimal)underTest.render(renderContext, position, 2.1F, "3")).round(new MathContext(4, RoundingMode.HALF_UP)));
         assertEquals(0L, underTest.render(renderContext, position, null, "3"));
         assertEquals(1L, underTest.render(renderContext, position, 2, null));
         assertEquals(2L, underTest.render(renderContext, position, 2, new Object()));

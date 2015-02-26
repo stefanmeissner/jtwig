@@ -60,16 +60,8 @@ public class Environment {
     protected TemplateCache cache = new ExecutionCache();
     protected Loader loader;
     
-    protected JtwigBasicParser basicParser;
-    protected JtwigTagPropertyParser tagPropertyParser;
-    protected JtwigConstantParser constantParser;
-    
     //~ Construction ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Environment() {
-        basicParser = createParser(JtwigBasicParser.class, this);
-        tagPropertyParser = createParser(JtwigTagPropertyParser.class, this);
-        constantParser = createParser(JtwigConstantParser.class, this);
-    }
+    public Environment() {}
     
     //~ Getters & Setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Charset getCharset() {
@@ -171,27 +163,15 @@ public class Environment {
     }
     
     public JtwigBasicParser getBasicParser() {
-        return basicParser;
-    }
-    public Environment setBasicParser(final JtwigBasicParser basicParser) {
-        this.basicParser = basicParser;
-        return this;
+        return createParser(JtwigBasicParser.class, this);
     }
     
     public JtwigTagPropertyParser getTagPropertyParser() {
-        return tagPropertyParser;
-    }
-    public Environment setTagPropertyParser(final JtwigTagPropertyParser tagPropertyParser) {
-        this.tagPropertyParser = tagPropertyParser;
-        return this;
+        return createParser(JtwigTagPropertyParser.class, this);
     }
     
     public JtwigConstantParser getConstantParser() {
-        return constantParser;
-    }
-    public Environment setConstantParser(final JtwigConstantParser constantParser) {
-        this.constantParser = constantParser;
-        return this;
+        return createParser(JtwigConstantParser.class, this);
     }
     
     //~ Operational methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

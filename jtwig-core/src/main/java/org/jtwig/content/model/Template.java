@@ -72,19 +72,27 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
             return this; // Discard
         }
         
+        if (compilable instanceof Sequence) {
+            for (Compilable c : ((Sequence)compilable).elements()) {
+                add(c);
+            }
+            return this;
+        }
+        
         if (parent != null) {
-//            if (compilable instanceof SetVariable || compilable instanceof Sequence) {
-//                content.add(compilable);
-//            } else if (compilable instanceof Block) {
-//                // Discard
-//            } else {
-//                throw new ParseBypassException(new ParseException("Extending templates do not support "+compilable.getClass().getName()));
-//            }
+            if (compilable instanceof SetVariable) {
+                content.add(compilable);
+            }
             return this;
         }
         
         content.add(compilable);
         return this;
+    }
+
+    @Override
+    public Collection<Compilable> elements() {
+        return content.elements();
     }
     
     @Override

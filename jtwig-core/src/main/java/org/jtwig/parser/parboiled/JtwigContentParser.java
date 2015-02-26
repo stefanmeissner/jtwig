@@ -101,7 +101,7 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
                 EOI
         );
     }
-
+    
     public Rule content() {
         return Sequence(
                 push(new Sequence()),

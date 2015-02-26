@@ -37,9 +37,9 @@ public class WhiteSpaceControlTest {
 
     @Test
     public void defaultTest() throws Exception {
-        assertThat(underTest.trimAfterOpen(), is(true));
-        assertThat(underTest.trimAfterClose(), is(true));
-        assertThat(underTest.trimBeforeOpen(), is(true));
-        assertThat(underTest.trimBeforeClose(), is(true));
+        assertThat(underTest.trimAfterOpen(), is(false));
+        assertThat(underTest.trimAfterClose(), is(false));
+        assertThat(underTest.trimBeforeOpen(), is(false));
+        assertThat(underTest.trimBeforeClose(), is(false));
     }
 }
