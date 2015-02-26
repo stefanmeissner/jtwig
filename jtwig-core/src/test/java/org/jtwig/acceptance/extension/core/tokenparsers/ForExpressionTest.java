@@ -16,26 +16,23 @@ package org.jtwig.acceptance.extension.core.tokenparsers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class ForExpressionTest extends AbstractJtwigTest {
     @Test
-    public void emptyListShouldOutputNothing () throws Exception {
-        model.withModelAttribute("list", Collections.EMPTY_LIST);
-        withResource("{% for item in list %}Item {{ item }}{% endfor %}");
-        assertThat(theResult(), is(""));
-    }
-    @Test
-    public void nonEmptyListShouldOutputSomething () throws Exception {
-        model.withModelAttribute("list", Arrays.asList("a"));
-        withResource("{% for item in list %}Item {{ item }}{% endfor %}");
-        assertThat(theResult(), is("Item a"));
+    public void generalTests() throws Exception {
+        assertEquals("", theResultOf(stringResource("{{ for item in [] %}{{ item }}{% endfor %}")));
+        assertEquals("abc", theResultOf(stringResource("{{ for item in ['a','b','c'] %}{{ item }}{% endfor %}")));
+        assertEquals("333", theResultOf(stringResource("{{ for item in ['a','b','c'] %}{{ loop.length }}{% endfor %}")));
+        assertEquals("0a", theResultOf(stringResource("{{ for key, value in ['a'] %}{{ key }}{{ value }}{% endfor %}")));
+        assertEquals("alt", theResultOf(stringResource("{{ for key, value in [] %}{{ key }}{{ value }}{% else %}alt{% endfor %}")));
+        assertEquals("one = 1|two = 2|three = 3|", theResultOf(stringResource("{% for key, value in {'one': '1', 'two': '2', 'three': '3' %}{{ key }} = {{ value }}|{% endfor %}")));
+        assertEquals("ab", theResultOf(stringResource("{% for value in list %}{{ value }}{% else %}nothing{% endfor %}")));
     }
 
     @Test
@@ -54,53 +51,6 @@ public class ForExpressionTest extends AbstractJtwigTest {
                 "{{ loop.index0 }}{{ loop.index }}{{ loop.revindex0 }}{{ loop.revindex }} " +
                 "{% endfor %}");
         assertThat(theResult(), is("0145 1234 2323 3412 4501 "));
-    }
-
-    @Test
-    public void shouldNotOutputNothingIfListIsNull () throws Exception {
-        model.withModelAttribute("list", null);
-        withResource("{% for item in list %}a{% endfor %}");
-        assertThat(theResult(), is(""));
-    }
-
-
-    @Test
-    public void iterateOverMap () throws Exception {
-        LinkedHashMap<String, String> value = new  LinkedHashMap<String, String>();
-        value.put("one", "1");
-        value.put("two", "2");
-        value.put("three", "3");
-        model.withModelAttribute("map", value);
-        withResource("{% for key, value in map %}{{ key }} = {{ value }}|{% endfor %}");
-        assertThat(theResult(), is("one = 1|two = 2|three = 3|"));
-    }
-    
-    @Test
-    public void avoidElseOnPopulatedList () throws Exception {
-        model.withModelAttribute("list", Arrays.asList("a","b"));
-        withResource("{% for value in list %}{{ value }}{% else %}nothing{% endfor %}");
-        assertThat(theResult(), is("ab"));
-    }
-    
-    @Test
-    public void outputElseOnEmptyList () throws Exception {
-        model.withModelAttribute("list", Collections.EMPTY_LIST);
-        withResource("{% for value in list %}item{% else %}nothing{% endfor %}");
-        assertThat(theResult(), is("nothing"));
-    }
-    
-    @Test
-    public void outputElseOnUndefined () throws Exception {
-        withResource("{% for value in var %}{{ value }}{% else %}nothing{% endfor %}");
-        assertThat(theResult(), is("nothing"));
-    }
-    
-    @Test
-    public void iterateOnSelection () throws Exception {
-        model.withModelAttribute("obj", new Obj())
-                .withModelAttribute("name", "Test");
-        withResource("{% for value in obj.getList(name) %}{{ value }}{% endfor %}");
-        assertThat(theResult(), is("ab"));
     }
     
     @Test

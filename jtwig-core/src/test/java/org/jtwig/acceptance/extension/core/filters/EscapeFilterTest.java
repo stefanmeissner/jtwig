@@ -14,25 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import static org.hamcrest.core.IsEqual.equalTo;
 import org.jtwig.AbstractJtwigTest;
-import org.jtwig.exception.RenderException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class EscapeFilterTest extends AbstractJtwigTest {
+    
     @Test
-    public void escapeExecuteDefault() throws Exception {
+    public void generalTests() throws Exception {
+        assertEquals("jo&atilde;o", theResultOf(stringResource("{{ 'joão'|escape }}")));
         assertEquals("&lt;html&gt;", theResultOf(stringResource("{{ '<html>'|escape }}")));
-    }
-
-    @Test
-    public void escapeExecuteXml() throws Exception {
         assertEquals("&lt;xml /&gt;", theResultOf(stringResource("{{ '<xml />'|escape('xml') }}")));
-    }
-
-    @Test
-    public void escapeExecuteJs() throws Exception {
         assertEquals("<xml \\/>", theResultOf(stringResource("{{ '<xml />'|escape('js') }}")));
     }
 
@@ -40,4 +32,5 @@ public class EscapeFilterTest extends AbstractJtwigTest {
     public void escapeNonSupportedType() throws Exception {
         theResultOf(stringResource("{{ '<xml />'|escape('test') }}"));
     }
+    
 }

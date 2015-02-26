@@ -28,8 +28,8 @@ public class SortFilterTest extends AbstractJtwigTest {
         assertEquals("-1.2", theResultOf(stringResource("{{ -1.2|sort }}")));
         assertEquals("-1.2", theResultOf(stringResource("{{ (-1.2)|sort }}")));
 
-        assertEquals("abc", theResultOf(stringResource("{{ ['a','b','c']|sort|join }}")));
-        assertEquals("123", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|sort|join }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|sort|keys|join }}")));
+        assertEquals("abc", theResultOf(stringResource("{{ ['b','c','a']|sort|join }}")));
+        assertEquals("123", theResultOf(stringResource("{{ {'b':'2','c':'3','a':'1'}|sort|join }}")));
+        assertEquals("abc", theResultOf(stringResource("{{ {'b':'2','c':'3','a':'1'}|sort|keys|join }}")));
     }
 }

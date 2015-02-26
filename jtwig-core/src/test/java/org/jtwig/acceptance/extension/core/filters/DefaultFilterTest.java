@@ -24,5 +24,7 @@ public class DefaultFilterTest extends AbstractJtwigTest {
         assertEquals("a", theResultOf(stringResource("{{ null|default('a') }}")));
         assertEquals("1", theResultOf(stringResource("{{ null|default(1) }}")));
         assertEquals("a", theResultOf(stringResource("{{ 'a'|default(1) }}")));
+        assertEquals("1", theResultOf(stringResource("{{ var|default(1) }}")));
+        assertEquals("1", theResultOf(stringResource("{{ var.val|default(1) }}")));
     }
 }

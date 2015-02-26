@@ -14,6 +14,7 @@
 
 package org.jtwig.extension.core.operators;
 
+import java.math.BigDecimal;
 import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
@@ -33,7 +34,11 @@ public class BinaryMultiplicationOperator extends BinaryOperator {
             return 0L;
         }
         if (isDecimal(left) || isDecimal(right)) {
-            return toDecimal(left).multiply(toDecimal(right));
+            BigDecimal result = toDecimal(left).multiply(toDecimal(right));
+            if (result.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0) {
+                return result.longValue();
+            }
+            return result.stripTrailingZeros();
         }
         return toLong(left) * toLong(right);
     }

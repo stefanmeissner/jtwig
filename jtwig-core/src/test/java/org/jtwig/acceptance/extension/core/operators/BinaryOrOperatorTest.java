@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,19 +12,17 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance;
+package org.jtwig.acceptance.extension.core.operators;
 
-import java.util.Collections;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.jtwig.AbstractJtwigTest;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class MapSelectionTest extends AbstractJtwigTest {
+public class BinaryOrOperatorTest extends AbstractJtwigTest {
+    
     @Test
-    public void testTrue() throws Exception {
-        model.withModelAttribute("test", Collections.singletonMap("abc", "a"));
-        withResource("{{ test['abc'] }}");
-        assertThat(theResult(), is("a"));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ ['a'] or false }}")));
     }
+    
 }

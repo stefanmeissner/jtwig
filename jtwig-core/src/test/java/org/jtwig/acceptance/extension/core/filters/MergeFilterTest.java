@@ -27,5 +27,7 @@ public class MergeFilterTest extends AbstractJtwigTest {
         assertEquals("1212", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge([1,2])|join }}")));
         assertEquals("abcd", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|keys|join }}")));
         assertEquals("1234", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|join }}")));
+        assertEquals("abcd", theResultOf(stringResource("{{ ['a','b']|merge(['c','d'],['e','f'])|join }}")));
     }
+    
 }

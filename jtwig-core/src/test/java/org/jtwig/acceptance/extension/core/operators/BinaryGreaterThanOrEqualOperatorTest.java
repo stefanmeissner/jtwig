@@ -3,7 +3,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core;
+package org.jtwig.acceptance.extension.core.operators;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import org.jtwig.AbstractJtwigTest;
-import static org.jtwig.util.SyntacticSugar.then;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class __old__MapFunctionsTest extends AbstractJtwigTest {
+public class BinaryGreaterThanOrEqualOperatorTest extends AbstractJtwigTest {
+    
     @Test
-    public void map() throws Exception {
-        withResource("{{ keys({ one:1, two:2 }) }}");
-        then(theResult(), is(equalTo("[one, two]")));
+    public void generalTests() throws Exception {
+        assertEquals("1", theResultOf(stringResource("{{ 2 >= 2 }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 2 >= 3 }}")));
     }
+    
 }

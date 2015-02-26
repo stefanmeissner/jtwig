@@ -12,28 +12,20 @@
  * limitations under the License.
  */
 
-package org.jtwig.acceptance.extension.core.filters;
+package org.jtwig.acceptance.extension.core.operators;
 
 import org.jtwig.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BatchFilterTest extends AbstractJtwigTest {
+public class BinaryMatchesOperatorTest extends AbstractJtwigTest {
+    
     @Test
     public void generalTests() throws Exception {
-        assertEquals("g,none,none", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none')[2] }}")));
-        assertEquals("a,b,none", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3, 'none')[2] }}")));
+        assertEquals("1", theResultOf(stringResource("{{ 'Hello' matches '/^H.*$/' }}")));
+        assertEquals("1", theResultOf(stringResource("{{ 'Hello' matches '/e.*$/' }}")));
+        assertEquals("0", theResultOf(stringResource("{{ 'Hello' matches '/^A.*$/' }}")));
+        assertEquals("0", theResultOf(stringResource("{{ null matches '/^A.*$/' }}")));
     }
     
-//    @Test
-//    public void batch() throws Exception {
-//        withResource("{{ batch([1,2,3,4], 3) }}");
-//        then(theResult(), is(equalTo("[[1, 2, 3], [4]]")));
-//    }
-//
-//    @Test
-//    public void batchWithPadding() throws Exception {
-//        withResource("{{ batch([1,2,3,4], 3, 1) }}");
-//        then(theResult(), is(equalTo("[[1, 2, 3], [4, 1, 1]]")));
-//    }
 }

@@ -22,6 +22,7 @@ public class StripTagsFilterTest extends AbstractJtwigTest {
     
     @Test
     public void generalTests() throws Exception {
+        assertEquals("<p>Hi Joao</p>", theResultOf(stringResource("{{ '<a><p>Hi Joao</p></a>'|striptags('p') }}")));
         assertEquals("test", theResultOf(stringResource("{{ 'te<br>st'|striptags }}")));
         assertEquals("1.21", theResultOf(stringResource("{{ '1.21'|striptags }}")));
         assertEquals("2.2a", theResultOf(stringResource("{{ '2.2a'|striptags }}")));

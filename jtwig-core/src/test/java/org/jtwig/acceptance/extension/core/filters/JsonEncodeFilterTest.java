@@ -24,6 +24,7 @@ public class JsonEncodeFilterTest extends AbstractJtwigTest {
     public void testExecute() throws Exception {
         theModel().withModelAttribute("obj", new Hello("world"));
         assertEquals("{\"hello\":\"world\"}", theResultOf(stringResource("{{ obj|json_encode }}")));
+        assertEquals("{\"hello\":\"world\"}", theResultOf(stringResource("{{ {'hello': 'world'}|json_encode }}")));
     }
 
     private static class Hello {
