@@ -14,20 +14,12 @@
 
 package org.jtwig.acceptance;
 
-import java.util.Collections;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.jtwig.AbstractJtwigTest;
 import org.junit.Test;
 
 public class OutputTest extends AbstractJtwigTest {
-    @Test
-    public void shouldAllowConcatenationOfDistinctElements () throws Exception {
-        model.withModelAttribute("list", Collections.EMPTY_LIST);
-        withResource("{{ concat ('1', list.size ,'3') }}");
-        assertThat(theResult(), is("103"));
-    }
-
     @Test
     public void shouldAllowFilters () throws Exception {
         withResource("{{ ['1', '2' ,'3'] | join(',') }}");

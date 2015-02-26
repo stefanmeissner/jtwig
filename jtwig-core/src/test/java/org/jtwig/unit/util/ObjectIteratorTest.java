@@ -12,16 +12,14 @@
  * limitations under the License.
  */
 
-package org.jtwig.functions.util;
-
-import org.jtwig.unit.util.ObjectIterator;
-import org.junit.Test;
+package org.jtwig.unit.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import org.jtwig.util.ObjectIterator;
+import org.junit.Test;
 
 public class ObjectIteratorTest {
     @Test
