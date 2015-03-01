@@ -29,9 +29,9 @@ public class DateFilterTest {
         DateTimeZone zone = DateTimeZone.forID("America/Toronto");
         DateTime dt = new DateTime(2014, 4, 6, 14, 5, 8, 298, zone);
         JtwigModelMap model = new JtwigModelMap(Collections.singletonMap("d", (Object)dt));
-        assertEquals("April 6, 2014 14:05", JtwigTemplate.inlineTemplate("{{ d|date }}").render(model));
+        assertEquals("April 6, 2014 14:05", JtwigTemplate.inlineTemplate("{{ d|date('F j, Y H:i', 'America/Toronto') }}").render(model));
         assertEquals("April 6, 2014 20:05", JtwigTemplate.inlineTemplate("{{ d|date('F j, Y H:i', 'Europe/Paris') }}").render(model));
-        assertEquals("06/04/2014 14:05:08", JtwigTemplate.inlineTemplate("{{ d|date('d/m/Y H:i:s') }}").render(model));
+        assertEquals("06/04/2014 14:05:08", JtwigTemplate.inlineTemplate("{{ d|date('d/m/Y H:i:s', 'America/Toronto') }}").render(model));
     }
     
 }
