@@ -61,33 +61,33 @@ public class ArrayUtilTest {
     @Test
     public void testToArrays() throws Exception {
         assertTrue(ArrayUtil.toArray(new byte[]{0xe}) instanceof Byte[]);
-        assertFalse(!ArrayUtil.toArray(new byte[]{0xe}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new byte[]{0xe}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new short[]{5}) instanceof Short[]);
-        assertFalse(!ArrayUtil.toArray(new short[]{5}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new short[]{5}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new int[]{5}) instanceof Integer[]);
-        assertFalse(!ArrayUtil.toArray(new int[]{5}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new int[]{5}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new long[]{5L}) instanceof Long[]);
-        assertFalse(!ArrayUtil.toArray(new long[]{5L}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new long[]{5L}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new boolean[]{false}) instanceof Boolean[]);
-        assertFalse(!ArrayUtil.toArray(new boolean[]{false}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new boolean[]{false}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new char[]{0xe}) instanceof Character[]);
-        assertFalse(!ArrayUtil.toArray(new char[]{0xe}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new char[]{0xe}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new float[]{1F}) instanceof Float[]);
-        assertFalse(!ArrayUtil.toArray(new float[]{1F}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new float[]{1F}).getClass().getComponentType().isPrimitive());
         
         assertTrue(ArrayUtil.toArray(new double[]{1D}) instanceof Double[]);
-        assertFalse(!ArrayUtil.toArray(new double[]{1D}).getClass().getComponentType().isPrimitive());
+        assertFalse(ArrayUtil.toArray(new double[]{1D}).getClass().getComponentType().isPrimitive());
         
-        assertTrue(ArrayUtil.toArray(new Object[]{new Object()}) instanceof Double[]);
-        assertFalse(!ArrayUtil.toArray(new double[]{1D}).getClass().getComponentType().isPrimitive());
+        assertTrue(ArrayUtil.toArray(new Object[]{new Object()}) instanceof Object[]);
+        assertFalse(ArrayUtil.toArray(new Object[]{new Object()}).getClass().getComponentType().isPrimitive());
         
-        assertTrue(ArrayUtil.toArray((Object)new Object[]{new Object()}) instanceof Double[]);
-        assertFalse(!ArrayUtil.toArray((Object)new double[]{1D}).getClass().getComponentType().isPrimitive());
+        assertTrue(ArrayUtil.toArray((Object)new Object[]{new Object()}) instanceof Object[]);
+        assertFalse(ArrayUtil.toArray((Object)new Object[]{new Object()}).getClass().getComponentType().isPrimitive());
     }
 }

@@ -14,7 +14,6 @@
 
 package org.jtwig.unit.addons;
 
-import com.google.common.base.Optional;
 import org.jtwig.Environment;
 import org.jtwig.addons.Addon;
 import org.jtwig.addons.AddonModel;
@@ -23,6 +22,7 @@ import org.jtwig.loader.impl.EmptyLoader;
 import org.jtwig.parser.parboiled.JtwigBasicParser;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
 import org.jtwig.parser.parboiled.JtwigTagPropertyParser;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.parboiled.Parboiled;
@@ -37,7 +37,7 @@ public class AddonTest {
         assertTrue(addon.basicParser() instanceof JtwigBasicParser);
         assertTrue(addon.expressionParser() instanceof JtwigExpressionParser);
         assertTrue(addon.tagPropertyParser() instanceof JtwigTagPropertyParser);
-        assertTrue(addon.startRule() instanceof Optional);
+        assertNotNull(addon.startRule());
     }
     
     
