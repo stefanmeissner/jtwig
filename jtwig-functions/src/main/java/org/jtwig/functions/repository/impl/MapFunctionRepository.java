@@ -26,7 +26,6 @@ public class MapFunctionRepository implements FunctionRepository {
 
     public MapFunctionRepository(JsonConfiguration configuration) {
         include(new ObjectFunctions());
-        include(new StringFunctions());
     }
 
     @Override

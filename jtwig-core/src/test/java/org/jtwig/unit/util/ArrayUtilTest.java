@@ -17,7 +17,9 @@ package org.jtwig.unit.util;
 import java.math.BigDecimal;
 import org.jtwig.util.ArrayUtil;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class ArrayUtilTest {
@@ -51,5 +53,41 @@ public class ArrayUtilTest {
         assertArrayEquals(new BigDecimal[]{new BigDecimal("3.1"), new BigDecimal("4.3"), new BigDecimal("5.5"), new BigDecimal("6.7")}, (BigDecimal[])ArrayUtil.range(3.1, 7.2, 1.2));
         assertArrayEquals(new Character[]{'Z','[','\\',']','^','_','`','a'}, (Character[])ArrayUtil.range("Z", "a"));
         assertArrayEquals(new Long[]{0L}, (Long[])ArrayUtil.range("AZ", ""));
+        
+        assertNull(ArrayUtil.range(1,2,3));
+        assertNull(ArrayUtil.range('a','b',3));
+    }
+    
+    @Test
+    public void testToArrays() throws Exception {
+        assertTrue(ArrayUtil.toArray(new byte[]{0xe}) instanceof Byte[]);
+        assertFalse(!ArrayUtil.toArray(new byte[]{0xe}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new short[]{5}) instanceof Short[]);
+        assertFalse(!ArrayUtil.toArray(new short[]{5}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new int[]{5}) instanceof Integer[]);
+        assertFalse(!ArrayUtil.toArray(new int[]{5}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new long[]{5L}) instanceof Long[]);
+        assertFalse(!ArrayUtil.toArray(new long[]{5L}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new boolean[]{false}) instanceof Boolean[]);
+        assertFalse(!ArrayUtil.toArray(new boolean[]{false}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new char[]{0xe}) instanceof Character[]);
+        assertFalse(!ArrayUtil.toArray(new char[]{0xe}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new float[]{1F}) instanceof Float[]);
+        assertFalse(!ArrayUtil.toArray(new float[]{1F}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new double[]{1D}) instanceof Double[]);
+        assertFalse(!ArrayUtil.toArray(new double[]{1D}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray(new Object[]{new Object()}) instanceof Double[]);
+        assertFalse(!ArrayUtil.toArray(new double[]{1D}).getClass().getComponentType().isPrimitive());
+        
+        assertTrue(ArrayUtil.toArray((Object)new Object[]{new Object()}) instanceof Double[]);
+        assertFalse(!ArrayUtil.toArray((Object)new double[]{1D}).getClass().getComponentType().isPrimitive());
     }
 }

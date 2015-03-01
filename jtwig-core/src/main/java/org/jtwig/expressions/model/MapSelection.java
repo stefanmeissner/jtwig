@@ -72,6 +72,7 @@ public class MapSelection extends AbstractCompilableExpression {
             
             if (variableValue == null || variableValue instanceof Undefined) {
                 error(context, variableValue, keyValue);
+                return UNDEFINED;
             }
 
             if (variableValue instanceof Map) {
@@ -84,6 +85,7 @@ public class MapSelection extends AbstractCompilableExpression {
             }
             if (!(variableValue instanceof Collection)) {
                 error(context, variableValue, keyValue);
+                return UNDEFINED;
             }
             int idx = TypeUtil.toLong(keyValue).intValue();
             if (((Collection)variableValue).size() <= idx) {

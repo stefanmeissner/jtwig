@@ -24,6 +24,7 @@ import org.jtwig.expressions.model.Constant;
 import org.jtwig.expressions.model.MapSelection;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.render.RenderContext;
+import org.jtwig.types.Undefined;
 import static org.jtwig.types.Undefined.UNDEFINED;
 import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
@@ -54,6 +55,28 @@ public class MapSelectionTest extends AbstractJtwigTest {
         when(variable.compile(compileContext)).thenReturn(mapExpression("test", "value"));
 
         MapSelection selection = new MapSelection(null, variable, key);
+        Expression compiled = selection.compile(compileContext);
+
+        assertThat(compiled, notNullValue(Expression.class));
+        compiled.calculate(renderContext);
+    }
+    
+    @Test
+    public void undefinedVariableWithoutStrictMode() throws Exception {
+        CompilableExpression key = new Constant<>("test");
+
+        MapSelection selection = new MapSelection(null, new Variable(null, "missing"), key);
+        Expression compiled = selection.compile(compileContext);
+
+        assertThat(compiled, notNullValue(Expression.class));
+        compiled.calculate(renderContext);
+    }
+    
+    @Test(expected = CalculateException.class)
+    public void undefinedVariableWithStrictMode() throws Exception {
+        CompilableExpression key = new Constant<>(UNDEFINED);
+
+        MapSelection selection = new MapSelection(null, new Variable(null, "missing"), key);
         Expression compiled = selection.compile(compileContext);
 
         assertThat(compiled, notNullValue(Expression.class));
