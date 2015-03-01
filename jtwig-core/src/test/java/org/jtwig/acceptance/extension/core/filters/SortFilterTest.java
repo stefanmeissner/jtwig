@@ -14,22 +14,22 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class SortFilterTest extends AbstractJtwigTest {
+public class SortFilterTest {
     @Test
     public void generalTests() throws Exception {
-        assertEquals("test", theResultOf(stringResource("{{ 'test'|sort }}")));
-        assertEquals("1.21", theResultOf(stringResource("{{ '1.21'|sort }}")));
-        assertEquals("2.2a", theResultOf(stringResource("{{ '2.2a'|sort }}")));
-        assertEquals("1.2", theResultOf(stringResource("{{ 1.2|sort }}")));
-        assertEquals("-1.2", theResultOf(stringResource("{{ -1.2|sort }}")));
-        assertEquals("-1.2", theResultOf(stringResource("{{ (-1.2)|sort }}")));
+        assertEquals("test", JtwigTemplate.inlineTemplate("{{ 'test'|sort }}").render());
+        assertEquals("1.21", JtwigTemplate.inlineTemplate("{{ '1.21'|sort }}").render());
+        assertEquals("2.2a", JtwigTemplate.inlineTemplate("{{ '2.2a'|sort }}").render());
+        assertEquals("1.2", JtwigTemplate.inlineTemplate("{{ 1.2|sort }}").render());
+        assertEquals("-1.2", JtwigTemplate.inlineTemplate("{{ -1.2|sort }}").render());
+        assertEquals("-1.2", JtwigTemplate.inlineTemplate("{{ (-1.2)|sort }}").render());
 
-        assertEquals("abc", theResultOf(stringResource("{{ ['b','c','a']|sort|join }}")));
-        assertEquals("123", theResultOf(stringResource("{{ {'b':'2','c':'3','a':'1'}|sort|join }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ {'b':'2','c':'3','a':'1'}|sort|keys|join }}")));
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ ['b','c','a']|sort|join }}").render());
+        assertEquals("123", JtwigTemplate.inlineTemplate("{{ {'b':'2','c':'3','a':'1'}|sort|join }}").render());
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ {'b':'2','c':'3','a':'1'}|sort|keys|join }}").render());
     }
 }

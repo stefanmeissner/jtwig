@@ -35,7 +35,7 @@ public class MacroDefinitionParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword("macro"),
                 basic.spacing(),
@@ -61,11 +61,11 @@ public class MacroDefinitionParser extends TokenParser {
                                 ")",
                                 basic.spacing(),
 //                                action(beforeBeginTrim()),
-                                basic.closeCode(),
+                                content.closeCode(),
 //                                action(afterBeginTrim()),
                                 content.content(),
                                 action(peek(1, Macro.class).withContent(pop(Sequence.class))),
-                                basic.openCode(),
+                                content.openCode(),
 //                                action(beforeEndTrim()),
                                 basic.spacing(),
                                 basic.keyword("endmacro"),
@@ -78,7 +78,7 @@ public class MacroDefinitionParser extends TokenParser {
                                         ),
                                         basic.spacing()
                                 ),
-                                basic.closeCode()
+                                content.closeCode()
 //                                action(afterEndTrim())
                         ),
                         new ParseException("Wrong macro syntax")

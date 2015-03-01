@@ -14,20 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class MergeFilterTest extends AbstractJtwigTest {
+public class MergeFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("ab12", theResultOf(stringResource("{{ ['a','b']|merge([1,2])|join }}")));
-        assertEquals("ab01", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge([1,2])|keys|join }}")));
-        assertEquals("1212", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge([1,2])|join }}")));
-        assertEquals("abcd", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|keys|join }}")));
-        assertEquals("1234", theResultOf(stringResource("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|join }}")));
-        assertEquals("abcd", theResultOf(stringResource("{{ ['a','b']|merge(['c','d'],['e','f'])|join }}")));
+        assertEquals("ab12", JtwigTemplate.inlineTemplate("{{ ['a','b']|merge([1,2])|join }}").render());
+        assertEquals("ab01", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|merge([1,2])|keys|join }}").render());
+        assertEquals("1212", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|merge([1,2])|join }}").render());
+        assertEquals("abcd", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|keys|join }}").render());
+        assertEquals("1234", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|merge({'c':'3','d':'4'})|join }}").render());
+        assertEquals("abcd", JtwigTemplate.inlineTemplate("{{ ['a','b']|merge(['c','d'],['e','f'])|join }}").render());
     }
     
 }

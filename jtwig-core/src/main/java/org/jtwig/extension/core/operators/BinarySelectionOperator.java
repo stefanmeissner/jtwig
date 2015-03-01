@@ -73,9 +73,9 @@ public class BinarySelectionOperator extends BinaryOperator {
             throw new CalculateException("Selection operator must be given a variable/function as right argument");
         }
         
-        if (left == null) {
+        if (left == null || left instanceof Undefined) {
             LOGGER.warn("Left hand argument is null. Right side is "+name);
-            if (!ctx.environment().isStrictMode()) {
+            if (!ctx.environment().getConfiguration().isStrictMode()) {
                 return Undefined.UNDEFINED;
             }
             throw new CalculateException(String.format(pos + ": Impossible to access attribute/method '%s' on %s", name, getName(left)));

@@ -14,15 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class DivisibleByTestTest extends AbstractJtwigTest {
+public class DivisibleByTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 2 is divisible by(1) }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 2 is divisible by(5) }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 2 is divisible by(1) }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 2 is divisible by(5) }}").render());
     }
+    
 }

@@ -14,13 +14,13 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class CapitalizeFilterTest extends AbstractJtwigTest {
+public class CapitalizeFilterTest {
     @Test
     public void generalTests() throws Exception {
-        assertEquals("Test capitalization", theResultOf(stringResource("{{ 'TEST CAPITALIZATION'|capitalize }}")));
+        assertEquals("Test capitalization", JtwigTemplate.inlineTemplate("{{ 'TEST CAPITALIZATION'|capitalize }}").render());
     }
 }

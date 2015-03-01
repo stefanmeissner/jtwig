@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.jtwig.Environment;
+import org.jtwig.configuration.JtwigConfiguration;
 import org.jtwig.extension.SimpleExtension;
 import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.functions.Function;
@@ -79,10 +80,10 @@ import org.jtwig.extension.core.tokenparsers.SpacelessTag;
 import org.jtwig.extension.core.tokenparsers.VerbatimTag;
 
 public class CoreJtwigExtension extends SimpleExtension {
-    private final Environment env;
+    private final JtwigConfiguration config;
     
-    public CoreJtwigExtension(final Environment env) {
-        this.env = env;
+    public CoreJtwigExtension(final JtwigConfiguration config) {
+        this.config = config;
     }
 
     @Override
@@ -176,7 +177,7 @@ public class CoreJtwigExtension extends SimpleExtension {
 
             // Encoding
             put("url_encode", new UrlEncodeFilter());
-            put("json_encode", new JsonEncodeFilter(env.getJsonConfiguration()));
+            put("json_encode", new JsonEncodeFilter(config.getJsonConfiguration()));
             put("convert_encoding", new ConvertEncodingFilter());
 
             // String filters

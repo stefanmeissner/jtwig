@@ -14,18 +14,18 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryRangeOperatorTest extends AbstractJtwigTest {
+public class BinaryRangeOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("12345", theResultOf(stringResource("{{ 1..5|join }}")));
-        assertEquals("54321", theResultOf(stringResource("{{ 5..1|join }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ 'a'..'c'|join }}")));
-        assertEquals("cba", theResultOf(stringResource("{{ 'c'..'a'|join }}")));
+        assertEquals("12345", JtwigTemplate.inlineTemplate("{{ 1..5|join }}").render());
+        assertEquals("54321", JtwigTemplate.inlineTemplate("{{ 5..1|join }}").render());
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ 'a'..'c'|join }}").render());
+        assertEquals("cba", JtwigTemplate.inlineTemplate("{{ 'c'..'a'|join }}").render());
     }
     
 }

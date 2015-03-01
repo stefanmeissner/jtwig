@@ -32,7 +32,7 @@ public class FilterCall extends Callable {
 
     @Override
     public Expression compile(CompileContext context) throws CompileException {
-        if (context.environment().getExtensions().getFilter(name) == null) {
+        if (context.environment().getConfiguration().getExtensions().getFilter(name) == null) {
             throw new CompileException("Unable to find filter '"+name+"'");
         }
         
@@ -53,7 +53,7 @@ public class FilterCall extends Callable {
 
         @Override
         public Object calculate(RenderContext context) throws CalculateException {
-            Filter filter = context.environment().getExtensions().getFilter(name);
+            Filter filter = context.environment().getConfiguration().getExtensions().getFilter(name);
             if (filter == null) {
                 throw new CalculateException("Unable to find filter '"+name+"'");
             }

@@ -29,6 +29,6 @@ public abstract class AbstractSpringExtensionTest extends AbstractViewAcceptance
         env = new Environment();
         extension = new SpringExtension();
         applicationContext().getAutowireCapableBeanFactory().autowireBean(extension);
-        env.getExtensions().addExtension(extension);
+        env.getConfiguration().getExtensions().addExtension(extension);
     }
 }

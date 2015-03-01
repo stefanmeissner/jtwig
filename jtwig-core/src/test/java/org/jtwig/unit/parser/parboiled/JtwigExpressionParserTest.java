@@ -14,15 +14,14 @@
 
 package org.jtwig.unit.parser.parboiled;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.Environment;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.parser.parboiled.JtwigExpressionParser;
+import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.ReportingParseRunner;
-import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

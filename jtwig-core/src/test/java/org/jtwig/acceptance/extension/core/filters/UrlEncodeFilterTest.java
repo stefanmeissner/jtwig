@@ -14,24 +14,23 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import java.util.TreeMap;
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class UrlEncodeFilterTest extends AbstractJtwigTest {
+public class UrlEncodeFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("%20test%20", theResultOf(stringResource("{{ ' test '|url_encode }}")));
-        assertEquals("1.21", theResultOf(stringResource("{{ '1.21'|url_encode }}")));
-        assertEquals("2.2a", theResultOf(stringResource("{{ '2.2a'|url_encode }}")));
-        assertEquals("1.2", theResultOf(stringResource("{{ 1.2|url_encode }}")));
-        assertEquals("-1.2", theResultOf(stringResource("{{ (-1.2)|url_encode }}")));
+        assertEquals("%20test%20", JtwigTemplate.inlineTemplate("{{ ' test '|url_encode }}").render());
+        assertEquals("1.21", JtwigTemplate.inlineTemplate("{{ '1.21'|url_encode }}").render());
+        assertEquals("2.2a", JtwigTemplate.inlineTemplate("{{ '2.2a'|url_encode }}").render());
+        assertEquals("1.2", JtwigTemplate.inlineTemplate("{{ 1.2|url_encode }}").render());
+        assertEquals("-1.2", JtwigTemplate.inlineTemplate("{{ (-1.2)|url_encode }}").render());
 
-        assertEquals("0=a&1=b&2=c", theResultOf(stringResource("{{ ['a','b','c']|url_encode }}")));
-        assertEquals("a=1&b=2&c=3", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|url_encode }}")));
-        assertEquals("a=1&b=2&c=3", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|url_encode }}")));
-        assertEquals("", theResultOf(stringResource("{{ obj|url_encode }}")));
+        assertEquals("0=a&1=b&2=c", JtwigTemplate.inlineTemplate("{{ ['a','b','c']|url_encode }}").render());
+        assertEquals("a=1&b=2&c=3", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|url_encode }}").render());
+        assertEquals("a=1&b=2&c=3", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|url_encode }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ obj|url_encode }}").render());
     }
 }

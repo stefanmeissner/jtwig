@@ -14,17 +14,25 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
+import org.jtwig.exception.ParseException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryAndOperatorTest extends AbstractJtwigTest {
+public class BinaryAndOperatorTest  {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ ['a'] and true }}")));
-        assertEquals("1", theResultOf(stringResource("{{ 3 and 2.0 }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 3 and false }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ ['a'] and true }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 3 and 2.0 }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 3 and false }}").render());
+    }
+
+    @Test(expected = ParseException.class)
+    public void AndBadSyntax () throws Exception {
+        JtwigTemplate
+            .inlineTemplate("{% if (items && true) %}Hi{% endif %}")
+            .render();
     }
     
 }

@@ -14,37 +14,22 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class FirstFilterTest extends AbstractJtwigTest {
+public class FirstFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("5", theResultOf(stringResource("{{ 5678|first }}")));
-        assertEquals("5", theResultOf(stringResource("{{ 5.678|first }}")));
-        assertEquals("t", theResultOf(stringResource("{{ 'test'|first }}")));
-        assertEquals("a", theResultOf(stringResource("{{ ['a','b','c']|first }}")));
-        assertEquals("a", theResultOf(stringResource("{{ {'1':'a','2':'b','3':'c'}|first }}")));
-        assertEquals("", theResultOf(stringResource("{{ ''|first }}")));
-        assertEquals("", theResultOf(stringResource("{{ null|first }}")));
-        assertEquals("1", theResultOf(stringResource("{{ true|first }}")));
+        assertEquals("5", JtwigTemplate.inlineTemplate("{{ 5678|first }}").render());
+        assertEquals("5", JtwigTemplate.inlineTemplate("{{ 5.678|first }}").render());
+        assertEquals("t", JtwigTemplate.inlineTemplate("{{ 'test'|first }}").render());
+        assertEquals("a", JtwigTemplate.inlineTemplate("{{ ['a','b','c']|first }}").render());
+        assertEquals("a", JtwigTemplate.inlineTemplate("{{ {'1':'a','2':'b','3':'c'}|first }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ ''|first }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ null|first }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ true|first }}").render());
     }
     
-//    @Test
-//    public void first() throws Exception {
-//        assertEquals(underTest.first("test"), (Character) 't');
-//    }
-//    @Test
-//    public void firstWithEmptyString() throws Exception {
-//        assertNull(underTest.first(""));
-//    }
-//
-//    @Test
-//    public void first() throws Exception {
-//        assertEquals(underTest.first(new String[]{"a","b","c"}), "a");
-//        assertEquals(underTest.first(null), null);
-//        assertEquals(underTest.first(true), true);
-//    }
 }

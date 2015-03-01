@@ -36,8 +36,10 @@ import org.jtwig.exception.ResourceException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.loader.Loader;
+import org.jtwig.loader.impl.EmptyLoader;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
+import org.jtwig.util.ArrayUtil;
 
 public class Template implements Compilable, ElementList<Compilable>, ElementTracker<Compilable> {
     protected final JtwigPosition position;
@@ -60,10 +62,7 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
         }
         return null;
     }
-    public Sequence content() {
-        return content;
-    }
-    
+
     @Override
     public Template add(Compilable compilable) {
         if (compilable instanceof Sequence) {
@@ -124,12 +123,6 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
     }
     
     //~ Helpers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    /**
-     * 
-     * @param ctx
-     * @return 
-     * @throws org.jtwig.exception.CompileException 
-     */
     protected Map<String, Macro.Compiled> compileMacros(
             final CompileContext ctx)
             throws CompileException {
@@ -185,7 +178,7 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
         }
         
         @Override
-        public void render(final RenderContext context) throws RenderException {
+        public void render(RenderContext context) throws RenderException {
             context.pushRenderingTemplate(this);
             doRender(context);
             try {
@@ -210,7 +203,7 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
             try {
                 // Now get the template
                 Loader.Resource extendedResource = resolveExtendedResource(parentExpr.calculate(context), context.environment());
-                if (extendedResource == null) {
+                if (extendedResource == null || extendedResource instanceof EmptyLoader.NoResource) {
                     throw new ResourceException("Resource not found: "+parentExpr.calculate(context)+" from "+position.getResource().canonicalPath());
                 }
                 
@@ -232,12 +225,8 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
             }
             return this;
         }
-        
-        //~ Block mgmt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        public Map<String, Block.CompiledBlock> blocks() {
-            return blocks;
-        }
-        public Block.CompiledBlock block(final String name) {
+
+        public Block.CompiledBlock block(String name) {
             if (child != null) {
                 Block.CompiledBlock block = child.block(name);
                 if (block != null) {
@@ -250,25 +239,11 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
             }
             return null;
         }
-        public Block.CompiledBlock parentBlock(final String name) {
-            if (blocks.containsKey(name)) {
-                return blocks.get(name);
-            }
-            
-            if (parent != null) {
-                Block.CompiledBlock block = parent.parentBlock(name);
-                if (block != null) {
-                    return block;
-                }
-            }
-            
-            return null;
-        }
-        
+
         public Map<String, Macro.Compiled> macros() {
             return macros;
         }
-        public Macro.Compiled macro(final String name) {
+        public Macro.Compiled macro(String name) {
             if (macros.containsKey(name)) {
                 return macros.get(name);
             }
@@ -278,9 +253,9 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
         //~ ExecutionAware impl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         @Override
         public Object execute(
-                final RenderContext ctx,
-                final String name,
-                final Object... parameters)
+                RenderContext ctx,
+                String name,
+                Object... parameters)
                 throws RenderException {
             // Check for macros
             if (macros.containsKey(name)) {
@@ -289,27 +264,25 @@ public class Template implements Compilable, ElementList<Compilable>, ElementTra
             return null;
         }
         
-        //~ Object impl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        @Override
-        public String toString() {
-            return getClass().getSimpleName()+"["+position.getResource()+"]";
-        }
-        
         //~ Helpers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        protected Loader.Resource resolveExtendedResource(final Object obj, final Environment env) throws ResourceException {
+        protected Loader.Resource resolveExtendedResource(Object obj, final Environment env) throws ResourceException {
             // If we've been given a collection, the first template found is
             // used
+            if (obj.getClass().isArray()) {
+                obj = ArrayUtil.toList(obj);
+            }
             if (obj instanceof Collection) {
                 Collection col = (Collection)obj;
                 for (Object o : col) {
                     try {
                         String path = position.getResource().resolve(o.toString());
                         Loader.Resource extendedResource = env.load(path);
-                        if (extendedResource != null) {
+                        if (extendedResource != null && !(extendedResource instanceof EmptyLoader.NoResource)) {
                             return extendedResource;
                         }
                     } catch (ResourceException e) {}
                 }
+                throw new ResourceException("Resources "+obj+" could not be found");
             }
             if (obj instanceof String) {
                 String path = position.getResource().resolve(obj.toString());

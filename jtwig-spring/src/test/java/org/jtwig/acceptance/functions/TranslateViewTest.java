@@ -40,7 +40,7 @@ public class TranslateViewTest extends AbstractViewAcceptanceTest {
     protected void registerExtensions() {
         SpringExtension springExtension = new SpringExtension();
         applicationContext().getAutowireCapableBeanFactory().autowireBean(springExtension);
-        env.getExtensions().addExtension(springExtension);
+        env.getConfiguration().getExtensions().addExtension(springExtension);
     }
 
 }

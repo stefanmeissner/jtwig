@@ -14,17 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryStartsWithOperatorTest extends AbstractJtwigTest {
+public class BinaryStartsWithOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 'Hello' starts with 'H' }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 'Hello' starts with 'e' }}")));
-        assertEquals("0", theResultOf(stringResource("{{ null starts with 'e' }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'Hello' starts with 'H' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'Hello' starts with 'e' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ null starts with 'e' }}").render());
     }
     
 }

@@ -15,9 +15,9 @@
 package org.jtwig.unit.extension.core.operators;
 
 import java.util.Arrays;
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.BinaryNotInOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.unit.AbstractJtwigTest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

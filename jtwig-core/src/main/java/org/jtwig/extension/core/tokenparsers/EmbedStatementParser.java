@@ -37,7 +37,7 @@ public class EmbedStatementParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword("embed"),
                 basic.spacing(),
@@ -45,18 +45,18 @@ public class EmbedStatementParser extends TokenParser {
                         Sequence(
                                 basic.stringLiteral(),
                                 basic.spacing(),
-                                basic.closeCode(),
+                                content.closeCode(),
                                 push(new Template(currentPosition()).setParent(new Constant<>(basic.pop()))),
                                 ZeroOrMore(
                                         basic.spacing(),
                                         content.addToElementTracker(block.rule(), true)
                                 ),
                                 basic.spacing(),
-                                basic.openCode(),
+                                content.openCode(),
                                 basic.spacing(),
                                 basic.keyword("endembed"),
                                 basic.spacing(),
-                                basic.closeCode()
+                                content.closeCode()
                         ),
                         new ParseException("Wrong embed syntax")
                 )

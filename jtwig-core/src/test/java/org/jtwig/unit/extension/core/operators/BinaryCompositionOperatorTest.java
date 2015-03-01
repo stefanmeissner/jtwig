@@ -14,9 +14,9 @@
 
 package org.jtwig.unit.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.BinaryCompositionOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.unit.AbstractJtwigTest;
 
 public class BinaryCompositionOperatorTest extends AbstractJtwigTest {
     BinaryCompositionOperator underTest = new BinaryCompositionOperator("|", 0);

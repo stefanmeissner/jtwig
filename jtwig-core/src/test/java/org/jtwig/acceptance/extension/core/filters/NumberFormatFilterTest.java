@@ -14,19 +14,19 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class NumberFormatFilterTest extends AbstractJtwigTest {
+public class NumberFormatFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1,234.57", theResultOf(stringResource("{{ '1234.5678'|number_format(2, '.', ',') }}")));
-        assertEquals("1234.57", theResultOf(stringResource("{{ '1234.5678'|number_format(2, '.') }}")));
-        assertEquals("1234.57", theResultOf(stringResource("{{ '1234.5678'|number_format(2) }}")));
-        assertEquals("1234.568", theResultOf(stringResource("{{ '1234.5678'|number_format }}")));
-        assertEquals("1234.56780", theResultOf(stringResource("{{ '1234.5678'|number_format(5) }}")));
+        assertEquals("1,234.57", JtwigTemplate.inlineTemplate("{{ '1234.5678'|number_format(2, '.', ',') }}").render());
+        assertEquals("1234.57", JtwigTemplate.inlineTemplate("{{ '1234.5678'|number_format(2, '.') }}").render());
+        assertEquals("1234.57", JtwigTemplate.inlineTemplate("{{ '1234.5678'|number_format(2) }}").render());
+        assertEquals("1234.568", JtwigTemplate.inlineTemplate("{{ '1234.5678'|number_format }}").render());
+        assertEquals("1234.56780", JtwigTemplate.inlineTemplate("{{ '1234.5678'|number_format(5) }}").render());
     }
     
 }

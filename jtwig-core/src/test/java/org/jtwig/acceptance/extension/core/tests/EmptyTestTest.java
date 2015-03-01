@@ -14,20 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class EmptyTestTest extends AbstractJtwigTest {
+public class EmptyTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ [] is empty }}")));
-        assertEquals("1", theResultOf(stringResource("{{ {} is empty }}")));
-        assertEquals("1", theResultOf(stringResource("{{ null is empty }}")));
-        assertEquals("1", theResultOf(stringResource("{{ 0 is empty }}")));
-        assertEquals("0", theResultOf(stringResource("{{ ['a'] is empty }}")));
-        assertEquals("0", theResultOf(stringResource("{{ {'a':'1'} is empty }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ [] is empty }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ {} is empty }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ null is empty }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 0 is empty }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ ['a'] is empty }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ {'a':'1'} is empty }}").render());
     }
     
 }

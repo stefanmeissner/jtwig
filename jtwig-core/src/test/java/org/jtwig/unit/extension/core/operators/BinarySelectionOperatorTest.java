@@ -14,13 +14,16 @@
 
 package org.jtwig.unit.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.exception.CalculateException;
+import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.core.operators.BinarySelectionOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.types.Undefined;
+import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import static org.mockito.Mockito.mock;
 
 public class BinarySelectionOperatorTest extends AbstractJtwigTest {
     BinarySelectionOperator underTest = new BinarySelectionOperator(".", 0);

@@ -14,16 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class ConvertEncodingFilterTest extends AbstractJtwigTest {
+public class ConvertEncodingFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("joao", theResultOf(stringResource("{{ 'joao'|convert_encoding('UTF-8', 'ASCII') }}")));
-        assertEquals("jo��o", theResultOf(stringResource("{{ 'joão'|convert_encoding('UTF-8', 'ASCII') }}")));
+        assertEquals("joao", JtwigTemplate.inlineTemplate("{{ 'joao'|convert_encoding('UTF-8', 'ASCII') }}").render());
+        assertEquals("jo��o", JtwigTemplate.inlineTemplate("{{ 'joão'|convert_encoding('UTF-8', 'ASCII') }}").render());
     }
     
 }

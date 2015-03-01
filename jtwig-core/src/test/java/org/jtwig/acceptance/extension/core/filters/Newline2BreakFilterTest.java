@@ -14,15 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class Newline2BreakFilterTest extends AbstractJtwigTest {
+public class Newline2BreakFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        theModel().withModelAttribute("var", "a\nb");
-        assertEquals("a<br/>b", theResultOf(stringResource("{{ var|nl2br }}")));
+        JtwigModelMap model = new JtwigModelMap().withModelAttribute("var", "a\nb");
+        assertEquals("a<br/>b", JtwigTemplate.inlineTemplate("{{ var|nl2br }}").render(model));
     }
 }

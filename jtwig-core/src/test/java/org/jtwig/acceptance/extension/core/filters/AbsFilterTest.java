@@ -14,18 +14,19 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import java.util.Collections;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class AbsFilterTest extends AbstractJtwigTest {
+public class AbsFilterTest {
     @Test
     public void generalTests() throws Exception {
-        theModel().withModelAttribute("var", new Object());
-        assertEquals("-82.49", theResultOf(stringResource("{{ -82.49|abs }}")));
-        assertEquals("82.49", theResultOf(stringResource("{{ (-82.49)|abs }}")));
-        assertEquals("82.49", theResultOf(stringResource("{{ '-82.49'|abs }}")));
-        assertEquals("1", theResultOf(stringResource("{{ var|abs }}")));
-        assertEquals("0", theResultOf(stringResource("{{ null|abs }}")));
+        assertEquals("-82.49", JtwigTemplate.inlineTemplate("{{ -82.49|abs }}").render());
+        assertEquals("82.49", JtwigTemplate.inlineTemplate("{{ (-82.49)|abs }}").render());
+        assertEquals("82.49", JtwigTemplate.inlineTemplate("{{ '-82.49'|abs }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ var|abs }}").render(new JtwigModelMap(Collections.singletonMap("var", new Object()))));
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ null|abs }}").render());
     }
 }

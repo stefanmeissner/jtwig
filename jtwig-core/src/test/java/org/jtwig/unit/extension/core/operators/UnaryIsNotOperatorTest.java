@@ -14,9 +14,9 @@ assertTrue(underTest.render(renderContext, position, use));
 
 package org.jtwig.unit.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.UnaryIsNotOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.unit.AbstractJtwigTest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -59,6 +59,7 @@ public class OperationBinary extends AbstractCompilableExpression {
             String operator = operators.get(i - 1);
 
             Operator op = context.environment()
+                    .getConfiguration()
                     .getExtensions()
                     .getBinaryOperator(operator);
             if (op == null) {

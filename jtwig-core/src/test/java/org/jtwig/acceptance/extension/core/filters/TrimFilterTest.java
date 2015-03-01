@@ -14,24 +14,24 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class TrimFilterTest extends AbstractJtwigTest {
+public class TrimFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("test", theResultOf(stringResource("{{ ' test '|trim }}")));
-        assertEquals("test", theResultOf(stringResource("{{ 'test'|trim }}")));
-        assertEquals("1.21", theResultOf(stringResource("{{ ' 1.21 '|trim }}")));
-        assertEquals("2.2a", theResultOf(stringResource("{{ ' 2.2a '|trim }}")));
-        assertEquals("1.2", theResultOf(stringResource("{{ 1.2|trim }}")));
-        assertEquals("-1.2", theResultOf(stringResource("{{ (-1.2)|trim }}")));
+        assertEquals("test", JtwigTemplate.inlineTemplate("{{ ' test '|trim }}").render());
+        assertEquals("test", JtwigTemplate.inlineTemplate("{{ 'test'|trim }}").render());
+        assertEquals("1.21", JtwigTemplate.inlineTemplate("{{ ' 1.21 '|trim }}").render());
+        assertEquals("2.2a", JtwigTemplate.inlineTemplate("{{ ' 2.2a '|trim }}").render());
+        assertEquals("1.2", JtwigTemplate.inlineTemplate("{{ 1.2|trim }}").render());
+        assertEquals("-1.2", JtwigTemplate.inlineTemplate("{{ (-1.2)|trim }}").render());
 
-        assertEquals("", theResultOf(stringResource("{{ ['a','b','c']|trim }}")));
-        assertEquals("", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|trim }}")));
-        assertEquals("", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|trim }}")));
-        assertEquals("", theResultOf(stringResource("{{ obj|trim }}")));
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ ['a','b','c']|trim }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|trim }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|trim }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ obj|trim }}").render());
     }
 }

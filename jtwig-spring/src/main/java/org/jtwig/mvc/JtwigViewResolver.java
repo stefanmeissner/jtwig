@@ -90,18 +90,10 @@ public class JtwigViewResolver extends AbstractTemplateViewResolver {
     }
 
     public FunctionResolver functionResolver() {
-//        if (springFunctions == null) {
-//            springFunctions = new SpringFunctions();
-//            getApplicationContext().getAutowireCapableBeanFactory().autowireBean(springFunctions);
-//            env.getFunctionRepository().include(springFunctions);
-//        }
-        
         if (springExtension == null) {
             springExtension = new SpringExtension();
-    //            springFunctions = new SpringFunctions();
             getApplicationContext().getAutowireCapableBeanFactory().autowireBean(springExtension);
-    //            env.getFunctionRepository().include(springFunctions);
-            env.getExtensions().addExtension(springExtension);
+            env.getConfiguration().getExtensions().addExtension(springExtension);
         }
         return functionResolver;
     }
@@ -127,7 +119,7 @@ public class JtwigViewResolver extends AbstractTemplateViewResolver {
     }
 
     public JtwigViewResolver includeFunctions(Object functionBean) {
-        env.getFunctionRepository().include(functionBean);
+        env.getConfiguration().getFunctionRepository().include(functionBean);
         return this;
     }
 
@@ -160,7 +152,7 @@ public class JtwigViewResolver extends AbstractTemplateViewResolver {
     }
 
     private DelegateFunctionResolver resolver(DemultiplexerConverter converter) {
-        return new DelegateFunctionResolver(env.getFunctionRepository(),
+        return new DelegateFunctionResolver(env.getConfiguration().getFunctionRepository(),
                                             new InputDelegateMethodParametersResolver(
                                                     parameterResolverFactory(converter)));
     }

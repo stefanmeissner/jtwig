@@ -22,11 +22,7 @@ public class PropertyFunctionTest extends AbstractSpringExtensionTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertNotNull(env.getExtensions().getFunction("property").evaluate(env, null, "user.home"));
+        assertNotNull(env.getConfiguration().getExtensions().getFunction("property").evaluate(env, null, "user.home"));
     }
-//
-//    @Test
-//    public void propertyTest () throws FunctionException {
-//        assertThat(functions.property("user.home"), is(notNullValue()));
-//    }
+    
 }

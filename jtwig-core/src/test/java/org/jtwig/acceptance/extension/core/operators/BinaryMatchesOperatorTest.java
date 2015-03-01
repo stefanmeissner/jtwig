@@ -14,18 +14,18 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryMatchesOperatorTest extends AbstractJtwigTest {
+public class BinaryMatchesOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 'Hello' matches '/^H.*$/' }}")));
-        assertEquals("1", theResultOf(stringResource("{{ 'Hello' matches '/e.*$/' }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 'Hello' matches '/^A.*$/' }}")));
-        assertEquals("0", theResultOf(stringResource("{{ null matches '/^A.*$/' }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'Hello' matches '/^H.*$/' }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'Hello' matches '/e.*$/' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'Hello' matches '/^A.*$/' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ null matches '/^A.*$/' }}").render());
     }
     
 }

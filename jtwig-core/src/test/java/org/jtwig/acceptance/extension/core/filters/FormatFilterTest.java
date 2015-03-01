@@ -14,15 +14,15 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class FormatFilterTest extends AbstractJtwigTest {
+public class FormatFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("I like foo and bar.", theResultOf(stringResource("{{ 'I like %s and %s.'|format('foo', 'bar') }}")));
-        assertEquals("I like it.", theResultOf(stringResource("{{ 'I like it.'|format }}")));
+        assertEquals("I like foo and bar.", JtwigTemplate.inlineTemplate("{{ 'I like %s and %s.'|format('foo', 'bar') }}").render());
+        assertEquals("I like it.", JtwigTemplate.inlineTemplate("{{ 'I like it.'|format }}").render());
     }
 }

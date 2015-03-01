@@ -16,13 +16,21 @@ package org.jtwig.acceptance;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.jtwig.AbstractJtwigTest;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import org.junit.Test;
 
-public class OutputTest extends AbstractJtwigTest {
+public class OutputTest {
     @Test
     public void shouldAllowFilters () throws Exception {
-        withResource("{{ ['1', '2' ,'3'] | join(',') }}");
-        assertThat(theResult(), is("1,2,3"));
+        JtwigModelMap model = new JtwigModelMap();
+
+        String result = JtwigTemplate
+            .inlineTemplate("{{ ['1', '2' ,'3'] | join(',') }}")
+            .render(model);
+
+        assertThat(result, is(equalTo("1,2,3")));
     }
 }

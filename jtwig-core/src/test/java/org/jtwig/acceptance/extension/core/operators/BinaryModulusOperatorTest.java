@@ -14,16 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryModulusOperatorTest extends AbstractJtwigTest {
+public class BinaryModulusOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("0", theResultOf(stringResource("{{ 4 % 2 }}")));
-        assertEquals("4", theResultOf(stringResource("{{ 4 % 5 }}")));
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 4 % 2 }}").render());
+        assertEquals("4", JtwigTemplate.inlineTemplate("{{ 4 % 5 }}").render());
     }
     
 }

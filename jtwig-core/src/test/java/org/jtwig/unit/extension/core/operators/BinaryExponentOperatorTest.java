@@ -17,9 +17,9 @@ package org.jtwig.unit.extension.core.operators;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.BinaryExponentOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.unit.AbstractJtwigTest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -14,23 +14,23 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class TitleFilterTest extends AbstractJtwigTest {
+public class TitleFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("My First Car", theResultOf(stringResource("{{ 'my first car'|title }}")));
-        assertEquals("1.21", theResultOf(stringResource("{{ '1.21'|title }}")));
-        assertEquals("2.2A", theResultOf(stringResource("{{ '2.2a'|title }}")));
-        assertEquals("1.2", theResultOf(stringResource("{{ 1.2|title }}")));
-        assertEquals("-1.2", theResultOf(stringResource("{{ (-1.2)|title }}")));
+        assertEquals("My First Car", JtwigTemplate.inlineTemplate("{{ 'my first car'|title }}").render());
+        assertEquals("1.21", JtwigTemplate.inlineTemplate("{{ '1.21'|title }}").render());
+        assertEquals("2.2A", JtwigTemplate.inlineTemplate("{{ '2.2a'|title }}").render());
+        assertEquals("1.2", JtwigTemplate.inlineTemplate("{{ 1.2|title }}").render());
+        assertEquals("-1.2", JtwigTemplate.inlineTemplate("{{ (-1.2)|title }}").render());
 
-        assertEquals("", theResultOf(stringResource("{{ ['a','b','c']|title }}")));
-        assertEquals("", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|title }}")));
-        assertEquals("", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|title }}")));
-        assertEquals("", theResultOf(stringResource("{{ obj|title }}")));
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ ['a','b','c']|title }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|title }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|title }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ obj|title }}").render());
     }
 }

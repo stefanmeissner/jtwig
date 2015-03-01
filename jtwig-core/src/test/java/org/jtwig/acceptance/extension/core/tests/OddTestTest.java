@@ -14,16 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class OddTestTest extends AbstractJtwigTest {
+public class OddTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 3 is odd }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 2 is odd }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 3 is odd }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 2 is odd }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 2 is not odd }}").render());
     }
     
 }

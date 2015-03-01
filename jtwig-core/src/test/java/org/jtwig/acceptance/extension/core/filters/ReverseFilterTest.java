@@ -14,22 +14,22 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class ReverseFilterTest extends AbstractJtwigTest {
+public class ReverseFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("tset", theResultOf(stringResource("{{ 'test'|reverse }}")));
-        assertEquals("2.1", theResultOf(stringResource("{{ '1.2'|reverse }}")));
-        assertEquals("2.1", theResultOf(stringResource("{{ 1.2|reverse }}")));
-        assertEquals("-2.1", theResultOf(stringResource("{{ -1.2|reverse }}")));
-        assertEquals("2.1-", theResultOf(stringResource("{{ (-1.2)|reverse }}")));
-        assertEquals("c,b,a", theResultOf(stringResource("{{ ['a','b','c']|reverse|join(',') }}")));
-        assertEquals("3,2,1", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|reverse|join(',') }}")));
-        assertEquals("c,b,a", theResultOf(stringResource("{{ {'a':'1','b':'2','c':'3'}|reverse|keys|join(',') }}")));
+        assertEquals("tset", JtwigTemplate.inlineTemplate("{{ 'test'|reverse }}").render());
+        assertEquals("2.1", JtwigTemplate.inlineTemplate("{{ '1.2'|reverse }}").render());
+        assertEquals("2.1", JtwigTemplate.inlineTemplate("{{ 1.2|reverse }}").render());
+        assertEquals("-2.1", JtwigTemplate.inlineTemplate("{{ -1.2|reverse }}").render());
+        assertEquals("2.1-", JtwigTemplate.inlineTemplate("{{ (-1.2)|reverse }}").render());
+        assertEquals("c,b,a", JtwigTemplate.inlineTemplate("{{ ['a','b','c']|reverse|join(',') }}").render());
+        assertEquals("3,2,1", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|reverse|join(',') }}").render());
+        assertEquals("c,b,a", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2','c':'3'}|reverse|keys|join(',') }}").render());
     }
     
 }

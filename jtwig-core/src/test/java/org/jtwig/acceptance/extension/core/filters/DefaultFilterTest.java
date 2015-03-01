@@ -14,17 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class DefaultFilterTest extends AbstractJtwigTest {
+public class DefaultFilterTest {
     @Test
     public void generalTest() throws Exception {
-        assertEquals("a", theResultOf(stringResource("{{ null|default('a') }}")));
-        assertEquals("1", theResultOf(stringResource("{{ null|default(1) }}")));
-        assertEquals("a", theResultOf(stringResource("{{ 'a'|default(1) }}")));
-        assertEquals("1", theResultOf(stringResource("{{ var|default(1) }}")));
-        assertEquals("1", theResultOf(stringResource("{{ var.val|default(1) }}")));
+        assertEquals("a", JtwigTemplate.inlineTemplate("{{ null|default('a') }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ null|default(1) }}").render());
+        assertEquals("a", JtwigTemplate.inlineTemplate("{{ 'a'|default(1) }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ var|default(1) }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ var.val|default(1) }}").render());
     }
 }

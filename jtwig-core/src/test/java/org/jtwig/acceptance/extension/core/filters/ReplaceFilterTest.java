@@ -15,21 +15,22 @@
 package org.jtwig.acceptance.extension.core.filters;
 
 import java.util.HashMap;
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class ReplaceFilterTest extends AbstractJtwigTest {
+public class ReplaceFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        theModel().withModelAttribute("replacements", new HashMap<String, Object>(){{
+        JtwigModelMap model = new JtwigModelMap().withModelAttribute("replacements", new HashMap<String, Object>(){{
             put("%this%", "foo");
             put("%that%", "bar");
         }});
-        assertEquals("I like foo and bar.", theResultOf(stringResource("{{ 'I like %this% and %that%.'|replace(replacements) }}")));
-        assertEquals("I like foo and %other%.", theResultOf(stringResource("{{ 'I like %this% and %other%.'|replace(replacements) }}")));
-        assertEquals("", theResultOf(stringResource("{{ 'I like %this% and %that%.'|replace }}")));
+        assertEquals("I like foo and bar.", JtwigTemplate.inlineTemplate("{{ 'I like %this% and %that%.'|replace(replacements) }}").render(model));
+        assertEquals("I like foo and %other%.", JtwigTemplate.inlineTemplate("{{ 'I like %this% and %other%.'|replace(replacements) }}").render(model));
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ 'I like %this% and %that%.'|replace }}").render());
     }
     
 }

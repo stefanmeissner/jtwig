@@ -14,9 +14,9 @@
 
 package org.jtwig.unit.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.extension.core.operators.UnaryPositiveOperator;
 import org.jtwig.parser.model.JtwigPosition;
+import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

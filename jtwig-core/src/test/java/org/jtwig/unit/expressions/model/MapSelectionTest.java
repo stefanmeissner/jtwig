@@ -14,11 +14,9 @@
 
 package org.jtwig.unit.expressions.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
@@ -27,6 +25,7 @@ import org.jtwig.expressions.model.MapSelection;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.types.Undefined.UNDEFINED;
+import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
@@ -53,27 +52,6 @@ public class MapSelectionTest extends AbstractJtwigTest {
         CompilableExpression key = new Constant<>(UNDEFINED);
 
         when(variable.compile(compileContext)).thenReturn(mapExpression("test", "value"));
-
-        MapSelection selection = new MapSelection(null, variable, key);
-        Expression compiled = selection.compile(compileContext);
-
-        assertThat(compiled, notNullValue(Expression.class));
-        compiled.calculate(renderContext);
-    }
-
-
-    @Test(expected = CalculateException.class)
-    public void nonMapVariable() throws Exception {
-        env.setStrictMode(true);
-        Variable variable = mock(Variable.class);
-        CompilableExpression key = new Constant<>("test");
-
-        when(variable.compile(compileContext)).thenReturn(new Expression() {
-            @Override
-            public Object calculate(RenderContext context) throws CalculateException {
-                return new ArrayList<>();
-            }
-        });
 
         MapSelection selection = new MapSelection(null, variable, key);
         Expression compiled = selection.compile(compileContext);

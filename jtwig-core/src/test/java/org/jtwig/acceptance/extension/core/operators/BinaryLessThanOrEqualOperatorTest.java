@@ -14,16 +14,22 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryLessThanOrEqualOperatorTest extends AbstractJtwigTest {
+public class BinaryLessThanOrEqualOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 2 <= 2 }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 3 <= 2 }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 2 <= 2 }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 3 <= 2 }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'test1' <= 'test1' }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'test1' <= 'test2' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'test2' <= 'test1' }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ date('2014-12-12') <= date('2015-01-01') }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ date('2015-01-01') <= date('2014-12-12') }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ date('2015-01-01') <= date('2015-01-01') }}").render());
     }
     
 }

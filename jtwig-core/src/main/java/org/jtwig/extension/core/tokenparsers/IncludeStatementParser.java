@@ -35,7 +35,7 @@ public class IncludeStatementParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword("include"),
                 basic.spacing(),
@@ -66,7 +66,7 @@ public class IncludeStatementParser extends TokenParser {
                                         action(peek(Include.class).setIsolated(true))
                                 ),
                                 basic.spacing(),
-                                basic.closeCode()
+                                content.closeCode()
 //                                action(afterEndTrim())
                         ),
                         new ParseException("Wrong include syntax")

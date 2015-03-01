@@ -34,8 +34,7 @@ public class ImportStatementParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
-                basic.spacing(),
+                content.openCode(),
                 basic.keyword("import"),
                 basic.spacing(),
                 mandatory(
@@ -47,7 +46,7 @@ public class ImportStatementParser extends TokenParser {
                                 expr.variable(),
                                 push(new Import.General(currentPosition(), expr.pop(1), expr.pop(Variable.class).name())),
                                 basic.spacing(),
-                                basic.closeCode()
+                                content.closeCode()
                         ),
                         new ParseException("Inavlid import syntax")
                 )

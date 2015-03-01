@@ -1,38 +1,25 @@
 package org.jtwig.unit.mvc;
 
-import java.io.ByteArrayInputStream;
-import org.jtwig.cache.JtwigTemplateCacheSystem;
-import org.jtwig.content.api.Renderable;
-import org.jtwig.mvc.JtwigView;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.jtwig.Environment;
+import org.jtwig.cache.TemplateCache;
+import static org.jtwig.configuration.JtwigConfigurationBuilder.newConfiguration;
 import org.jtwig.mvc.JtwigViewResolver;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
-import org.springframework.web.servlet.view.AbstractUrlBasedView;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
-import java.util.concurrent.Callable;
-
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import org.jtwig.Environment;
-import org.jtwig.cache.TemplateCache;
-import org.jtwig.loader.Loader;
-import org.jtwig.loader.impl.StringLoader;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
 
 public class JtwigViewResolverTest {
     private HttpServletRequest request;
@@ -48,7 +35,8 @@ public class JtwigViewResolverTest {
     @Before
     public void setUp() throws Exception {
         env = spy(new Environment());
-        env.setCache(cache = mock(TemplateCache.class));
+        cache = mock(TemplateCache.class);
+        when(env.getConfiguration()).thenReturn(newConfiguration().withTemplateCache(cache).build());
         
         underTest = new JtwigViewResolver();
         underTest.setEnvironment(env);
@@ -57,45 +45,6 @@ public class JtwigViewResolverTest {
         model = new ModelMap();
     }
 
-    @Test
-    public void renders() throws Exception {
-//        JtwigTemplateCacheSystem cacheSystem = mock(JtwigTemplateCacheSystem.class);
-//        Mockito.when(cacheSystem.get(anyString(), Matchers.any(Callable.class))).thenReturn(mock(Renderable.class));
-
-        Loader.Resource oneResource = mock(Loader.Resource.class);
-        when(oneResource.source()).thenReturn(new ByteArrayInputStream("".getBytes()));
-        when(oneResource.getCacheKey()).thenReturn("one");
-        when(oneResource.relativePath()).thenReturn("one");
-        when(oneResource.canonicalPath()).thenReturn("one");
-        
-        Loader loader = mock(Loader.class);
-        when(loader.exists("one")).thenReturn(true);
-        when(loader.get("one")).thenReturn(oneResource);
-        env.setLoader(loader);
-
-        servletContext = new MockServletContext();
-        applicationContext = new GenericWebApplicationContext(servletContext);
-        applicationContext.getBeanFactory().registerSingleton("viewResolver", underTest);
-        servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, applicationContext);
-
-        underTest.setApplicationContext(applicationContext);
-        underTest.setServletContext(servletContext);
-//        underTest.setCacheSystem(cacheSystem);
-
-        AbstractUrlBasedView one = (AbstractUrlBasedView) underTest.resolveViewName("one", Locale.ENGLISH);
-        assertThat(one, instanceOf(JtwigView.class));
-        assertEquals("one", one.getUrl());
-
-        one.setApplicationContext(applicationContext);
-        one.setServletContext(servletContext);
-        one.afterPropertiesSet();
-
-        one.render(model, request, response);
-        verify(env).load(eq("one"));
-        verify(cache).getParsed(eq("one"));
-//        verify(cacheSystem).get(eq("one"), Matchers.any(Callable.class));
-//        verify(cache).getCompiled(eq("one"));
-    }
 
     @Test
     public void includeFunctionDelegatesToRenderConfiguration() throws Exception {
@@ -109,6 +58,6 @@ public class JtwigViewResolverTest {
 
         underTest.includeFunctions(this);
 
-        verify(env.getFunctionRepository()).include(this);
+        verify(env.getConfiguration().getFunctionRepository()).include(this);
     }
 }

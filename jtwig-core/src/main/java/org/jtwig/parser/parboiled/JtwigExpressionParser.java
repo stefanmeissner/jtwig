@@ -88,8 +88,8 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
     
     Rule operatorsHierarchy() {
-        List<Operator> operators = new ArrayList<>(env.getExtensions().getBinaryOperators().values());
-        operators.addAll(env.getExtensions().getUnaryOperators().values());
+        List<Operator> operators = new ArrayList<>(env.getConfiguration().getExtensions().getBinaryOperators().values());
+        operators.addAll(env.getConfiguration().getExtensions().getUnaryOperators().values());
         Collections.sort(operators, Collections.reverseOrder());
         
         Rule previous = primary();
@@ -113,7 +113,7 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
     }
 
     String[] tests() {
-        return env.getExtensions().getTests().keySet().toArray(new String[0]);
+        return env.getConfiguration().getExtensions().getTests().keySet().toArray(new String[0]);
     }
 
     Rule primary() {
@@ -353,6 +353,9 @@ public class JtwigExpressionParser extends JtwigBaseParser<CompilableExpression>
 
     @SuppressNode
     Rule firstOperatorOf(String... operators) {
+        if (operators == null || operators.length == 0) {
+            return EMPTY;
+        }
         Rule[] rules = new Rule[operators.length];
         int i = 0;
         for (String operator : operators)

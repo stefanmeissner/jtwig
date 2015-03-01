@@ -14,26 +14,22 @@
 
 package org.jtwig.extension.core.functions;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.jtwig.Environment;
 import org.jtwig.extension.api.functions.Function;
-import org.jtwig.functions.annotations.JtwigFunction;
-import org.jtwig.functions.annotations.Parameter;
 import static org.jtwig.functions.util.ObjectUtils.compare;
 import org.jtwig.render.RenderContext;
+import org.jtwig.util.ArrayUtil;
 
 public class MinFunction implements Function {
 
     @Override
     public Object evaluate(Environment env, RenderContext ctx, Object... args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @JtwigFunction(name = "min")
-    public Object min (@Parameter Object ... values) {
-        Object result = values[0];
-        values = ArrayUtils.remove(values, 0);
-        for(Object value : values) {
+        if (args.length == 1) {
+            args = ArrayUtil.toArray(args[0]);
+        }
+        Object result = args[0];
+        args = ArrayUtil.toArray(args);
+        for(Object value : args) {
             int cmp = compare(result, value);
             if(cmp > 0) {
                 result = value;

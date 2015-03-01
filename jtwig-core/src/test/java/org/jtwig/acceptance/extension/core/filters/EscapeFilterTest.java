@@ -14,23 +14,23 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class EscapeFilterTest extends AbstractJtwigTest {
+public class EscapeFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("jo&atilde;o", theResultOf(stringResource("{{ 'joão'|escape }}")));
-        assertEquals("&lt;html&gt;", theResultOf(stringResource("{{ '<html>'|escape }}")));
-        assertEquals("&lt;xml /&gt;", theResultOf(stringResource("{{ '<xml />'|escape('xml') }}")));
-        assertEquals("<xml \\/>", theResultOf(stringResource("{{ '<xml />'|escape('js') }}")));
+        assertEquals("jo&atilde;o", JtwigTemplate.inlineTemplate("{{ 'joão'|escape }}").render());
+        assertEquals("&lt;html&gt;", JtwigTemplate.inlineTemplate("{{ '<html>'|escape }}").render());
+        assertEquals("&lt;xml /&gt;", JtwigTemplate.inlineTemplate("{{ '<xml />'|escape('xml') }}").render());
+        assertEquals("<xml \\/>", JtwigTemplate.inlineTemplate("{{ '<xml />'|escape('js') }}").render());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void escapeNonSupportedType() throws Exception {
-        theResultOf(stringResource("{{ '<xml />'|escape('test') }}"));
+        JtwigTemplate.inlineTemplate("{{ '<xml />'|escape('test') }}").render();
     }
     
 }

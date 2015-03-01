@@ -19,14 +19,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.jtwig.Environment;
 import org.jtwig.addons.Addon;
 import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.api.functions.Function;
 import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.extension.api.test.Test;
 import org.jtwig.extension.api.tokenparser.TokenParser;
-import org.jtwig.extension.core.CoreJtwigExtension;
 
 /**
  * The ExtensionHolder contains all information pertaining to the registration
@@ -38,7 +36,6 @@ import org.jtwig.extension.core.CoreJtwigExtension;
  * followed by individual components.
  */
 public class ExtensionHolder {
-    private final Environment env;
     private final Collection<Class<? extends Addon>> addons = new ArrayList<>();
     private final Collection<Extension> extensions = new ArrayList<>();
     private final Map<String, Object> globals = new HashMap<>();
@@ -48,12 +45,6 @@ public class ExtensionHolder {
     private final Map<String, Function> functions = new HashMap<>();
     private final Map<String, Test> tests = new HashMap<>();
     private final Collection<Class<? extends TokenParser>> tokenParsers = new ArrayList<>();
-//    private final Collection<NodeVisitor> nodeVisitors = new ArrayList<>();
-    
-    public ExtensionHolder(final Environment env) {
-        this.env = env;
-        this.addExtension(new CoreJtwigExtension(env));
-    }
     
     public ExtensionHolder addAddon (final Class<? extends Addon> addon) {
         addons.add(addon);

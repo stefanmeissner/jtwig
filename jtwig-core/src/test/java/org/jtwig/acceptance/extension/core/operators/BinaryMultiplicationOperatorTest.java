@@ -14,18 +14,18 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryMultiplicationOperatorTest extends AbstractJtwigTest {
+public class BinaryMultiplicationOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("6", theResultOf(stringResource("{{ 3 * 2 }}")));
-        assertEquals("6", theResultOf(stringResource("{{ 3 * 2.0 }}")));
-        assertEquals("6", theResultOf(stringResource("{{ 3.0 * 2.0 }}")));
-        assertEquals("6.3", theResultOf(stringResource("{{ 3.0 * 2.1 }}")));
+        assertEquals("6", JtwigTemplate.inlineTemplate("{{ 3 * 2 }}").render());
+        assertEquals("6", JtwigTemplate.inlineTemplate("{{ 3 * 2.0 }}").render());
+        assertEquals("6", JtwigTemplate.inlineTemplate("{{ 3.0 * 2.0 }}").render());
+        assertEquals("6.3", JtwigTemplate.inlineTemplate("{{ 3.0 * 2.1 }}").render());
     }
     
 }

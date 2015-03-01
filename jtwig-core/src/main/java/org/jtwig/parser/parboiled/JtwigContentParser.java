@@ -64,7 +64,7 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
         tagPropertyParser = env.getTagPropertyParser();
         expressionParser = createParser(JtwigExpressionParser.class, resource, env);
 
-        this.contentAddons = Collections2.transform(env.getExtensions().getAddons(), toBaseParser());
+        this.contentAddons = Collections2.transform(env.getConfiguration().getExtensions().getAddons(), toBaseParser());
         this.env = env;
 
         contentAddonParsers = new Addon[contentAddons.size()];
@@ -74,7 +74,7 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
             contentAddonParsers[i++] = (Addon) createParser(contentAddon, resource, env);
         }
         
-        for (Class<? extends TokenParser> tokenParser : env.getExtensions().getTokenParsers()) {
+        for (Class<? extends TokenParser> tokenParser : env.getConfiguration().getExtensions().getTokenParsers()) {
             tokenParsers.add(createParser(tokenParser, resource, this, basicParser, expressionParser, tagPropertyParser));
         }
     }
@@ -308,7 +308,8 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
     public Rule closeCode() {
         return Sequence(
                 tagPropertyParser.property(),
-                basicParser.closeCode()
+                basicParser.closeCode(),
+                Optional(FirstOf("\r\n", "\n"))
         );
     }
 

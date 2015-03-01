@@ -14,16 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BatchFilterTest extends AbstractJtwigTest {
+public class BatchFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("[[a, b, c], [d, e, f], [g, none, none]]", theResultOf(stringResource("{{ ['a','b','c','d','e','f','g']|batch(3, 'none') }}")));
-        assertEquals("[[a, b]]", theResultOf(stringResource("{{ {'1':'a','2':'b'}|batch(3) }}")));
+        assertEquals("[[a, b, c], [d, e, f], [g, none, none]]", JtwigTemplate.inlineTemplate("{{ ['a','b','c','d','e','f','g']|batch(3, 'none') }}").render());
+        assertEquals("[[a, b]]", JtwigTemplate.inlineTemplate("{{ {'1':'a','2':'b'}|batch(3) }}").render());
     }
     
 }

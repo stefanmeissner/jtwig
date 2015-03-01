@@ -14,7 +14,8 @@
 
 package org.jtwig.acceptance.issues;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exception.CalculateException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,10 +23,14 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.jtwig.util.SyntacticSugar.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.jtwig.configuration.JtwigConfiguration;
+import static org.jtwig.configuration.JtwigConfigurationBuilder.defaultConfiguration;
+import static org.jtwig.configuration.JtwigConfigurationBuilder.newConfiguration;
+import org.jtwig.extension.core.CoreJtwigExtension;
 import static org.jtwig.util.matchers.ExceptionMatcher.exception;
 
-public class Issue140Test extends AbstractJtwigTest {
+public class Issue140Test {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -37,8 +42,12 @@ public class Issue140Test extends AbstractJtwigTest {
     @Test
     public void undefinedVarThrowsExceptionOnEvaluation() throws Exception {
         expectedException.expect(exception().withInnerException(exception().ofType(CalculateException.class)));
-        env.setStrictMode(true).setLogNonStrictMode(true);
-        theResultOf(stringResource("{{ var is null }}"));
+        
+        JtwigModelMap model = new JtwigModelMap();
+
+        JtwigTemplate
+            .inlineTemplate("{{ var is null }}", config(true))
+            .render(model);
     }
 
     /**
@@ -47,9 +56,24 @@ public class Issue140Test extends AbstractJtwigTest {
      * @throws Exception 
      */
     @Test
-    public void outputNonexistentVarThrowsException() throws Exception {
-        given(theEnvironment().setStrictMode(false));
-        withResource("{{ var is null }}");
-        then(theResult(), is(equalTo("1")));
+    public void outputNonexistentVarReturnsTrue() throws Exception {
+        JtwigModelMap model = new JtwigModelMap();
+
+        String result = JtwigTemplate
+            .inlineTemplate("{{ var is null }}", config())
+            .render(model);
+
+        assertThat(result, is(equalTo("1")));
+    }
+    
+    protected JtwigConfiguration config() {
+        return config(false);
+    }
+    protected JtwigConfiguration config(boolean strict) {
+        JtwigConfiguration config = newConfiguration()
+                .withStrictMode(strict)
+                .build();
+        config.getExtensions().addExtension(new CoreJtwigExtension(config));
+        return config;
     }
 }

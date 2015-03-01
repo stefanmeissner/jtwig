@@ -14,16 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class EvenTestTest extends AbstractJtwigTest {
+public class EvenTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 2 is even }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 1 is even }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 2 is even }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 1 is even }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 1 is not even }}").render());
     }
     
 }

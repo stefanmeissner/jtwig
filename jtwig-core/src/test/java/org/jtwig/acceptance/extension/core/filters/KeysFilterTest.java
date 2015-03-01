@@ -14,16 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class KeysFilterTest extends AbstractJtwigTest {
+public class KeysFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("12", theResultOf(stringResource("{{ {'1':'a','2':'b'}|keys|join }}")));
-        assertEquals("01", theResultOf(stringResource("{{ ['a','b']|keys|join }}")));
+        assertEquals("12", JtwigTemplate.inlineTemplate("{{ {'1':'a','2':'b'}|keys|join }}").render());
+        assertEquals("01", JtwigTemplate.inlineTemplate("{{ ['a','b']|keys|join }}").render());
     }
     
 }

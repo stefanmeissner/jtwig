@@ -32,8 +32,7 @@ public class FromImportStatementParser extends ImportStatementParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
-                basic.spacing(),
+                content.openCode(),
                 basic.keyword("from"),
                 basic.spacing(),
                 importLocation(),
@@ -51,7 +50,7 @@ public class FromImportStatementParser extends ImportStatementParser {
                                         importDefinition(),
                                         basic.spacing()
                                 ),
-                                basic.closeCode()
+                                content.closeCode()
                         ),
                         new ParseException("Inavlid import syntax")
                 )

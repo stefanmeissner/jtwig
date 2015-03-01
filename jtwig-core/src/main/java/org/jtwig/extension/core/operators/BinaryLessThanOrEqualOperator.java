@@ -18,6 +18,7 @@ import org.jtwig.extension.api.operator.BinaryOperator;
 import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import static org.jtwig.util.TypeUtil.isDecimal;
+import static org.jtwig.util.TypeUtil.isLong;
 import static org.jtwig.util.TypeUtil.toDecimal;
 import static org.jtwig.util.TypeUtil.toLong;
 
@@ -32,7 +33,13 @@ public class BinaryLessThanOrEqualOperator extends BinaryOperator {
         if (isDecimal(left) || isDecimal(right)) {
             return toDecimal(left).compareTo(toDecimal(right)) <= 0;
         }
-        return toLong(left) <= toLong(right);
+        if (isLong(left) || isLong(right)) {
+            return toLong(left) <= toLong(right);
+        }
+        if (left.getClass().equals(right.getClass()) && left instanceof Comparable) {
+            return ((Comparable)left).compareTo(right) <= 0;
+        }
+        return left.toString().compareTo(right.toString()) <= 0;
     }
     
 }

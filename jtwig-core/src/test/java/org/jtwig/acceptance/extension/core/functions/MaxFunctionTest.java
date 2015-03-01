@@ -14,23 +14,18 @@
 
 package org.jtwig.acceptance.extension.core.functions;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-public class MaxFunctionTest extends AbstractJtwigTest {
+public class MaxFunctionTest {
     
-//    @Test
-//    public void maxPrefersIntegersOverCharacters() throws Exception {
-//        Object result = underTest.max(1,2,'a','e');
-//        assertEquals(2, result);
-//    }
-//    @Test
-//    public void maxPrefersLowercase() throws Exception {
-//        Object result = underTest.max('a','A','b');
-//        assertEquals('b', result);
-//    }
-//    @Test
-//    public void maxWorksAlphabetically() throws Exception {
-//        Object result = underTest.max("hello","help",'z');
-//        assertEquals('z', result);
-//    }
+    @Test
+    public void generalTests() throws Exception {
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ max([1,2,'a','e']) }}").render());
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ max(1,2) }}").render());
+        assertEquals("b", JtwigTemplate.inlineTemplate("{{ max(['a','A','b']) }}").render());
+        assertEquals("z", JtwigTemplate.inlineTemplate("{{ max(['hello','help','z']) }}").render());
+    }
+    
 }

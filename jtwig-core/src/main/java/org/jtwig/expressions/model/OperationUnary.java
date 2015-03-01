@@ -22,35 +22,6 @@ import org.jtwig.extension.api.operator.Operator;
 import org.jtwig.parser.model.JtwigPosition;
 
 public class OperationUnary extends AbstractCompilableExpression {
-//    public static class Builder implements CompilableExpression {
-//        private JtwigPosition position;
-//        private String operator;
-//        private CompilableExpression operand;
-//
-//        public Builder withPosition(JtwigPosition position) {
-//            this.position = position;
-//            return this;
-//        }
-//
-//        public Builder withOperator(String operator) {
-//            this.operator = operator;
-//            return this;
-//        }
-//
-//        public Builder withOperand(CompilableExpression operand) {
-//            this.operand = operand;
-//            return this;
-//        }
-//
-//        public OperationUnary build () {
-//            return new OperationUnary(position, operator, operand);
-//        }
-//
-//        @Override
-//        public Expression compile(CompileContext context) throws CompileException {
-//            return null;
-//        }
-//    }
 
     private final String operator;
     private CompilableExpression operand;
@@ -68,6 +39,7 @@ public class OperationUnary extends AbstractCompilableExpression {
     @Override
     public Expression compile(CompileContext context) throws CompileException {
         Operator op = context.environment()
+                .getConfiguration()
                 .getExtensions()
                 .getUnaryOperator(operator);
         if (op == null) {

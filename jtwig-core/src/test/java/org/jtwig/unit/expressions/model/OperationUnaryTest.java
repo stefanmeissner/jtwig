@@ -14,13 +14,13 @@
 
 package org.jtwig.unit.expressions.model;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
 import org.jtwig.expressions.model.OperationUnary;
 import org.jtwig.render.RenderContext;
+import org.jtwig.unit.AbstractJtwigTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

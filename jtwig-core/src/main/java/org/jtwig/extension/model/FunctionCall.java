@@ -60,7 +60,7 @@ public class FunctionCall extends Callable {
                     return ((ExecutionAware)context.map(name)).execute(context, null, calculateArguments(context));
                 }
                 
-                Function function = context.environment().getExtensions().getFunction(name);
+                Function function = context.environment().getConfiguration().getExtensions().getFunction(name);
                 if (function != null) {
                     return function.evaluate(context.environment(), context, calculateArguments(context));
                 }

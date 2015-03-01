@@ -42,7 +42,7 @@ public abstract class Tag extends TokenParser {
     public Rule rule() {
         return Sequence(
                 action(push(model(currentPosition()))),
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword(getKeyword()),
                 basic.spacing(),
@@ -50,7 +50,7 @@ public abstract class Tag extends TokenParser {
                         Sequence(
                                 getAttributeRule().label("Attribute data"),
                                 basic.spacing(),
-                                basic.closeCode(),
+                                content.closeCode(),
                                 Optional(
                                         takesContent(peek()),
                                         content.content(),
@@ -74,11 +74,11 @@ public abstract class Tag extends TokenParser {
         return mandatory(
                 Sequence(
                         basic.spacing(),
-                        basic.openCode(),
+                        content.openCode(),
                         basic.spacing(),
                         basic.keyword(""+getEndKeyword()),
                         basic.spacing(),
-                        basic.closeCode()
+                        content.closeCode()
                 ),
                 new ParseException("End tag '"+getEndKeyword()+"' required but not found")
         );

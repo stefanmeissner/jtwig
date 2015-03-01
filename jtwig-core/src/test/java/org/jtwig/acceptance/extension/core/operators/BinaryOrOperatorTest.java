@@ -14,15 +14,23 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
+import org.jtwig.exception.ParseException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryOrOperatorTest extends AbstractJtwigTest {
+public class BinaryOrOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ ['a'] or false }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ ['a'] or false }}").render());
+    }
+
+    @Test(expected = ParseException.class)
+    public void OrBadSyntax () throws Exception {
+        JtwigTemplate
+            .inlineTemplate("{% if (items || true) %}Hi{% endif %}")
+            .render();
     }
     
 }

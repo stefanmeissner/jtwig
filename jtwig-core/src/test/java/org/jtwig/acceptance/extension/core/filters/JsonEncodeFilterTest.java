@@ -14,17 +14,19 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class JsonEncodeFilterTest extends AbstractJtwigTest {
+public class JsonEncodeFilterTest {
     
     @Test
     public void testExecute() throws Exception {
-        theModel().withModelAttribute("obj", new Hello("world"));
-        assertEquals("{\"hello\":\"world\"}", theResultOf(stringResource("{{ obj|json_encode }}")));
-        assertEquals("{\"hello\":\"world\"}", theResultOf(stringResource("{{ {'hello': 'world'}|json_encode }}")));
+        JtwigModelMap model = new JtwigModelMap()
+                .withModelAttribute("obj", new Hello("world"));
+        assertEquals("{\"hello\":\"world\"}", JtwigTemplate.inlineTemplate("{{ obj|json_encode }}").render(model));
+        assertEquals("{\"hello\":\"world\"}", JtwigTemplate.inlineTemplate("{{ {'hello': 'world'}|json_encode }}").render());
     }
 
     private static class Hello {

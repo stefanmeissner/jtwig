@@ -38,19 +38,8 @@ public class ExtendsStatementParser extends TokenParser {
     @Label("Extends rule")
     @Override
     public Rule rule() {
-        
-//        if (!$this->parser->isMainScope()) {
-//            throw new Twig_Error_Syntax('Cannot extend from a block', $token->getLine(), $this->parser->getFilename());
-//        }
-//
-//        if (null !== $this->parser->getParent()) {
-//            throw new Twig_Error_Syntax('Multiple extends tags are forbidden', $token->getLine(), $this->parser->getFilename());
-//        }
-//        $this->parser->setParent($this->parser->getExpressionParser()->parseExpression());
-        
-        
         return Sequence(
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword("extends"),
                 mandatory(
@@ -65,7 +54,7 @@ public class ExtendsStatementParser extends TokenParser {
                                 ),
                                 action(peek(2, Template.class).setParent(expr.pop())),
                                 basic.spacing(),
-                                basic.closeCode()
+                                content.closeCode()
                         ),
                         new ParseException("Wrong extends syntax")
                 )

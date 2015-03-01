@@ -16,11 +16,10 @@ package org.jtwig.acceptance.extension.core.functions;
 
 import java.util.Date;
 import org.joda.time.LocalDateTime;
-import org.jtwig.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class DateFunctionTest extends AbstractJtwigTest {
+public class DateFunctionTest {
     
 //    @Test
 //    public void generalTests() throws Exception {

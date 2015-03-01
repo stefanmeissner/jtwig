@@ -33,7 +33,7 @@ public class TestCall extends Callable {
 
     @Override
     public Expression compile(CompileContext context) throws CompileException {
-        if (context.environment().getExtensions().getTest(name) == null) {
+        if (context.environment().getConfiguration().getExtensions().getTest(name) == null) {
             throw new CompileException("Unable to find test '"+name+"'");
         }
         
@@ -54,7 +54,7 @@ public class TestCall extends Callable {
 
         @Override
         public Boolean calculate(RenderContext context) throws CalculateException {
-            Test test = context.environment().getExtensions().getTest(name);
+            Test test = context.environment().getConfiguration().getExtensions().getTest(name);
             if (test == null) {
                 throw new CalculateException("Unable to find test '"+name+"'");
             }

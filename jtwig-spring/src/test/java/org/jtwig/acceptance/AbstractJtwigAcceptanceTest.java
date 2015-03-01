@@ -25,6 +25,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.jtwig.Environment;
 import org.jtwig.extension.spring.SpringExtension;
+import org.jtwig.configuration.JtwigConfigurationBuilder;
 import org.jtwig.loader.impl.ClasspathLoader;
 import org.jtwig.mvc.JtwigViewResolver;
 import org.junit.After;
@@ -40,6 +41,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.theme.FixedThemeResolver;
 
+import java.io.IOException;
+import org.jtwig.configuration.JtwigConfiguration;
+import org.jtwig.extension.core.CoreJtwigExtension;
+
 public abstract class AbstractJtwigAcceptanceTest {
     private HttpClient httpClient = httpClient();
 
@@ -49,12 +54,12 @@ public abstract class AbstractJtwigAcceptanceTest {
     private void startServer () throws Exception {
         jetty = new Server(9090);
 
-        final AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
+        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
         applicationContext.register(ConfigClass.class, getClass());
         applicationContext.register(configurationClasses());
 
-        final ServletHolder servletHolder = new ServletHolder(new DispatcherServlet(applicationContext));
-        final ServletContextHandler context = new ServletContextHandler();
+        ServletHolder servletHolder = new ServletHolder(new DispatcherServlet(applicationContext));
+        ServletContextHandler context = new ServletContextHandler();
 
         context.setErrorHandler(null); // use Spring exception handler(s)
         context.setContextPath("/");
@@ -129,12 +134,12 @@ public abstract class AbstractJtwigAcceptanceTest {
             ClasspathLoader classpath = new ClasspathLoader();
 //            ChainLoader chainLoader = new ChainLoader(Arrays.asList(web, classpath));
             
-            Environment env = new Environment();
-            env.setLoader(classpath);
-            env.getExtensions().addExtension(springExtension());
-            
-//            env.getFunctionRepository().include(springFunctions());
-            return env;
+            JtwigConfiguration config = JtwigConfigurationBuilder.newConfiguration()
+                    .withLoader(classpath)
+                    .build();
+            config.getExtensions().addExtension(new CoreJtwigExtension(config));
+            config.getExtensions().addExtension(springExtension());
+            return new Environment(config);
         }
         
         @Bean

@@ -117,6 +117,78 @@ public class ArrayUtil {
         return result;
     }
     
+    public static Byte[] toArray(byte[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Short[] toArray(short[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Integer[] toArray(int[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Long[] toArray(long[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Boolean[] toArray(boolean[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Character[] toArray(char[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Float[] toArray(float[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Double[] toArray(double[] arr) {
+        return ArrayUtils.toObject(arr);
+    }
+    public static Object[] toArray(Object[] arr) {
+        return arr;
+    }
+    public static Object[] toArray(Object obj) {
+        if (obj instanceof Collection) {
+            obj = ((Collection)obj).toArray();
+        }
+        if (obj instanceof Map) {
+            obj = ((Map)obj).values().toArray();
+        }
+        
+        if (!obj.getClass().isArray()) {
+            return new Object[]{obj};
+        }
+        
+        Class<?> type = obj.getClass().getComponentType();
+        if (!type.isPrimitive()) {
+            return (Object[])obj;
+        }
+        
+        if (Byte.TYPE.isAssignableFrom(type)) {
+            return toArray((byte[])obj);
+        }
+        if (Short.TYPE.isAssignableFrom(type)) {
+            return toArray((short[])obj);
+        }
+        if (Integer.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((int[])obj);
+        }
+        if (Long.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((long[])obj);
+        }
+        if (Boolean.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((boolean[])obj);
+        }
+        if (Character.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((char[])obj);
+        }
+        if (Float.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((float[])obj);
+        }
+        if (Double.TYPE.isAssignableFrom(obj.getClass().getComponentType())) {
+            return toArray((double[])obj);
+        }
+        
+        throw new IllegalArgumentException("Unsupported argument type: "+type.getName());
+    }
+    
     public static List<? extends Object> toList(final Object obj) {
         if (obj instanceof Collection) {
             return new ArrayList<>((Collection)obj);
@@ -128,31 +200,7 @@ public class ArrayUtil {
             return new ArrayList<>(Arrays.asList(obj));
         }
         
-        if (obj instanceof byte[]) {
-            return Arrays.asList(ArrayUtils.toObject((byte[])obj));
-        }
-        if (obj instanceof short[]) {
-            return Arrays.asList(ArrayUtils.toObject((short[])obj));
-        }
-        if (obj instanceof int[]) {
-            return Arrays.asList(ArrayUtils.toObject((int[])obj));
-        }
-        if (obj instanceof long[]) {
-            return Arrays.asList(ArrayUtils.toObject((long[])obj));
-        }
-        if (obj instanceof float[]) {
-            return Arrays.asList(ArrayUtils.toObject((float[])obj));
-        }
-        if (obj instanceof double[]) {
-            return Arrays.asList(ArrayUtils.toObject((double[])obj));
-        }
-        if (obj instanceof char[]) {
-            return Arrays.asList(ArrayUtils.toObject((char[])obj));
-        }
-        if (obj instanceof boolean[]) {
-            return Arrays.asList(ArrayUtils.toObject((boolean[])obj));
-        }
-        return Arrays.asList((Object[])obj);
+        return Arrays.asList(toArray(obj));
     }
     
 }

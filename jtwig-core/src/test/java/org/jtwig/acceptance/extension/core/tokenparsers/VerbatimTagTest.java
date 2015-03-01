@@ -14,16 +14,24 @@
 
 package org.jtwig.acceptance.extension.core.tokenparsers;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import org.junit.Test;
 
-public class VerbatimTagTest extends AbstractJtwigTest {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+public class VerbatimTagTest {
     @Test
-    public void verbatimDoesntTryToResolveExpressions() throws Exception {
-        withResource("{% verbatim %}{{ name }}{% endverbatim %}");
-        assertThat(theResult(), is("{{ name }}"));
+    public void verbatimDoesNotTryToResolveExpressions() throws Exception {
+        JtwigModelMap model = new JtwigModelMap();
+
+        String result = JtwigTemplate
+            .inlineTemplate("{% verbatim %}{{ name }}{% endverbatim %}")
+            .render(model);
+
+        assertThat(result, is(equalTo("{{ name }}")));
     }
 
 }

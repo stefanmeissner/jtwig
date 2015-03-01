@@ -14,17 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.functions;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class RangeFunctionTest extends AbstractJtwigTest {
+public class RangeFunctionTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("123", theResultOf(stringResource("{{ range(1,3)|join }}")));
-        assertEquals("13", theResultOf(stringResource("{{ range(1,3,2)|join }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ range('a', 'c')|join }}")));
-        assertEquals("AB", theResultOf(stringResource("{{ range('AA', 'BZ')|join }}")));
+        assertEquals("123", JtwigTemplate.inlineTemplate("{{ range(1,3)|join }}").render());
+        assertEquals("13", JtwigTemplate.inlineTemplate("{{ range(1,3,2)|join }}").render());
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ range('a', 'c')|join }}").render());
+        assertEquals("AB", JtwigTemplate.inlineTemplate("{{ range('AA', 'BZ')|join }}").render());
     }
 }

@@ -12,19 +12,22 @@
  * limitations under the License.
  */
 
-package org.jtwig;
+package org.jtwig.unit;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.jtwig.Environment;
 import org.jtwig.exception.ResourceException;
 import org.jtwig.loader.Loader;
 import org.jtwig.util.LoaderUtil;
 import org.junit.Before;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 public abstract class MultiresourceUnitTest extends AbstractJtwigTest {
     protected Map<String, Loader.Resource> resources;

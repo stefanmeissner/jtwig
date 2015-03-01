@@ -35,7 +35,7 @@ public class ForStatementParser extends TokenParser {
     @Override
     public Rule rule() {
         return Sequence(
-                basic.openCode(),
+                content.openCode(),
                 basic.spacing(),
                 basic.keyword("for"),
                 basic.spacing(),
@@ -70,29 +70,29 @@ public class ForStatementParser extends TokenParser {
                                 ),
 //                                action(content.beforeBeginTrim()),
                                 basic.spacing(),
-                                basic.closeCode(),
+                                content.closeCode(),
 //                                action(afterBeginTrim()),
                                 content.content(),
                                 action(peek(1, Content.class).withContent(pop(Sequence.class))),
                                 Optional(
                                         Sequence(
-                                                basic.openCode(),
+                                                content.openCode(),
 //                                                action(beforeEndTrim()),
                                                 basic.spacing(),
                                                 basic.keyword("else"),
                                                 basic.spacing(),
-                                                basic.closeCode(),
+                                                content.closeCode(),
 //                                                action(afterBeginTrim()),
                                                 content.content(),
                                                 action(peek(1, For.class).withElse(pop(Sequence.class)))
                                         )
                                 ),
-                                basic.openCode(),
+                                content.openCode(),
 //                                action(beforeEndTrim()),
                                 basic.spacing(),
                                 basic.keyword("endfor"),
                                 basic.spacing(),
-                                basic.closeCode()
+                                content.closeCode()
 //                                action(afterEndTrim())
                         ),
                         new ParseException("Wrong for each syntax")

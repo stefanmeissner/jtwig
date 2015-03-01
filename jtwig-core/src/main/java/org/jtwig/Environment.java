@@ -14,152 +14,45 @@
 
 package org.jtwig;
 
-import com.google.common.base.Function;
-import java.nio.charset.Charset;
-import org.jtwig.cache.TemplateCache;
-import org.jtwig.cache.impl.ExecutionCache;
 import org.jtwig.compile.CompileContext;
+import org.jtwig.configuration.JtwigConfiguration;
+import org.jtwig.configuration.JtwigConfigurationBuilder;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.model.Template;
 import org.jtwig.exception.CompileException;
 import org.jtwig.exception.ParseBypassException;
 import org.jtwig.exception.ParseException;
 import org.jtwig.exception.ResourceException;
-import org.jtwig.extension.ExtensionHolder;
-import org.jtwig.functions.config.JsonConfiguration;
-import org.jtwig.functions.repository.api.FunctionRepository;
-import org.jtwig.functions.repository.impl.MapFunctionRepository;
 import org.jtwig.loader.Loader;
-import org.jtwig.parser.config.Symbols;
-import org.jtwig.parser.config.TagSymbols;
+import org.jtwig.loader.impl.EmptyLoader;
 import org.jtwig.parser.parboiled.JtwigBasicParser;
 import org.jtwig.parser.parboiled.JtwigConstantParser;
 import org.jtwig.parser.parboiled.JtwigContentParser;
 import org.jtwig.parser.parboiled.JtwigTagPropertyParser;
 import org.parboiled.Parboiled;
-import static org.parboiled.Parboiled.createParser;
 import org.parboiled.common.FileUtils;
 import org.parboiled.errors.ParserRuntimeException;
 import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 
+import java.nio.charset.Charset;
+
+import static org.parboiled.Parboiled.createParser;
+
 public class Environment {
-    protected Charset charset = Charset.forName("UTF-8");
-    protected boolean strictMode = false;
-    protected boolean logNonStrictMode = true;
-    protected Symbols symbols = TagSymbols.DEFAULT;
-    protected ExtensionHolder extensions = new ExtensionHolder(this);
-    
-    protected int minThreads = 20;
-    protected int maxThreads = 100;
-    protected long keepAliveTime = 60L;
-    
-    protected JsonConfiguration jsonConfiguration = new JsonConfiguration();
-    protected FunctionRepository functionRepository
-            = new MapFunctionRepository(jsonConfiguration);
-    protected TemplateCache cache = new ExecutionCache();
-    protected Loader loader;
+    protected JtwigConfiguration configuration;
     
     //~ Construction ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Environment() {}
-    
-    //~ Getters & Setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Charset getCharset() {
-        return charset;
-    }
-    public Environment setCharset(final Charset charset) {
-        this.charset = charset;
-        return this;
-    }
-    
-    public boolean isStrictMode() {
-        return strictMode;
-    }
-    public Environment setStrictMode(final boolean strictMode) {
-        this.strictMode = strictMode;
-        return this;
-    }
-    
-    public boolean isLogNonStrictMode() {
-        return logNonStrictMode;
-    }
-    public Environment setLogNonStrictMode(final boolean logNonStrictMode) {
-        this.logNonStrictMode = logNonStrictMode;
-        return this;
-    }
-    
-    public Symbols getSymbols() {
-        return symbols;
-    }
-    public Environment setSymbols(final Symbols symbols) {
-        this.symbols = symbols;
-        return this;
-    }
-    
-    public ExtensionHolder getExtensions() {
-        return extensions;
-    }
-    
-    public int getMinThreads() {
-        return minThreads;
-    }
-    public Environment setMinThreads(final int minThreads) {
-        this.minThreads = minThreads;
-        return this;
+    public Environment() {
+        this(JtwigConfigurationBuilder.defaultConfiguration());
     }
 
-    public int getMaxThreads() {
-        return maxThreads;
-    }
-    public Environment setMaxThreads(final int maxThreads) {
-        this.maxThreads = maxThreads;
-        return this;
+    public Environment(JtwigConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-    public long getKeepAliveTime() {
-        return keepAliveTime;
-    }
-    public Environment setKeepAliveTime(final long keepAliveTime) {
-        this.keepAliveTime = keepAliveTime;
-        return this;
-    }
-
-    public JsonConfiguration getJsonConfiguration () {
-        return jsonConfiguration;
-    }
-    public Environment setJsonConfiguration(
-            final JsonConfiguration jsonConfiguration) {
-        this.jsonConfiguration = jsonConfiguration;
-        return this;
-    }
-    public Environment setJsonMapper(final Function<Object, String> mapper) {
-        getJsonConfiguration().jsonMapper(mapper);
-        return this;
-    }
-
-    public FunctionRepository getFunctionRepository() {
-        return functionRepository;
-    }
-    public Environment setFunctionRepository(
-            final FunctionRepository functionRepository) {
-        this.functionRepository = functionRepository;
-        return this;
-    }
-    
-    public TemplateCache getCache() {
-        return cache;
-    }
-    public Environment setCache(final TemplateCache cache) {
-        this.cache = cache;
-        return this;
-    }
-    
-    public Loader getLoader() {
-        return loader;
-    }
-    public Environment setLoader(final Loader loader) {
-        this.loader = loader;
-        return this;
+    public JtwigConfiguration getConfiguration() {
+        return configuration;
     }
     
     public JtwigBasicParser getBasicParser() {
@@ -175,20 +68,21 @@ public class Environment {
     }
     
     //~ Operational methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Loader.Resource load(final String name) throws ResourceException {
-        if (loader.exists(name)) {
-            return loader.get(name);
+    public Loader.Resource load(String name) throws ResourceException {
+        if (configuration.getLoader().exists(name)) {
+            return configuration.getLoader().get(name);
         }
-        return null;
+        return new EmptyLoader.NoResource(name);
     }
-    public Template parse(final String name) throws ResourceException, ParseException {
+
+    public Template parse(String name) throws ResourceException, ParseException {
         return parse(load(name));
     }
-    public Template parse(final Loader.Resource resource) throws ResourceException, ParseException {
+    public Template parse(Loader.Resource resource) throws ResourceException, ParseException {
         if (resource == null) {
             throw new IllegalArgumentException("No resource given");
         }
-        Template cached = getCache().getParsed(resource.getCacheKey());
+        Template cached = configuration.getTemplateCache().getParsed(resource.getCacheKey());
         if (cached != null) {
             return cached;
         }
@@ -200,7 +94,7 @@ public class Environment {
             ParsingResult<Compilable> result = runner.run(
                     FileUtils.readAllText(resource.source(), Charset.defaultCharset()));
             cached = (Template)result.resultValue;
-            getCache().addParsed(resource.getCacheKey(), cached);
+            configuration.getTemplateCache().addParsed(resource.getCacheKey(), cached);
             return cached;
         } catch (ParserRuntimeException e) {
             if (e.getCause() instanceof ParseBypassException) {
@@ -248,12 +142,12 @@ public class Environment {
     public Template.Compiled compile(final Template template,
             final Loader.Resource resource,
             final CompileContext context) throws CompileException {
-        Template.Compiled cached = getCache().getCompiled(resource.getCacheKey());
+        Template.Compiled cached = configuration.getTemplateCache().getCompiled(resource.getCacheKey());
         if (cached != null) {
             return cached;
         }
         cached = template.compile(context);
-        getCache().addCompiled(resource.getCacheKey(), cached);
+        configuration.getTemplateCache().addCompiled(resource.getCacheKey(), cached);
         return cached;
     }
 }

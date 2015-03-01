@@ -14,22 +14,18 @@
 
 package org.jtwig.acceptance.extension.core.functions;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-public class MinFunctionTest extends AbstractJtwigTest {
-//    @Test
-//    public void minPrefersCharsOverIntegers() throws Exception {
-//        Object result = underTest.min(1,2,'a','e');
-//        assertEquals('a', result);
-//    }
-//    @Test
-//    public void minPrefersUppercase() throws Exception {
-//        Object result = underTest.min('a','A');
-//        assertEquals('A', result);
-//    }
-//    @Test
-//    public void minWorksAlphabetically() throws Exception {
-//        Object result = underTest.min("hello","help",'z');
-//        assertEquals("hello", result);
-//    }
+public class MinFunctionTest {
+    
+    @Test
+    public void generalTests() throws Exception {
+        assertEquals("a", JtwigTemplate.inlineTemplate("{{ min([1,2,'a','e']) }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ min(1,2) }}").render());
+        assertEquals("B", JtwigTemplate.inlineTemplate("{{ min(['a','B']) }}").render());
+        assertEquals("hello", JtwigTemplate.inlineTemplate("{{ min(['hello','help','z']) }}").render());
+    }
+    
 }

@@ -14,19 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class LowerFilterTest extends AbstractJtwigTest {
+public class LowerFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        theModel().withModelAttribute("obj", new Object());
-        assertEquals("abc", theResultOf(stringResource("{{ 'abc'|lower }}")));
-        assertEquals("abc", theResultOf(stringResource("{{ 'ABC'|lower }}")));
-        assertEquals("1.5", theResultOf(stringResource("{{ 1.5|lower }}")));
-        assertEquals("", theResultOf(stringResource("{{ obj|lower }}")));
+        JtwigModelMap model = new JtwigModelMap().withModelAttribute("obj", new Object());
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ 'abc'|lower }}").render());
+        assertEquals("abc", JtwigTemplate.inlineTemplate("{{ 'ABC'|lower }}").render());
+        assertEquals("1.5", JtwigTemplate.inlineTemplate("{{ 1.5|lower }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ obj|lower }}").render(model));
     }
     
 }

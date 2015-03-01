@@ -14,20 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import org.jtwig.exception.RenderException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class ConstantTestTest extends AbstractJtwigTest {
+public class ConstantTestTest {
     public static final String CONSTANT = "value";
     
     @Test(expected = RenderException.class)
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 'value' is constant('"+getClass().getName()+".CONSTANT') }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 'test' is constant('"+getClass().getName()+".CONSTANT') }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 'value' is constant('UnknownClass') }}")));
-        theResultOf(stringResource("{{ 'value' is constant() }}"));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'value' is constant('"+getClass().getName()+".CONSTANT') }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'test' is constant('"+getClass().getName()+".CONSTANT') }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'value' is constant('UnknownClass') }}").render());
+        JtwigTemplate.inlineTemplate("{{ 'value' is constant() }}").render();
     }
     
 }

@@ -14,30 +14,49 @@
 
 package org.jtwig.acceptance.issues;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.jtwig.util.SyntacticSugar.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.jtwig.configuration.JtwigConfiguration;
+import org.jtwig.configuration.JtwigConfigurationBuilder;
+import static org.jtwig.configuration.JtwigConfigurationBuilder.defaultConfiguration;
+import org.jtwig.extension.core.CoreJtwigExtension;
 
 /**
  * 
  */
-public class Issue210Test extends AbstractJtwigTest {
+public class Issue210Test {
     @Test
     public void testNonUTFEncoding() throws Exception {
-        theEnvironment().setCharset(Charset.forName("ISO-8859-1"));
-        given(theModel().withModelAttribute("text", "tête de bou  간편한 설치 및 사용"));
-        withResource("{{ text }}");
-        then(theResult(), is(equalTo("t�te de bou  ??? ?? ? ??")));
+        JtwigModelMap model = new JtwigModelMap();
+        model.withModelAttribute("text", "tête de bou  간편한 설치 및 사용");
+
+        JtwigConfiguration config = JtwigConfigurationBuilder.newConfiguration()
+                .withCharset(Charset.forName("ISO-8859-1"))
+                .build();
+        config.getExtensions().addExtension(new CoreJtwigExtension(config));
+        
+        String result = JtwigTemplate
+            .inlineTemplate("{{ text }}", config)
+            .render(model);
+
+        assertThat(result, is(equalTo("t�te de bou  ??? ?? ? ??")));
     }
     @Test
     public void testUTFEncoding() throws Exception {
-        given(theModel().withModelAttribute("text", "tête de bou  간편한 설치 및 사용"));
-        withResource("{{ text }}");
-        then(theResult(), is(equalTo("tête de bou  간편한 설치 및 사용")));
+        JtwigModelMap model = new JtwigModelMap();
+        model.withModelAttribute("text", "tête de bou  간편한 설치 및 사용");
+
+        String result = JtwigTemplate
+            .inlineTemplate("{{ text }}")
+            .render(model);
+
+        assertThat(result, is(equalTo("tête de bou  간편한 설치 및 사용")));
     }
 }

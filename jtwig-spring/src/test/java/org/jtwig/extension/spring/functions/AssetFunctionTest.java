@@ -32,12 +32,12 @@ public class AssetFunctionTest extends AbstractViewAcceptanceTest {
         registerBean("assetResolver", assetResolver());
         SpringExtension springExtension = new SpringExtension();
         applicationContext().getAutowireCapableBeanFactory().autowireBean(springExtension);
-        env.getExtensions().addExtension(springExtension);
+        env.getConfiguration().getExtensions().addExtension(springExtension);
     }
 
     @Test
     public void assetTest() throws Exception {
-        assertEquals("/One", env.getExtensions().getFunction("asset").evaluate(env, null, "One"));
+        assertEquals("/One", env.getConfiguration().getExtensions().getFunction("asset").evaluate(env, null, "One"));
     }
     
     @Bean

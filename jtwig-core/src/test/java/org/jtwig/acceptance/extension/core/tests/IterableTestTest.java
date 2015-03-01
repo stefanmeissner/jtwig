@@ -14,16 +14,20 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import java.util.Collections;
+import org.jtwig.JtwigModelMap;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class IterableTestTest extends AbstractJtwigTest {
+public class IterableTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ [] is iterable }}")));
-        assertEquals("1", theResultOf(stringResource("{{ {} is iterable }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ [] is iterable }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ {} is iterable }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ value is iterable }}")
+                .render(new JtwigModelMap(Collections.singletonMap("value", (Object)new Object[0]))));
     }
     
 }

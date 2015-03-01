@@ -14,17 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class LastFilterTest extends AbstractJtwigTest {
+public class LastFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("2", theResultOf(stringResource("{{ {'a':'1','b':'2'}|last }}")));
-        assertEquals("b", theResultOf(stringResource("{{ ['a','b']|last }}")));
-        assertEquals("c", theResultOf(stringResource("{{ 'abc'|last }}")));
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|last }}").render());
+        assertEquals("b", JtwigTemplate.inlineTemplate("{{ ['a','b']|last }}").render());
+        assertEquals("c", JtwigTemplate.inlineTemplate("{{ 'abc'|last }}").render());
     }
     
 }

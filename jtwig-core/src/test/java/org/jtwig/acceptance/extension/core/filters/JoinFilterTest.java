@@ -14,17 +14,17 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class JoinFilterTest extends AbstractJtwigTest {
+public class JoinFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals(", 1, 2", theResultOf(stringResource("{{ [null,1,2]|join(', ') }}")));
-        assertEquals("", theResultOf(stringResource("{{ null|join(',') }}")));
-        assertEquals("12", theResultOf(stringResource("{{ [null,1,2]|join }}")));
+        assertEquals(", 1, 2", JtwigTemplate.inlineTemplate("{{ [null,1,2]|join(', ') }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ null|join(',') }}").render());
+        assertEquals("12", JtwigTemplate.inlineTemplate("{{ [null,1,2]|join }}").render());
     }
     
 }

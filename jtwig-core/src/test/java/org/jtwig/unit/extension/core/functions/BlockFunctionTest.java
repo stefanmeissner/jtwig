@@ -14,12 +14,12 @@
 
 package org.jtwig.unit.extension.core.functions;
 
-import org.jtwig.AbstractJtwigTest;
 import org.jtwig.content.model.Template;
 import org.jtwig.content.model.compilable.Block;
 import org.jtwig.exception.RenderException;
 import org.jtwig.extension.core.functions.BlockFunction;
 import org.jtwig.render.RenderContext;
+import org.jtwig.unit.AbstractJtwigTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

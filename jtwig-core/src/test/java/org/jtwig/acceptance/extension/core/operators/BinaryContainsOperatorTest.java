@@ -14,16 +14,16 @@
 
 package org.jtwig.acceptance.extension.core.operators;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BinaryContainsOperatorTest extends AbstractJtwigTest {
+public class BinaryContainsOperatorTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ 'a' in 'abc' }}")));
-        assertEquals("0", theResultOf(stringResource("{{ 'a' in ['b','c'] }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 'a' in 'abc' }}").render());
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'a' in ['b','c'] }}").render());
     }
     
 }

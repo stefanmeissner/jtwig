@@ -48,7 +48,7 @@ public class BinaryIsOperator extends BinaryOperator {
 
     @Override
     public Rule getRightSideRule(JtwigExpressionParser expr, Environment env) {
-        String[] identifiers = env.getExtensions().getTests().keySet().toArray(new String[0]);
+        String[] identifiers = env.getConfiguration().getExtensions().getTests().keySet().toArray(new String[0]);
         return expr.callable(TestCall.class, identifiers);
     }
 }

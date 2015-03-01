@@ -14,27 +14,27 @@
 
 package org.jtwig.acceptance.extension.core.filters;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class RoundFilterTest extends AbstractJtwigTest {
+public class RoundFilterTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("0", theResultOf(stringResource("{{ 'test'|round }}")));
-        assertEquals("2", theResultOf(stringResource("{{ '1.5'|round }}")));
-        assertEquals("2", theResultOf(stringResource("{{ '1.2'|round(0, 'ceil') }}")));
-        assertEquals("1", theResultOf(stringResource("{{ '1.7'|round(0, 'floor') }}")));
-        assertEquals("2", theResultOf(stringResource("{{ '2.2a'|round }}")));
-        assertEquals("1", theResultOf(stringResource("{{ 1.2|round }}")));
-        assertEquals("-1", theResultOf(stringResource("{{ -1.2|round }}")));
-        assertEquals("1.2", theResultOf(stringResource("{{ 1.2345|round(1) }}")));
-        assertEquals("1.3", theResultOf(stringResource("{{ 1.2345|round(1, 'ceil') }}")));
-        assertEquals("1.235", theResultOf(stringResource("{{ 1.2345|round(3) }}")));
-        assertEquals("1.234", theResultOf(stringResource("{{ 1.2345|round(3, 'floor') }}")));
-        assertEquals("", theResultOf(stringResource("{{ ['a','b']|round }}")));
-        assertEquals("", theResultOf(stringResource("{{ {'a':'1','b':'2'}|round }}")));
+        assertEquals("0", JtwigTemplate.inlineTemplate("{{ 'test'|round }}").render());
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ '1.5'|round }}").render());
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ '1.2'|round(0, 'ceil') }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ '1.7'|round(0, 'floor') }}").render());
+        assertEquals("2", JtwigTemplate.inlineTemplate("{{ '2.2a'|round }}").render());
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ 1.2|round }}").render());
+        assertEquals("-1", JtwigTemplate.inlineTemplate("{{ -1.2|round }}").render());
+        assertEquals("1.2", JtwigTemplate.inlineTemplate("{{ 1.2345|round(1) }}").render());
+        assertEquals("1.3", JtwigTemplate.inlineTemplate("{{ 1.2345|round(1, 'ceil') }}").render());
+        assertEquals("1.235", JtwigTemplate.inlineTemplate("{{ 1.2345|round(3) }}").render());
+        assertEquals("1.234", JtwigTemplate.inlineTemplate("{{ 1.2345|round(3, 'floor') }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ ['a','b']|round }}").render());
+        assertEquals("", JtwigTemplate.inlineTemplate("{{ {'a':'1','b':'2'}|round }}").render());
     }
     
 }

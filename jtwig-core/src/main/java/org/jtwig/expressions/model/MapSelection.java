@@ -97,9 +97,9 @@ public class MapSelection extends AbstractCompilableExpression {
         }
         
         private void error(RenderContext context, Object value, Object key) throws CalculateException {
-            if (context.environment().isStrictMode()) {
+            if (context.environment().getConfiguration().isStrictMode()) {
                 throw new CalculateException(position + ": Unable to retrieve "+key+" from "+value);
-            } else if (context.environment().isLogNonStrictMode()) {
+            } else if (context.environment().getConfiguration().isLogNonStrictMode()) {
                 LOGGER.warn(position + ": Unable to retrieve "+key+" from "+value);
             }
         }

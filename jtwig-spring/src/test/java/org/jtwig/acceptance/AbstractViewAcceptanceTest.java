@@ -2,9 +2,13 @@ package org.jtwig.acceptance;
 
 import java.util.Locale;
 import org.jtwig.Environment;
+import org.jtwig.configuration.JtwigConfiguration;
+import org.jtwig.configuration.JtwigConfigurationBuilder;
 import org.jtwig.loader.impl.StringLoader;
 import org.jtwig.mvc.JtwigViewResolver;
 import org.junit.Before;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -20,10 +24,14 @@ public abstract class AbstractViewAcceptanceTest {
     private JtwigViewResolver viewResolver;
     private AnnotationConfigWebApplicationContext applicationContext;
     private MockHttpServletRequest httpServletRequest;
+    protected JtwigConfiguration config;
     protected Environment env;
 
     @Before
     public void setUp() throws Exception {
+        config = spy(JtwigConfigurationBuilder.defaultConfiguration());
+        env = spy(new Environment(config));
+        
         MockServletContext servletContext = new MockServletContext();
         httpServletRequest = new MockHttpServletRequest();
 
@@ -31,12 +39,11 @@ public abstract class AbstractViewAcceptanceTest {
         applicationContext.setServletContext(servletContext);
         servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, applicationContext);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
-
-        viewResolver = new JtwigViewResolver();
         applicationContext.refresh();
+
+        viewResolver = new JtwigViewResolver(env);
         applicationContext.getBeanFactory().registerSingleton("viewResolver", viewResolver);
         viewResolver.setApplicationContext(applicationContext);
-        env = viewResolver.getEnvironment();
     }
     
     protected ApplicationContext applicationContext() {
@@ -65,7 +72,7 @@ public abstract class AbstractViewAcceptanceTest {
 
     public String renderString (final String inlineTemplate, ModelMap modelMap) throws Exception {
         MockHttpServletResponse response = new MockHttpServletResponse();
-        viewResolver.getEnvironment().setLoader(new StringLoader(inlineTemplate));
+        when(viewResolver.getEnvironment().getConfiguration().getLoader()).thenReturn(new StringLoader(inlineTemplate));
         viewResolver.resolveViewName("", Locale.getDefault())
                 .render(modelMap, new MockHttpServletRequest(), response);
 

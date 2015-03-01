@@ -14,15 +14,15 @@
 
 package org.jtwig.acceptance.extension.core.tests;
 
-import org.jtwig.AbstractJtwigTest;
+import org.jtwig.JtwigTemplate;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class NullTestTest extends AbstractJtwigTest {
+public class NullTestTest {
     
     @Test
     public void generalTests() throws Exception {
-        assertEquals("1", theResultOf(stringResource("{{ null is null }}")));
+        assertEquals("1", JtwigTemplate.inlineTemplate("{{ null is null }}").render());
     }
     
 }
