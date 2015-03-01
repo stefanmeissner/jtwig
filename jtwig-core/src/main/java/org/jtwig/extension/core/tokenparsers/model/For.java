@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.content.model.compilable;
+package org.jtwig.extension.core.tokenparsers.model;
 
 import java.util.ArrayList;
 import org.jtwig.compile.CompileContext;
@@ -28,6 +28,8 @@ import org.jtwig.types.Undefined;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import org.jtwig.content.model.compilable.Content;
+import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.util.ArrayUtil;
 
 public class For extends Content<For> {

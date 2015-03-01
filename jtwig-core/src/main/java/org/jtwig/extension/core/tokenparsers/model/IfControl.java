@@ -12,13 +12,15 @@
  * limitations under the License.
  */
 
-package org.jtwig.content.model.compilable;
+package org.jtwig.extension.core.tokenparsers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
+import org.jtwig.content.model.compilable.AbstractElement;
+import org.jtwig.content.model.compilable.Content;
 import org.jtwig.content.model.tag.TagInformation;
 import org.jtwig.content.model.tag.WhiteSpaceControl;
 import org.jtwig.exception.CalculateException;

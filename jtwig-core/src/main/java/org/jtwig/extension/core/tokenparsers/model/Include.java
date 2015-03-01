@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.content.model.compilable;
+package org.jtwig.extension.core.tokenparsers.model;
 
 
 import org.jtwig.compile.CompileContext;
@@ -25,6 +25,7 @@ import org.jtwig.parser.model.JtwigPosition;
 import org.jtwig.render.RenderContext;
 import java.util.Map;
 import org.jtwig.content.model.Template;
+import org.jtwig.content.model.compilable.AbstractElement;
 import org.jtwig.expressions.model.Constant;
 import org.jtwig.loader.Loader;
 

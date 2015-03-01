@@ -21,7 +21,7 @@ import org.jtwig.JtwigModelMap;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.model.Template;
-import org.jtwig.content.model.compilable.Block;
+import org.jtwig.extension.core.tokenparsers.model.Block;
 import org.jtwig.content.model.compilable.Text;
 import org.jtwig.render.RenderContext;
 import static org.junit.Assert.assertEquals;

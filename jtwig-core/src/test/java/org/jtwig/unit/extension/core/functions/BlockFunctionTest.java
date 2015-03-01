@@ -15,7 +15,7 @@
 package org.jtwig.unit.extension.core.functions;
 
 import org.jtwig.content.model.Template;
-import org.jtwig.content.model.compilable.Block;
+import org.jtwig.extension.core.tokenparsers.model.Block;
 import org.jtwig.exception.RenderException;
 import org.jtwig.extension.core.functions.BlockFunction;
 import org.jtwig.render.RenderContext;

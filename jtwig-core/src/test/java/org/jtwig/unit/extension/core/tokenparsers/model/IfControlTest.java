@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package org.jtwig.unit.content.model;
+package org.jtwig.unit.extension.core.tokenparsers.model;
 
 import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
-import org.jtwig.content.model.compilable.IfControl;
+import org.jtwig.extension.core.tokenparsers.model.IfControl;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;

@@ -12,14 +12,14 @@
  * limitations under the License.
  */
 
-package org.jtwig.unit.content.model;
+package org.jtwig.unit.extension.core.tokenparsers.model;
 
 import static java.util.Arrays.asList;
 import org.jtwig.unit.AbstractJtwigTest;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
-import org.jtwig.content.model.compilable.For;
+import org.jtwig.extension.core.tokenparsers.model.For;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.CompileException;
 import org.jtwig.expressions.api.CompilableExpression;

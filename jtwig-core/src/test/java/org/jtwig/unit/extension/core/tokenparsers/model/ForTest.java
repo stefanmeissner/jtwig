@@ -1,7 +1,7 @@
-package org.jtwig.unit.content.model.compilable;
+package org.jtwig.unit.extension.core.tokenparsers.model;
 
 import org.jtwig.compile.CompileContext;
-import org.jtwig.content.model.compilable.For;
+import org.jtwig.extension.core.tokenparsers.model.For;
 import org.jtwig.content.model.compilable.Sequence;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.RenderException;

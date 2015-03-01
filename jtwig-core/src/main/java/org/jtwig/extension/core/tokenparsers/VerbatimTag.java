@@ -21,7 +21,7 @@ import org.jtwig.content.api.Compilable;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.compilable.Content;
 import org.jtwig.content.model.compilable.Sequence;
-import org.jtwig.content.model.compilable.Verbatim;
+import org.jtwig.extension.core.tokenparsers.model.Verbatim;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.exception.ParseException;

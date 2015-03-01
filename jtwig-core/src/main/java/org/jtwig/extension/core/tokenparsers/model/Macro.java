@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.jtwig.content.model.compilable;
+package org.jtwig.extension.core.tokenparsers.model;
 
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.jtwig.content.api.ability.ExecutionAware;
+import org.jtwig.content.model.compilable.Content;
 
 public class Macro extends Content<Macro> {
     private static final Logger LOG = LoggerFactory.getLogger(Macro.class);

@@ -12,7 +12,9 @@
  * limitations under the License.
  */
 
-package org.jtwig.content.model.compilable;
+package org.jtwig.extension.core.tokenparsers.model;
+
+import org.jtwig.content.model.compilable.Content;
 
 public class Verbatim extends Content {
 }

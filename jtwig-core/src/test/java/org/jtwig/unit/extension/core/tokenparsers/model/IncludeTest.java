@@ -11,7 +11,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.jtwig.unit.content.model;
+package org.jtwig.unit.extension.core.tokenparsers.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import org.jtwig.Environment;
 import org.jtwig.compile.CompileContext;
 import org.jtwig.content.api.Renderable;
 import org.jtwig.content.model.Template;
-import org.jtwig.content.model.compilable.Include;
+import org.jtwig.extension.core.tokenparsers.model.Include;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.exception.CompileException;
 import org.jtwig.exception.RenderException;

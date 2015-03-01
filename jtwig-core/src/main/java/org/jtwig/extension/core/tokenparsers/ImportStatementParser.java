@@ -14,7 +14,7 @@
 
 package org.jtwig.extension.core.tokenparsers;
 
-import org.jtwig.content.model.compilable.Import;
+import org.jtwig.extension.core.tokenparsers.model.Import;
 import org.jtwig.exception.ParseException;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.extension.api.tokenparser.TokenParser;
