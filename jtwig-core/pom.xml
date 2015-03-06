@@ -41,6 +41,11 @@
             <version>${commons.lang3.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.crosstreelabs</groupId>
+            <artifactId>phpfunctions</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apfloat</groupId>
             <artifactId>apfloat</artifactId>
             <version>1.8.2</version>

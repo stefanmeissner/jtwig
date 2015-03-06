@@ -104,10 +104,9 @@ public class JtwigContentParser extends JtwigBaseParser<Compilable> {
                 ZeroOrMore(
                         FirstOf(
                                 addToContent(output()),
-//                                addToContent(verbatim()),
 //                                addToContent(comment()),
                                 tokenParsers(),
-//                                addToContent(contentParsers()),
+                                addToContent(contentParsers()),
                                 Sequence(
                                         openCode(),
                                         TestNot(

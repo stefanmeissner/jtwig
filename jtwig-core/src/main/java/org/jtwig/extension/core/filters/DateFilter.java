@@ -14,12 +14,12 @@
 
 package org.jtwig.extension.core.filters;
 
+import com.crosstreelabs.phpfunctions.DateFormatUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.jtwig.extension.api.filters.Filter;
 import org.jtwig.extension.core.functions.DateFunction;
-import org.jtwig.util.DateFormatUtil;
 
 public class DateFilter implements Filter {
 
