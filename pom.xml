@@ -13,7 +13,7 @@
     <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JTwig Root</name>
+    <name>JTwig sme Root</name>
     <url>http://www.lyncode.com</url>
     <description>Twig port to Java</description>
 
