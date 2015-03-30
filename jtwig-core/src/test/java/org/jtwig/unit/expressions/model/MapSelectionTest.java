@@ -14,11 +14,9 @@
 
 package org.jtwig.unit.expressions.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-import org.jtwig.unit.AbstractJtwigTest;
 import org.jtwig.exception.CalculateException;
 import org.jtwig.expressions.api.CompilableExpression;
 import org.jtwig.expressions.api.Expression;
@@ -26,7 +24,9 @@ import org.jtwig.expressions.model.Constant;
 import org.jtwig.expressions.model.MapSelection;
 import org.jtwig.expressions.model.Variable;
 import org.jtwig.render.RenderContext;
+import org.jtwig.types.Undefined;
 import static org.jtwig.types.Undefined.UNDEFINED;
+import org.jtwig.unit.AbstractJtwigTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
@@ -60,21 +60,23 @@ public class MapSelectionTest extends AbstractJtwigTest {
         assertThat(compiled, notNullValue(Expression.class));
         compiled.calculate(renderContext);
     }
-
-
-    @Test(expected = CalculateException.class)
-    public void nonMapVariable() throws Exception {
-        Variable variable = mock(Variable.class);
+    
+    @Test
+    public void undefinedVariableWithoutStrictMode() throws Exception {
         CompilableExpression key = new Constant<>("test");
 
-        when(variable.compile(compileContext)).thenReturn(new Expression() {
-            @Override
-            public Object calculate(RenderContext context) throws CalculateException {
-                return new ArrayList<>();
-            }
-        });
+        MapSelection selection = new MapSelection(null, new Variable(null, "missing"), key);
+        Expression compiled = selection.compile(compileContext);
 
-        MapSelection selection = new MapSelection(null, variable, key);
+        assertThat(compiled, notNullValue(Expression.class));
+        compiled.calculate(renderContext);
+    }
+    
+    @Test(expected = CalculateException.class)
+    public void undefinedVariableWithStrictMode() throws Exception {
+        CompilableExpression key = new Constant<>(UNDEFINED);
+
+        MapSelection selection = new MapSelection(null, new Variable(null, "missing"), key);
         Expression compiled = selection.compile(compileContext);
 
         assertThat(compiled, notNullValue(Expression.class));

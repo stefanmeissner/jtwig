@@ -72,7 +72,7 @@ public class RenderContext {
 
     private final RenderStream renderStream;
     
-    private Stack<Template.CompiledTemplate> renderingTemplateStack = new Stack<>();
+    private Stack<Template.Compiled> renderingTemplateStack = new Stack<>();
 
     private RenderContext(
             Environment env,
@@ -89,7 +89,7 @@ public class RenderContext {
             JtwigModelMap modelMap,
             FunctionResolver functionResolver,
             RenderStream renderStream,
-            Stack<Template.CompiledTemplate> renderingTemplateStack) {
+            Stack<Template.Compiled> renderingTemplateStack) {
         this(env, modelMap, functionResolver, renderStream);
         this.renderingTemplateStack = renderingTemplateStack;
     }
@@ -116,11 +116,11 @@ public class RenderContext {
         return env.getConfiguration().getTemplateCache();
     }
     
-    public Template.CompiledTemplate getRenderingTemplate() {
+    public Template.Compiled getRenderingTemplate() {
         return renderingTemplateStack.peek();
     }
     
-    public RenderContext pushRenderingTemplate(Template.CompiledTemplate renderingTemplate) {
+    public RenderContext pushRenderingTemplate(final Template.Compiled renderingTemplate) {
         this.renderingTemplateStack.push(renderingTemplate);
         return this;
     }
