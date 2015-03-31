@@ -94,9 +94,9 @@ public class CoreJtwigExtension extends SimpleExtension {
     @Override
     public Map<String, Operator> getUnaryOperators() {
         return new HashMap<String, Operator>(){{
-            put("not", new UnaryNotOperator("not", 19));
-            put("is", new UnaryIsOperator("is", 100));
             put("is not", new UnaryIsNotOperator("is not", 105));
+            put("is", new UnaryIsOperator("is", 100));
+            put("not", new UnaryNotOperator("not", 19));
             put("-", new UnaryNegativeOperator("-", 3));
             put("+", new UnaryPositiveOperator("+", 3));
         }};
@@ -108,7 +108,6 @@ public class CoreJtwigExtension extends SimpleExtension {
             // These aren't operators in Twig, but they function like it
             put("is", new BinaryIsOperator("is", 4));
             put("is not", new BinaryIsNotOperator("is not", 4));
-            put(".", new BinarySelectionOperator(".", 5));
             put("|", new BinaryCompositionOperator("|", 5));
             
             // Twig operators
@@ -120,10 +119,10 @@ public class CoreJtwigExtension extends SimpleExtension {
             
             put("==", new BinaryEqualOperator("==", 20));
             put("!=", new BinaryNotEqualOperator("!=", 20));
+            put("<=", new BinaryLessThanOrEqualOperator("<=", 21));
+            put(">=", new BinaryGreaterThanOrEqualOperator(">=", 21));
             put("<", new BinaryLessThanOperator("<", 20));
             put(">", new BinaryGreaterThanOperator(">", 20));
-            put("<=", new BinaryLessThanOrEqualOperator("<=", 20));
-            put(">=", new BinaryGreaterThanOrEqualOperator(">=", 20));
             put("not in", new BinaryNotInOperator("not in", 20));
             put("in", new BinaryInOperator("in", 20));
             put("matches", new BinaryMatchesOperator("matches", 20));
@@ -140,6 +139,7 @@ public class CoreJtwigExtension extends SimpleExtension {
             put("//", new BinaryFloorDivisionOperator("//", 60));
             put("%", new BinaryModulusOperator("%", 60));
             put("**", new BinaryExponentOperator("**", 200));
+            put(".", new BinarySelectionOperator(".", 500));
         }};
     }
 
