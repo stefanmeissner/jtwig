@@ -16,6 +16,7 @@ package org.jtwig.util;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jtwig.types.Undefined;
@@ -195,6 +196,21 @@ public class TypeUtil {
         return obj == null || obj instanceof Undefined || obj instanceof Boolean
                 || obj instanceof String || obj instanceof Number;
     }
+    
+    
+    /**
+     * Determines if the given object is an empty String, e.g. "".
+     * 
+     * Note this is necessary due to Twigs behaviour for String comparisons 
+     * of Null and empty Strings.
+     * 
+     * @param obj
+     * @return 
+     */
+    private static boolean isEmptyString(Object obj) {
+        return obj instanceof String && ((String)obj).isEmpty();
+    }
+    
     /**
      * Determines if the given objects are equal in PHP's loose equality terms.
      * 
@@ -207,13 +223,13 @@ public class TypeUtil {
     public static boolean areLooselyEqual(Object a, Object b) {
         // Using the same behaviour for Jtwig as we retrieve in twig
         if (a == null) {
-            return b == null || (isBoolean(b) && !toBoolean(b));
+            return b == null || isEmptyString(b) || (isBoolean(b) && !toBoolean(b));
         }
         if (b == null) {
-            return isBoolean(a) && !toBoolean(a);
+            return isEmptyString(a) || isBoolean(a) && !toBoolean(a);
         }
         if (isBoolean(a) || isBoolean(b)) {
-            return toBoolean(a) == toBoolean(b);
+            return Objects.equals(toBoolean(a), toBoolean(b));
         }
         return a.toString().equals(b.toString());
     }

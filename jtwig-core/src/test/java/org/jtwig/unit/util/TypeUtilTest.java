@@ -160,6 +160,8 @@ public class TypeUtilTest {
         assertTrue(TypeUtil.areLooselyEqual(null, false));
         assertFalse(TypeUtil.areLooselyEqual(null, true));
         assertFalse(TypeUtil.areLooselyEqual(null, new Object()));
+        assertTrue(TypeUtil.areLooselyEqual(null, ""));
+        assertTrue(TypeUtil.areLooselyEqual("", null));
         
         // Check booleans
         assertFalse(TypeUtil.areLooselyEqual(false, true));
